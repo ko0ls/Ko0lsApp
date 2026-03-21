@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,19 +10,13 @@ public abstract partial class BindableObject
 {
   #region ChangeTracking
 
-  public void AddEventsForPropsDirty()
-  {
-    ModelPropertyChanged -= OnModelPropertyChanged;
-    ModelPropertyChanged += OnModelPropertyChanged;
-  }
-
   private void OnModelPropertyChanged(object sender, ModelPropertyChangedEventArgs e)
   {
     if (!TrackedDictionary.TryGetValue(e.PropertyName, out var value) ||
         value is not TrackedChange trackedChange) return;
     IsAnyPropsDirty = trackedChange.DetectChange(e.Value);
     if (!IsAnyPropsDirty) {
-      IsAnyPropsDirty = TrackedDictionary.Select(x => x.Value).OfType<TrackedChange>().Any(x => x.IsDirty);
+      IsAnyPropsDirty = TrackedDictionary.Values.OfType<TrackedChange>().Any(x => x.IsDirty);
     }
   }
 
@@ -34,6 +28,8 @@ public abstract partial class BindableObject
   public void BeginChanges()
   {
     ThrowIfTrackingStarted();
+    ModelPropertyChanged -= OnModelPropertyChanged;
+    ModelPropertyChanged += OnModelPropertyChanged;
     Track(GetTrackableProperties());
     IsChanged = false;
   }
@@ -65,8 +61,6 @@ public abstract partial class BindableObject
     foreach (var change in trackedChanges) {
       change.AcceptChange();
     }
-
-    UpdateTracked();
     IsChanged = false;
   }
 
@@ -81,10 +75,9 @@ public abstract partial class BindableObject
     ThrowIfTrackingNotStarted();
     var trackedChanges = GetTrackedChanges();
     foreach (var change in trackedChanges) {
-      SetValue(change.Property, change.OriginalValue);
       change.RejectChange();
+      SetValue(change.Property, change.OriginalValue);
     }
-
     IsChanged = false;
   }
 
@@ -131,9 +124,7 @@ public abstract partial class BindableObject
   protected void Track(IEnumerable<PropertyInfo> properties)
   {
     foreach (var prop in properties) {
-      if (prop.Name != string.Empty) {
-        Track(prop, GetValue(prop));
-      }
+      Track(prop, GetValue(prop));
     }
   }
 
@@ -155,7 +146,6 @@ public abstract partial class BindableObject
         OriginalValue = currentValue == null ? null :
               isValueType || currentValue is string ? currentValue : currentValue.Clone()
       };
-
       TrackedDictionary.Add(property.Name, currentChange);
     }
     else {
@@ -189,26 +179,19 @@ public abstract partial class BindableObject
         return currentValueDouble.Count() != originalValueDouble.Count() ||
                !currentValueDouble.SequenceEqual(originalValueDouble);
       }
-      if (currentValue is System.Collections.ObjectModel.ObservableCollection<double> currentValueDouble1 && originalValue is System.Collections.ObjectModel.ObservableCollection<double>
-          originalValueDouble1) {
-        return currentValueDouble1.Count != originalValueDouble1.Count ||
-               !currentValueDouble1.SequenceEqual(originalValueDouble1);
-      }
       var collectionCurrent = ((IEnumerable<T>) currentValue).ToList();
       var collectionOrigin = ((IEnumerable<T>) originalValue).ToList();
-      var res = collectionCurrent.Count != collectionOrigin.Count ||
-                !collectionCurrent.SequenceEqual(collectionOrigin);
-      return res;
+      return collectionCurrent.Count != collectionOrigin.Count ||
+             !collectionCurrent.SequenceEqual(collectionOrigin);
     }
     catch {
-      var res = !EqualityComparer<T>.Default.Equals(originalValue, currentValue);
-      return res;
+      return !EqualityComparer<T>.Default.Equals(originalValue, currentValue);
     }
   }
 
-  protected IEnumerable<TrackedChange> GetTrackedChanges() => TrackedDictionary.Select(pair => (TrackedChange) pair.Value);
+  protected IEnumerable<TrackedChange> GetTrackedChanges() => TrackedDictionary.Values.Cast<TrackedChange>();
 
-  protected TrackedChange? GetTrackedChange(string propertyName) => IsTrackedChange(propertyName) ? (TrackedChange) TrackedDictionary[propertyName] : null;
+  protected TrackedChange? GetTrackedChange(string propertyName) => IsTrackedChange(propertyName) ? (TrackedChange)TrackedDictionary[propertyName] : null;
 
   private bool IsTrackedChange(string propertyName) => TrackedDictionary.ContainsKey(propertyName);
 
@@ -233,7 +216,7 @@ public abstract partial class BindableObject
   private void ThrowIfTrackingNotStarted()
   {
     if (!IsTracking) {
-      BeginChanges();
+      throw new InvalidOperationException("Change tracking has not started");
     }
   }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using AutoCADTools.Presentation.Utils.HelperTracking;
 using Newtonsoft.Json;
@@ -20,13 +19,7 @@ public abstract partial class BindableObject
   [JsonIgnore]
   public bool IsChanged
   {
-    get
-    {
-      if (!IsTracking) return _isChanged;
-      var trackedChanges = UpdateTracked();
-      _isChanged = trackedChanges.Where(x => x.Property.Name != string.Empty).Any(x => x.DetectChange(GetValue(x.Property)));
-      return _isChanged;
-    }
+    get => _isChanged;
     private set => _isChanged = value;
   }
 

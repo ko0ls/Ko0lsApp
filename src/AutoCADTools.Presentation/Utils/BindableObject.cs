@@ -32,14 +32,14 @@ public abstract partial class BindableObject : IRevertibleChangeTracking, INotif
       Checked
     }
 
-    public PropertyInfo Property { get; set; } = null!;
+    public PropertyInfo Property { get; set; }
     public TrackingStatus Status { get; set; } = TrackingStatus.Unchecked;
 
     public bool HasChanges => Status == TrackingStatus.Checked && DetectChange(CurrentValue);
 
     public DateTime? LastChecked { get; set; }
 
-    private Func<object?, object?, bool> HasChangedFunc { get; set; } = null!;
+    private Func<object?, object?, bool> HasChangedFunc { get; set; }
     public bool DetectChange(object? currentValue)
     {
       var hasChanged = HasChangedFunc(OriginalValue, currentValue);
