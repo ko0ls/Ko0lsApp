@@ -74,7 +74,27 @@
       "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:platform.anthropic.com)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(dotnet package:*)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//d/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/**)",
+      "Bash(done)",
+      "Bash(taskkill /F /IM testhost.exe)",
+      "Bash(taskkill /F /IM dotnet.exe)",
+      "Bash(cmd.exe /c \"taskkill /F /IM testhost.exe 2>nul & taskkill /F /IM dotnet.exe 2>nul & echo Done\")",
+      "Bash(grep -E \"^[0-9.-]+ [0-9.-]+ [0-9.-]+ [0-9.-]+$\")",
+      "Bash(dotnet msbuild:*)",
+      "Bash(cd:*)",
+      "Read(//d/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/$HOME/**)",
+      "Bash(ilspycmd \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.Presentation.dll\" --method \"GetStrokeDashArray\")",
+      "Bash(ilspycmd --help)",
+      "Bash(ilspycmd -p -o ilspy_out \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.Presentation.dll\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(ilspycmd -p -o ilspy_out3 \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.Presentation.dll\")",
+      "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp' -name AutoCADTools.dll -exec ls -la {})",
+      "Bash(2)",
+      "Bash(ilspycmd -p -o ilspy_app \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.dll\")"
     ]
   }
 }

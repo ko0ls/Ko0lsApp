@@ -14,22 +14,22 @@ namespace AutoCADTools.Presentation.Utils
       _execute = execute ?? throw new ArgumentNullException(nameof(execute));
     }
 
-    public bool CanExecute(object parameter)
+    public bool CanExecute(object? parameter)
     {
       try {
-        return _canExecute((T) parameter);
+        return _canExecute((T) parameter!);
       }
       catch {
         return true;
       }
     }
 
-    public void Execute(object parameter)
+    public void Execute(object? parameter)
     {
-      _execute((T) parameter);
+      _execute((T) parameter!);
     }
 
-    public event EventHandler CanExecuteChanged
+    public event EventHandler? CanExecuteChanged
     {
       add => CommandManager.RequerySuggested += value;
       remove => CommandManager.RequerySuggested -= value;
