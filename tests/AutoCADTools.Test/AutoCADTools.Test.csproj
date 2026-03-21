@@ -27,6 +27,8 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
 
 </Project>
