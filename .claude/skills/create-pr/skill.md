@@ -45,17 +45,35 @@ Dua tren ket qua git diff va log, Claude tu dong de xuat:
 
 ```
 ## Summary
-[Feature summary - tom tat tinh nang dua tren files changed + commits]
+
+- [Muc 1 - mo ta thay doi/cong viec]
+- [Muc 2 - mo ta thay doi/cong viec]
+- [Muc N - mo ta thay doi/cong viec]
 
 ## How to check
-[How to check - huong dan kiem tra dua tren nhung gi thay doi]
+
+1. [buoc kiem tra]
+2. [buoc kiem tra]
 ```
 
-### Huong dan viet Feature Summary:
+### Huong dan viet Feature Summary (danh sach gach dau dong):
 - Doc danh sach commit messages de hieu muc dich
-- Doc git diff de xem cac file nao duoc sua
-- Tom tat thanh 1-3 cau, tap trung vao " cai gi thay doi / cai gi duoc them"
+- Doc git diff de xem cac file nao duoc them/sua/xoa
+- **Moi file hoac nhom file tuong tu** -> 1 gach dau dong rieng
+- Format: `- [Ten file/module]: [mo ta ngan thay doi]`
+- Khong gop chung nhieu thay doi khac nhau vao 1 dau dong
 - Khong lien quan den qua trinh (process), chi noi ket qua (outcome)
+
+**Vi du:**
+```
+## Summary
+
+- `Canvas/Utils/UtilsPoint.cs`: them cac extension methods cho `Point` — `DistanceTo`, `MidPoint`, `ProjectOnLineBound`, `ProjectOnLineUnbound`, `DistanceToLineBound`
+- `Canvas/Utils/UtilsVector.cs`: them cac extension methods cho `Vector` — `IsValid`, `CreateVector`, `GetAngle`, `AngleTo`
+- `Canvas/Shapes/ShapeBase.cs`: tao abstract base class cho cac shape, ho tro `IsSelected`, `IsMoveOver`, `MakeHighLight`, `ResetHighLight`
+- `Canvas/Shapes/EnumLineType.cs`: tao enum `Solid`, `Dash`, `DashDot`
+- `tests/`: them 86 unit tests cho cac class moi
+```
 
 ### Huong dan viet How to check:
 - Nhin vao cac file thay doi, neu la:
@@ -72,10 +90,14 @@ Hien thi noi dung de xuat cho nguoi dung:
 > **De xuat noi dung PR:**
 >
 > ### Summary
-> [noi dung]
+>
+> - [muc 1]
+> - [muc 2]
 >
 > ### How to check
-> [noi dung]
+>
+> 1. [buoc kiem tra]
+> 2. [buoc kiem tra]
 >
 > **Dong y tra ket qua?**
 
@@ -97,10 +119,14 @@ https://github.com/{owner}/{repo}/compare/{base}...{compare}
 ### PR Body (de copy)
 ```
 ## Summary
-[Feature summary da duoc xac nhan]
+
+- [muc 1]
+- [muc 2]
 
 ## How to check
-[How to check da duoc xac nhan]
+
+1. [buoc kiem tra]
+2. [buoc kiem tra]
 ```
 
 ### Ghi chu:
