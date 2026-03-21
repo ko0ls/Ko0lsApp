@@ -1,5 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
+    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <UseWPF>true</UseWPF>
+    <DefineConstants>$(DefineConstants);NET8_0_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutoCADTools.App\AutoCADTools.App.csproj" />
     <ProjectReference Include="..\..\src\AutoCADTools.Presentation\AutoCADTools.Presentation.csproj" />
@@ -18,17 +30,16 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0;net48</TargetFrameworks>
-    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Data" />
   </ItemGroup>
 
 </Project>
