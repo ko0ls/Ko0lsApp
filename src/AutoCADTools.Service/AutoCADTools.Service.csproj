@@ -1,13 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\AutoCADTools.Core\AutoCADTools.Core.csproj" />
-  </ItemGroup>
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <RootNamespace>AutoCADTools.Service</RootNamespace>
+    <AssemblyName>AutoCADTools.Service</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System"/>
+    <Reference Include="System.Core"/>
+    <Reference Include="System.Data"/>
+    <Reference Include="System.Xml"/>
+    <Reference Include="PresentationCore"/>
+    <Reference Include="PresentationFramework"/>
+    <Reference Include="WindowsBase"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoCADTools.Core\AutoCADTools.Core.csproj"/>
+  </ItemGroup>
+
 
 </Project>

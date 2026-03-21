@@ -31,3 +31,12 @@ Thumbs.db
 # User-specific files
 *.user
 *.rsuser
+
+# CAD files
+*.ifc
+
+# Scripts
+load.scr
+
+# Editor config
+.editorconfig

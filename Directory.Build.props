@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Inline environment variables (no separate env.prop needed for SDK-style projects) -->
+  <PropertyGroup>
+    <AutodeskVersion Condition="'$(AutodeskVersion)' == ''">2023</AutodeskVersion>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="$(Configuration.StartsWith('Debug '))">
+      <PropertyGroup>
+        <ConfigMode>Debug</ConfigMode>
+        <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <ConfigMode>Release</ConfigMode>
+        <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <Choose>
+    <When Condition="$(Configuration.EndsWith(' 2023'))">
+      <PropertyGroup>
+        <AutodeskVersion>2023</AutodeskVersion>
+        <TargetFramework>net48</TargetFramework>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(Configuration.EndsWith(' 2024'))">
+      <PropertyGroup>
+        <AutodeskVersion>2024</AutodeskVersion>
+        <TargetFramework>net48</TargetFramework>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AutodeskVersion>2023</AutodeskVersion>
+        <TargetFramework>net48</TargetFramework>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <PropertyGroup>
+    <Configurations>Debug 2023;Release 2023;Debug 2024;Release 2024</Configurations>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Platforms>x64;AnyCPU</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <OutputPath>bin\$(ConfigMode)\$(AutodeskVersion)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ConfigMode)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ConfigMode)' == 'Release'">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+</Project>
