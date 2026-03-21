@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Ko0lsApp-2023" type="RunExe" factoryName=".NET Executable" folderName="AutoCAD">
     <option name="EXE_PATH" value="C:/Program Files/Autodesk/AutoCAD 2023/acad.exe"/>
-    <option name="PROGRAM_PARAMETERS" value="&quot;C:\Program Files\Autodesk\AutoCAD 2023\acad.exe&quot; /ld &quot;C:\Program Files\Autodesk\AutoCAD 2023\AecBase.dbx&quot; /p &quot;&lt;&lt;C3D_Metric&gt;&gt;&quot; /product C3D /language en-US"/>
+    <option name="PROGRAM_PARAMETERS" value="/ld &quot;C:\Program Files\Autodesk\AutoCAD 2023\acad.exe&quot; /p &quot;&lt;&lt;C3D_Metric&gt;&gt;&quot; /product C3D /language en-US"/>
     <option name="WORKING_DIRECTORY" value="C:/Program Files/Autodesk/AutoCAD 2023"/>
     <option name="PASS_PARENT_ENVS" value="1"/>
     <option name="USE_EXTERNAL_CONSOLE" value="0"/>
