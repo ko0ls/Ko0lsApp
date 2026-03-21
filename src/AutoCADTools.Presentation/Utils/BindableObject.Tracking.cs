@@ -156,12 +156,11 @@ public abstract partial class BindableObject
       currentChange.LastChecked = DateTime.Now;
     }
 
-    if (currentChange.HasChanges) {
+    // Compute IsDirty from CurrentValue vs OriginalValue
+    var isDirty = currentChange.DetectChange(currentValue);
+    currentChange.IsDirty = isDirty;
+    if (isDirty) {
       IsChanged = true;
-      currentChange.IsDirty = true;
-    }
-    else {
-      currentChange.IsDirty = false;
     }
   }
 

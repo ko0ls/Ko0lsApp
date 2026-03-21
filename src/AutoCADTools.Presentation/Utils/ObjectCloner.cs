@@ -1,19 +1,24 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
-namespace AutoCADTools.Presentation.Utils
+namespace AutoCADTools.Presentation.Utils;
+
+public static class ObjectCloner
 {
-  public static class ObjectCloner
-  {
-    public static object? Clone(this object? source)
-    {
-      if (source == null) return null!;
+  private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings {
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+  };
 
-      using var stream = new MemoryStream();
-      var formatter = new BinaryFormatter();
-      formatter.Serialize(stream, source);
-      stream.Position = 0;
-      return formatter.Deserialize(stream)!;
-    }
+  public static T? Clone<T>(this T? source)
+  {
+    if (source == null) return default;
+    var json = JsonConvert.SerializeObject(source, Settings);
+    return JsonConvert.DeserializeObject<T>(json);
+  }
+
+  public static object? Clone(this object? source)
+  {
+    if (source == null) return null;
+    var json = JsonConvert.SerializeObject(source, Settings);
+    return JsonConvert.DeserializeObject(json, source.GetType());
   }
 }

@@ -25,4 +25,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+
 </Project>
