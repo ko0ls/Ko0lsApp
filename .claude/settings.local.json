@@ -74,7 +74,9 @@
       "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:platform.anthropic.com)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(git fetch:*)",
+      "Bash(echo \"EXIT:$?\")"
     ]
   }
 }
