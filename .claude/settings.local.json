@@ -53,6 +53,9 @@
       "Bash(gh repo:*)",
       "Bash(git push:*)",
       "Bash(git remote:*)",
+      "Bash(git branch:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
       "Read(//c/Windows/Microsoft.NET/assembly/GAC_MSIL/**)",
       "Read(//c/Windows/assembly/GAC_MSIL/**)",
       "Bash(dotnet format:*)",
@@ -63,7 +66,15 @@
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f''''Total: {len\\(d\\)}''''\\)\")",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f''''Total: {len\\(d\\)}''''\\); [print\\(f[''''FilePath'''']\\) for f in d]\")",
       "Bash(ls:*)",
-      "Bash(dotnet clean:*)"
+      "Bash(dotnet clean:*)",
+      "Bash(grep -v \"\\\\.dll$\")",
+      "Bash(grep -v \"\\\\.pdb$\")",
+      "Bash(grep -v \"\\\\.cache$\")",
+      "Bash(\"CLAUDE.md\":*)",
+      "WebSearch",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:platform.anthropic.com)",
+      "Skill(update-config)"
     ]
   }
 }
