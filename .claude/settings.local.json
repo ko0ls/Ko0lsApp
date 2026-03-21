@@ -46,7 +46,15 @@
       "Bash(unzip -p /tmp/cc.nupkg castle.core.nuspec)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git reset:*)",
+      "Bash(git update-ref:*)",
+      "Bash(git rm:*)",
+      "Bash(gh repo:*)",
+      "Bash(git push:*)",
+      "Bash(git remote:*)",
+      "Read(//c/Windows/Microsoft.NET/assembly/GAC_MSIL/**)",
+      "Read(//c/Windows/assembly/GAC_MSIL/**)"
     ]
   }
 }
