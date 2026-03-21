@@ -1,6 +1,6 @@
-namespace Ko0lsApp
+﻿namespace Ko0lsApp
 {
-    public class Class1
-    {
-    }
+  public class Class1
+  {
+  }
 }
