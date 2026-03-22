@@ -1,0 +1,122 @@
+[
+  {
+    "Scale": "5",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 0.5 },
+      { "Id": 2, "Thickness": 1 },
+      { "Id": 3, "Thickness": 1.5 },
+      { "Id": 4, "Thickness": 2 },
+      { "Id": 5, "Thickness": 2.5 },
+      { "Id": 6, "Thickness": 3 },
+      { "Id": 7, "Thickness": 3.5 },
+      { "Id": 8, "Thickness": 4 },
+      { "Id": 9, "Thickness": 4.5 },
+      { "Id": 10, "Thickness": 5 }
+    ]
+  },
+  {
+    "Scale": "10",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 1 },
+      { "Id": 2, "Thickness": 2 },
+      { "Id": 3, "Thickness": 3 },
+      { "Id": 4, "Thickness": 4 },
+      { "Id": 5, "Thickness": 5 },
+      { "Id": 6, "Thickness": 6 },
+      { "Id": 7, "Thickness": 7 },
+      { "Id": 8, "Thickness": 8 },
+      { "Id": 9, "Thickness": 9 },
+      { "Id": 10, "Thickness": 10 }
+    ]
+  },
+  {
+    "Scale": "15",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 1.5 },
+      { "Id": 2, "Thickness": 3 },
+      { "Id": 3, "Thickness": 4.5 },
+      { "Id": 4, "Thickness": 6 },
+      { "Id": 5, "Thickness": 7.5 },
+      { "Id": 6, "Thickness": 9 },
+      { "Id": 7, "Thickness": 10.5 },
+      { "Id": 8, "Thickness": 12 },
+      { "Id": 9, "Thickness": 13.5 },
+      { "Id": 10, "Thickness": 15 }
+    ]
+  },
+  {
+    "Scale": "20",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 2 },
+      { "Id": 2, "Thickness": 4 },
+      { "Id": 3, "Thickness": 6 },
+      { "Id": 4, "Thickness": 8 },
+      { "Id": 5, "Thickness": 10 },
+      { "Id": 6, "Thickness": 12 },
+      { "Id": 7, "Thickness": 14 },
+      { "Id": 8, "Thickness": 16 },
+      { "Id": 9, "Thickness": 18 },
+      { "Id": 10, "Thickness": 20 }
+    ]
+  },
+  {
+    "Scale": "50",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 5 },
+      { "Id": 2, "Thickness": 10 },
+      { "Id": 3, "Thickness": 15 },
+      { "Id": 4, "Thickness": 20 },
+      { "Id": 5, "Thickness": 25 },
+      { "Id": 6, "Thickness": 30 },
+      { "Id": 7, "Thickness": 35 },
+      { "Id": 8, "Thickness": 40 },
+      { "Id": 9, "Thickness": 45 },
+      { "Id": 10, "Thickness": 50 }
+    ]
+  },
+  {
+    "Scale": "100",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 10 },
+      { "Id": 2, "Thickness": 20 },
+      { "Id": 3, "Thickness": 30 },
+      { "Id": 4, "Thickness": 40 },
+      { "Id": 5, "Thickness": 50 },
+      { "Id": 6, "Thickness": 60 },
+      { "Id": 7, "Thickness": 70 },
+      { "Id": 8, "Thickness": 80 },
+      { "Id": 9, "Thickness": 90 },
+      { "Id": 10, "Thickness": 100 }
+    ]
+  },
+  {
+    "Scale": "200",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 20 },
+      { "Id": 2, "Thickness": 40 },
+      { "Id": 3, "Thickness": 60 },
+      { "Id": 4, "Thickness": 80 },
+      { "Id": 5, "Thickness": 100 },
+      { "Id": 6, "Thickness": 120 },
+      { "Id": 7, "Thickness": 140 },
+      { "Id": 8, "Thickness": 160 },
+      { "Id": 9, "Thickness": 180 },
+      { "Id": 10, "Thickness": 200 }
+    ]
+  },
+  {
+    "Scale": "500",
+    "LineWeights": [
+      { "Id": 1, "Thickness": 50 },
+      { "Id": 2, "Thickness": 100 },
+      { "Id": 3, "Thickness": 150 },
+      { "Id": 4, "Thickness": 200 },
+      { "Id": 5, "Thickness": 250 },
+      { "Id": 6, "Thickness": 300 },
+      { "Id": 7, "Thickness": 350 },
+      { "Id": 8, "Thickness": 400 },
+      { "Id": 9, "Thickness": 450 },
+      { "Id": 10, "Thickness": 500 }
+    ]
+  }
+]

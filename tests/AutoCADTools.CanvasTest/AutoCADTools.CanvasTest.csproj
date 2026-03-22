@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AutoCADTools.CanvasTest</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Wpf.Controls.PanAndZoom" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\BindableObject.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\BindableObject.Events.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\BindableObject.Data.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\BindableObject.Tracking.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\BindableObject.Validation.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\RelayCommand.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\ObjectCloner.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\ModelPropertyChangedEventArgs.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\HelperTracking\ChangeTrackerAttribute.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\HelperTracking\ITrackedChange.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\HelperTracking\PropertyChangedTrackedEventArgs.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Utils\HelperTracking\ReflectionExtensions.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsCanvas.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsPoint.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsVector.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Converters\ConverterMultiParameter.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\ShapeBase.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Line2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Polygon2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Ellipse2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\TextBlock2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Polyline2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\EnumLineType.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\EnumTextAlignment.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Annotation\AnnotationBase.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Annotation\Angular2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Annotation\Grid2D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Annotation\EnumGridSymbolStyle.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Settings\Grid2DSetting.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeight.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeightGroup.cs" />
+    <EmbeddedResource Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeightData.json" />
+  </ItemGroup>
+
+</Project>

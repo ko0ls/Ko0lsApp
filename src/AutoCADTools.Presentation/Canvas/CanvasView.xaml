@@ -1,0 +1,68 @@
+<UserControl x:Class="AutoCADTools.Presentation.Canvas.CanvasView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:paz="clr-namespace:Wpf.Controls.PanAndZoom;assembly=Wpf.Controls.PanAndZoom"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converters="clr-namespace:AutoCADTools.Presentation.Canvas.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+  <UserControl.Resources>
+    <converters:ConverterMultiParameter x:Key="ConverterMultiParameter" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+  </UserControl.Resources>
+
+  <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                  HorizontalScrollBarVisibility="Disabled">
+      <paz:ZoomBorder x:Name="MyZoomBorder"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent"
+                      ClipToBounds="True"
+                      Focusable="True"
+                      Stretch="None"
+                      PanButton="Middle"
+                      ZoomSpeed="1.2">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="MouseMove">
+            <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"
+                                   PassEventArgsToCommand="True"/>
+          </i:EventTrigger>
+          <i:EventTrigger EventName="MouseDown">
+            <i:InvokeCommandAction Command="{Binding MouseDownCommand}"
+                                   PassEventArgsToCommand="True"/>
+          </i:EventTrigger>
+          <i:EventTrigger EventName="MouseUp">
+            <i:InvokeCommandAction Command="{Binding MouseUpCommand}"
+                                   PassEventArgsToCommand="True"/>
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Canvas x:Name="MyCanvas" Background="Transparent" />
+      </paz:ZoomBorder>
+    </ScrollViewer>
+
+    <CheckBox Content="Show Dimension"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="9"
+              Panel.ZIndex="1000"
+              IsChecked="{Binding IsShowDim}"
+              Visibility="{Binding ShowDimCheckBox, Converter={StaticResource BoolToVisibilityConverter}}" />
+  </Grid>
+
+  <i:Interaction.Triggers>
+    <i:EventTrigger EventName="Loaded">
+      <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}">
+        <i:InvokeCommandAction.CommandParameter>
+          <MultiBinding Converter="{StaticResource ConverterMultiParameter}">
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+            <Binding ElementName="MyCanvas" />
+            <Binding ElementName="MyZoomBorder" />
+          </MultiBinding>
+        </i:InvokeCommandAction.CommandParameter>
+      </i:InvokeCommandAction>
+    </i:EventTrigger>
+  </i:Interaction.Triggers>
+</UserControl>

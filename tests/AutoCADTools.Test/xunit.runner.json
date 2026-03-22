@@ -1,0 +1,6 @@
+{
+  "xunit": {
+    "methodDisplay": "method"
+  },
+  "parallelizeTestCollections": false
+}

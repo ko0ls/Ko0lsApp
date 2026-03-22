@@ -119,7 +119,7 @@ public abstract partial class BindableObject
       var q = from r in validationResults from m in r.MemberNames group r by m into g select g;
 
       foreach (var prop in q) {
-        var messages = prop.Select(r => r.ErrorMessage).ToList();
+        var messages = prop.Select(r => r.ErrorMessage!).ToList();
 
         PropErrors.Remove(prop.Key);
 
