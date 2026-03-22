@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Command.ShowDimension" xml:space="preserve">
+    <value>Show Dimension</value>
+  </data>
+  <data name="Command.DrawLine" xml:space="preserve">
+    <value>Draw Line</value>
+  </data>
+  <data name="Command.DrawCircle" xml:space="preserve">
+    <value>Draw Circle</value>
+  </data>
+  <data name="Command.DrawArc" xml:space="preserve">
+    <value>Draw Arc</value>
+  </data>
+  <data name="App.Title" xml:space="preserve">
+    <value>Ko0ls Tools</value>
+  </data>
+  <data name="App.Loaded" xml:space="preserve">
+    <value>AutoCADTools loaded successfully.</value>
+  </data>
+  <data name="App.InitializationFailed" xml:space="preserve">
+    <value>AutoCADTools initialization failed: {0}</value>
+  </data>
+  <data name="Message.Title.Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Message.Title.Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Message.Title.Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Command.DrawLineTooltip" xml:space="preserve">
+    <value>Draw a line</value>
+  </data>
+  <data name="Command.DrawCircleTooltip" xml:space="preserve">
+    <value>Draw a circle</value>
+  </data>
+  <data name="Command.DrawArcTooltip" xml:space="preserve">
+    <value>Draw an arc</value>
+  </data>
+  <data name="Error.RibbonNotInitialized" xml:space="preserve">
+    <value>ComponentManager.Ribbon is null. Ensure this method is called after the AutoCAD ribbon has been initialised.</value>
+  </data>
+  <data name="Error.CommandExecutionFailed" xml:space="preserve">
+    <value>Error executing command '{0}': {1}</value>
+  </data>
+  <data name="Error.PointsNullOrEmpty" xml:space="preserve">
+    <value>Points cannot be null or empty.</value>
+  </data>
+  <data name="Error.ZeroVector" xml:space="preserve">
+    <value>Vectors must not be zero vectors.</value>
+  </data>
+  <data name="Error.InvalidDimensionGeometry" xml:space="preserve">
+    <value>Dimension2D: invalid geometry (parallel lines or zero-length dimension).</value>
+  </data>
+  <data name="Error.ChangeTrackingNotStarted" xml:space="preserve">
+    <value>Change tracking has not started.</value>
+  </data>
+  <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve">
+    <value>Change tracking has already started.</value>
+  </data>
+</root>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Command.ShowDimension" xml:space="preserve">
+    <value>Hiển thị Kích thước</value>
+  </data>
+  <data name="Command.DrawLine" xml:space="preserve">
+    <value>Vẽ Đường thẳng</value>
+  </data>
+  <data name="Command.DrawCircle" xml:space="preserve">
+    <value>Vẽ Hình tròn</value>
+  </data>
+  <data name="Command.DrawArc" xml:space="preserve">
+    <value>Vẽ Cung tròn</value>
+  </data>
+  <data name="App.Title" xml:space="preserve">
+    <value>Công cụ Ko0ls</value>
+  </data>
+  <data name="App.Loaded" xml:space="preserve">
+    <value>AutoCADTools đã tải thành công.</value>
+  </data>
+  <data name="App.InitializationFailed" xml:space="preserve">
+    <value>AutoCADTools khởi tạo thất bại: {0}</value>
+  </data>
+  <data name="Message.Title.Notification" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="Message.Title.Warning" xml:space="preserve">
+    <value>Cảnh báo</value>
+  </data>
+  <data name="Message.Title.Error" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="Command.DrawLineTooltip" xml:space="preserve">
+    <value>Vẽ đường thẳng</value>
+  </data>
+  <data name="Command.DrawCircleTooltip" xml:space="preserve">
+    <value>Vẽ hình tròn</value>
+  </data>
+  <data name="Command.DrawArcTooltip" xml:space="preserve">
+    <value>Vẽ cung tròn</value>
+  </data>
+  <data name="Error.RibbonNotInitialized" xml:space="preserve">
+    <value>ComponentManager.Ribbon bị null. Hãy đảm bảo phương thức này được gọi sau khi AutoCAD ribbon đã khởi tạo.</value>
+  </data>
+  <data name="Error.CommandExecutionFailed" xml:space="preserve">
+    <value>Lỗi khi thực thi lệnh '{0}': {1}</value>
+  </data>
+  <data name="Error.PointsNullOrEmpty" xml:space="preserve">
+    <value>Points không được null hoặc rỗng.</value>
+  </data>
+  <data name="Error.ZeroVector" xml:space="preserve">
+    <value>Vectors không được là zero vectors.</value>
+  </data>
+  <data name="Error.InvalidDimensionGeometry" xml:space="preserve">
+    <value>Dimension2D: geometry không hợp lệ (các đường song song hoặc chiều dài bằng không).</value>
+  </data>
+  <data name="Error.ChangeTrackingNotStarted" xml:space="preserve">
+    <value>Change tracking chưa bắt đầu.</value>
+  </data>
+  <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve">
+    <value>Change tracking đã được bắt đầu.</value>
+  </data>
+</root>
