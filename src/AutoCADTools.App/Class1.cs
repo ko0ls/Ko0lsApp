@@ -1,6 +1,5 @@
 #nullable enable
 
-using System;
 using Autodesk.AutoCAD.ApplicationServices.Core;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +9,15 @@ namespace AutoCADTools.App
 {
   public class AppEntry : Autodesk.AutoCAD.Runtime.IExtensionApplication
   {
-    private ServiceProvider? _serviceProvider;
+    private static ServiceProvider? _serviceProvider;
+    private static Presentation.Canvas.CanvasViewModel? _instanceVm;
+
+    public static void RegisterViewModel(Presentation.Canvas.CanvasViewModel vm)
+    {
+      _instanceVm = vm;
+    }
+
+    public static Presentation.Canvas.CanvasViewModel? CanvasViewModel => _instanceVm;
 
     public void Initialize()
     {
@@ -19,13 +26,11 @@ namespace AutoCADTools.App
         var services = new ServiceCollection();
         services.AddTransient<Presentation.Canvas.CanvasViewModel>();
         _serviceProvider = services.BuildServiceProvider();
-        var ed = Application.DocumentManager.MdiActiveDocument?.Editor;
-        ed?.WriteMessage("\nAutoCADTools loaded successfully.");
+        Application.DocumentManager.MdiActiveDocument?.Editor.WriteMessage("\nAutoCADTools loaded successfully.");
       }
-      catch (Exception ex)
+      catch (System.Exception ex)
       {
-        var ed = Application.DocumentManager.MdiActiveDocument?.Editor;
-        ed?.WriteMessage($"\nAutoCADTools initialization failed: {ex.Message}");
+        Application.DocumentManager.MdiActiveDocument?.Editor.WriteMessage($"\nAutoCADTools initialization failed: {ex.Message}");
       }
     }
 

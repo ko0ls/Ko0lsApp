@@ -94,7 +94,10 @@
       "Bash(ilspycmd -p -o ilspy_out3 \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.Presentation.dll\")",
       "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp' -name AutoCADTools.dll -exec ls -la {})",
       "Bash(2)",
-      "Bash(ilspycmd -p -o ilspy_app \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.dll\")"
+      "Bash(ilspycmd -p -o ilspy_app \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.dll\")",
+      "Bash(grep -rl \"Accore\\\\|Acdb\\\\|Acmgd\\\\|Autodesk\\\\|Point3d\\\\|Vector3d\\\\|ObjectId\\\\|TransactionManager\" 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/src/AutoCADTools.Presentation' --include=*.cs)",
+      "Bash(grep -rl Autodesk. 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/src/AutoCADTools.Presentation' --include=*.cs)",
+      "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/tests/AutoCADTools.CanvasTest/bin' -name *.dll -o -name *.exe)"
     ]
   }
 }
