@@ -93,10 +93,10 @@
   <data name="View.Settings.Language" xml:space="preserve">
     <value>Ngôn ngữ:</value>
   </data>
-  <data name="View.Settings.Save" xml:space="preserve">
+  <data name="View.Settings.Button.Save" xml:space="preserve">
     <value>Lưu</value>
   </data>
-  <data name="View.Settings.Cancel" xml:space="preserve">
+  <data name="View.Settings.Button.Cancel" xml:space="preserve">
     <value>Hủy</value>
   </data>
 </root>
