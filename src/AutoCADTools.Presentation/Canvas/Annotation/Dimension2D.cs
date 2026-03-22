@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Canvas.Shapes;
 using AutoCADTools.Presentation.Canvas.Settings;
 using AutoCADTools.Presentation.Canvas.Utils;
@@ -309,7 +310,7 @@ public class Dimension2D
 
     InitSetting(_scale, _dimSetting);
     if (!InitGeometry())
-      throw new ArgumentException("Dimension2D: invalid geometry (parallel lines or zero-length dimension).");
+      throw new ArgumentException("Error.InvalidDimensionGeometry".GetString());
 
     DrawDimLine();
 

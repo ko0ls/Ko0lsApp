@@ -43,7 +43,7 @@
       </paz:ZoomBorder>
     </ScrollViewer>
 
-    <CheckBox Content="Show Dimension"
+    <CheckBox Content="{Binding ShowDimensionLabel}"
               HorizontalAlignment="Right"
               VerticalAlignment="Bottom"
               Margin="9"

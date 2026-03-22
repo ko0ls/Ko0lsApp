@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Canvas.LineWeightData;
 using Wpf.Controls.PanAndZoom;
 
@@ -129,7 +130,7 @@ public static class UtilsCanvas
   public static Point CalculateCenter(PointCollection points)
   {
     if (points == null || !points.Any())
-      throw new ArgumentException("Points cannot be null or empty.");
+      throw new ArgumentException("Error.PointsNullOrEmpty".GetString());
     var cx = points.Average(p => p.X);
     var cy = points.Average(p => p.Y);
     return new Point(cx, cy);

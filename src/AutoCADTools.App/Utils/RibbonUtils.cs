@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using AutoCADTools.Core.Localization;
 using Autodesk.Windows;
 
 namespace AutoCADTools.App.Utils;
@@ -182,8 +183,7 @@ public static class RibbonUtils
       if (ribbonControl == null)
       {
         throw new InvalidOperationException(
-          "ComponentManager.Ribbon is null.  Ensure this method is called after " +
-          "the AutoCAD ribbon has been initialised.");
+          "Error.RibbonNotInitialized".GetString());
       }
 
       RibbonTab tab = FindOrCreateTab(ribbonControl, _tabName);
@@ -339,7 +339,7 @@ public static class RibbonUtils
       {
         var ed = Autodesk.AutoCAD.ApplicationServices.Core.Application
           .DocumentManager.MdiActiveDocument?.Editor;
-        ed?.WriteMessage($"\nError executing command '{_commandName}': {ex.Message}");
+        ed?.WriteMessage($"\n{"Error.CommandExecutionFailed".GetString().Replace("{0}", _commandName ?? "").Replace("{1}", ex.Message)}");
       }
     }
   }

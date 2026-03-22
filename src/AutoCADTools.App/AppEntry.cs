@@ -69,9 +69,9 @@ namespace AutoCADTools.App
     private static void CreatePanel()
     {
       RibbonUtils.CreatePanel("App.Title".GetString(), "Ko0ls Tab")
-        .AddButton("Command.DrawLine".GetString(), "KOOLS_CMD_LINE", "Draw a line", iconKey: "line")
-        .AddButton("Command.DrawCircle".GetString(), "KOOLS_CMD_CIRCLE", "Draw a circle", iconKey: "circle")
-        .AddButton("Command.DrawArc".GetString(), "KOOLS_CMD_ARC", "Draw an arc", iconKey: "arc")
+        .AddButton("Command.DrawLine".GetString(), "KOOLS_CMD_LINE", "Command.DrawLineTooltip".GetString(), iconKey: "line")
+        .AddButton("Command.DrawCircle".GetString(), "KOOLS_CMD_CIRCLE", "Command.DrawCircleTooltip".GetString(), iconKey: "circle")
+        .AddButton("Command.DrawArc".GetString(), "KOOLS_CMD_ARC", "Command.DrawArcTooltip".GetString(), iconKey: "arc")
         .Build();
     }
 

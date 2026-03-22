@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using AutoCADTools.Core.Localization;
 
 namespace AutoCADTools.Presentation.Canvas.Utils;
 
@@ -113,7 +114,7 @@ public static class UtilsVector
     var magnitudeB = vectorB.Length;
 
     if (magnitudeA < 1e-9 || magnitudeB < 1e-9)
-      throw new InvalidOperationException("Vectors must not be zero vectors.");
+      throw new InvalidOperationException("Error.ZeroVector".GetString());
 
     var cosAngle = dotProduct / ( magnitudeA * magnitudeB );
     cosAngle = Math.Max(-1, Math.Min(1, cosAngle));
