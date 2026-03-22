@@ -77,7 +77,7 @@ namespace AutoCADTools.App
 
     private static void CreatePanel()
     {
-      RibbonUtils.CreatePanel("App.Title".GetString(), "Ko0ls Tab")
+      RibbonUtils.CreatePanel("Panel.Settings.Title".GetString(), "Ko0ls Tab")
         .AddButton("Command.Settings".GetString(), "KOOLS_CMD_SETTINGS", "Command.Settings".GetString(), iconKey: "settings")
         .Build();
     }

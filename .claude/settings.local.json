@@ -100,7 +100,16 @@
       "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/tests/AutoCADTools.CanvasTest/bin' -name *.dll -o -name *.exe)",
       "Bash(powershell -Command \"Get-ChildItem '$env:ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents' -ErrorAction SilentlyContinue | Select-Object Name\")",
       "Bash(powershell -Command \"Test-Path \\(Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents'\\)\")",
-      "Bash(powershell -ExecutionPolicy Bypass -Command \"$out='D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug\\\\2023\\\\net48';$bundle=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents';$pkg=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle';if\\(-Not\\(Test-Path $bundle\\)\\){New-Item -ItemType Directory -Path $bundle -Force|Out-Null};Copy-Item \\\\\"$out\\\\*.*\\\\\" $bundle -Recurse -Force;Copy-Item 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\PackageContents.xml' $pkg -Force;Write-Host 'Done'\")"
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"$out='D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug\\\\2023\\\\net48';$bundle=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents';$pkg=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle';if\\(-Not\\(Test-Path $bundle\\)\\){New-Item -ItemType Directory -Path $bundle -Force|Out-Null};Copy-Item \\\\\"$out\\\\*.*\\\\\" $bundle -Recurse -Force;Copy-Item 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\PackageContents.xml' $pkg -Force;Write-Host 'Done'\")",
+      "Bash(dotnet list:*)",
+      "WebFetch(domain:help.autodesk.com)",
+      "WebFetch(domain:through-the-interface.typepad.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:forums.autodesk.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:aps.autodesk.com)",
+      "WebFetch(domain:adndevblog.typepad.com)",
+      "WebFetch(domain:stackoverflow.com)"
     ]
   }
 }
