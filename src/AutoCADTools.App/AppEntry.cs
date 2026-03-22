@@ -1,6 +1,7 @@
 #nullable enable
 
 using AutoCADTools.App.Utils;
+using AutoCADTools.Core.Localization;
 using AutoCADTools.Core.Utils;
 using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.Runtime;
@@ -30,17 +31,19 @@ namespace AutoCADTools.App
         services.AddTransient<Presentation.Canvas.CanvasViewModel>();
         _serviceProvider = services.BuildServiceProvider();
 
+        LocalizationManager.SetLanguage("en");
+
         if (ComponentManager.Ribbon == null)
           ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
         else {
           var editor = Application.DocumentManager.MdiActiveDocument.Editor;
           CreatePanel();
-          editor.WriteMessage("\nAutoCADTools loaded successfully.");
+          editor.WriteMessage($"\n{"App.Loaded".GetString()}");
         }
       }
       catch (System.Exception ex) {
         Application.DocumentManager.MdiActiveDocument?.Editor
-          .WriteMessage($"\nAutoCADTools initialization failed: {ex.Message}");
+          .WriteMessage($"\n{"App.InitializationFailed".GetString().Replace("{0}", ex.Message)}");
       }
     }
 
@@ -65,10 +68,10 @@ namespace AutoCADTools.App
 
     private static void CreatePanel()
     {
-      RibbonUtils.CreatePanel("Ko0ls Tools", "Ko0ls Tab")
-        .AddButton("Draw Line", "KOOLS_CMD_LINE", "Draw a line", iconKey: "line")
-        .AddButton("Draw Circle", "KOOLS_CMD_CIRCLE", "Draw a circle", iconKey: "circle")
-        .AddButton("Draw Arc", "KOOLS_CMD_ARC", "Draw an arc", iconKey: "arc")
+      RibbonUtils.CreatePanel("App.Title".GetString(), "Ko0ls Tab")
+        .AddButton("Command.DrawLine".GetString(), "KOOLS_CMD_LINE", "Draw a line", iconKey: "line")
+        .AddButton("Command.DrawCircle".GetString(), "KOOLS_CMD_CIRCLE", "Draw a circle", iconKey: "circle")
+        .AddButton("Command.DrawArc".GetString(), "KOOLS_CMD_ARC", "Draw an arc", iconKey: "arc")
         .Build();
     }
 
