@@ -302,13 +302,10 @@ public static class RibbonUtils
   // ─────────────────────────────────────────────────────────────────
 
   /// <summary>
-  ///   An <c>ICommand</c> that, when executed, calls
-  ///   <c>Editor.RunCommand(commandName)</c> on the active AutoCAD document.
+  ///   An <c>ICommand</c> that dispatches an AutoCAD command registered via
+  ///   <c>[CommandMethod]</c> using <c>Autodesk.Windows.RibbonCommandHandler.Execute</c>,
+  ///   which is the official AdWindows API for ribbon button command dispatch.
   /// </summary>
-  /// <remarks>
-  ///   Implements <c>System.Windows.Input.ICommand</c>, which is the type
-  ///   expected by <c>RibbonButton.CommandHandler</c>.
-  /// </remarks>
   private class AutoCADCommandHandler : ICommand
   {
     private readonly string? _commandName;
@@ -318,7 +315,7 @@ public static class RibbonUtils
       _commandName = commandName;
     }
 
-#pragma warning disable CS0067 // Never used — WPF fires this via reflection
+#pragma warning disable CS0067
     public event EventHandler? CanExecuteChanged;
 #pragma warning restore CS0067
 
@@ -331,9 +328,11 @@ public static class RibbonUtils
 
       try
       {
-        var doc = Autodesk.AutoCAD.ApplicationServices.Core.Application
-          .DocumentManager.MdiActiveDocument;
-        doc?.Editor.Command(_commandName);
+        // SendStringToExecute on Document (not Editor) is the correct AutoCAD API
+        // for dispatching commands from ribbon button clicks.
+        Autodesk.AutoCAD.ApplicationServices.Core.Application
+          .DocumentManager.MdiActiveDocument
+          ?.SendStringToExecute(_commandName + "\n", true, false, true);
       }
       catch (Exception ex)
       {
