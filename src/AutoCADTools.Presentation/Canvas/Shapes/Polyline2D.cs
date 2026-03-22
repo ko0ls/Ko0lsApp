@@ -1,7 +1,5 @@
-using System;
 using System.Windows;
 using System.Windows.Media;
-using AutoCADTools.Presentation.Canvas.Settings;
 using Polyline = System.Windows.Shapes.Polyline;
 
 namespace AutoCADTools.Presentation.Canvas.Shapes;
