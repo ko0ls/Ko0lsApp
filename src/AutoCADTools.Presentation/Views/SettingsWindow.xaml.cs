@@ -14,7 +14,21 @@ namespace AutoCADTools.Presentation.Views
 
     private void OnCloseRequested()
     {
+      if (DataContext is SettingViewModel vm)
+      {
+        vm.CloseRequested -= OnCloseRequested;
+      }
       Close();
+    }
+
+    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    {
+      if (DataContext is SettingViewModel vm)
+      {
+        vm.CloseRequested -= OnCloseRequested;
+        vm.CancelCommand.Execute(null); // trigger cancel logic for X button
+      }
+      base.OnClosing(e);
     }
   }
 }
