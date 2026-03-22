@@ -266,13 +266,13 @@
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource EmptyValidationTemplate}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding HasChanged}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ResourceKey=TextBox.Dirty.Background}" />
+                <Setter Property="Background" Value="{StaticResource TextBox.Dirty.Background}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding HasError}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ResourceKey=TextBox.Error.Background}" />
+                <Setter Property="Background" Value="{StaticResource TextBox.Error.Background}" />
             </DataTrigger>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="Background" Value="{StaticResource ResourceKey=TextBox.Error.Background}" />
+                <Setter Property="Background" Value="{StaticResource TextBox.Error.Background}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -290,7 +290,7 @@
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(TextBox.IsEnabled)}" Value="True" />
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True" />
                     <Condition Binding="{Binding IsSelected,RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
@@ -325,7 +325,7 @@
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(TextBox.IsEnabled)}" Value="True" />
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True" />
                     <Condition Binding="{Binding IsSelected,RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
@@ -487,7 +487,7 @@
                                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder"
                                         BorderThickness="1"
-                                        Background="White "
+                                        Background="White"
                                         BorderBrush="#646464">
                                 </Border>
                                 <ScrollViewer x:Name="ScrollViewer"
@@ -586,7 +586,7 @@
                                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder"
                                         BorderThickness="0"
-                                        Background="White "
+                                        Background="White"
                                         BorderBrush="#646464">
                                 </Border>
                                 <ScrollViewer x:Name="ScrollViewer"
@@ -643,19 +643,26 @@
         </Setter>
     </Style>
 
+    <!-- ToggleButton arrow uses Path geometry instead of external image files -->
     <Style x:Key="ExpanderHeaderStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <DockPanel Background="Transparent" Tag="Header">
-                        <Image Tag="Header" x:Name="arrow" Source="pack://application:,,,/PcBridge.App;component/Resources/Images/ArrowDown.png" Stretch="None"
-                               HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12 0 0 0" Width="20" />
+                        <Path x:Name="Arrow"
+                              Data="M 0 0 L 20 0 L 10 10 Z"
+                              Stretch="Uniform"
+                              Stroke="Black"
+                              StrokeThickness="3"
+                              Margin="12,0,0,0"
+                              Height="6"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center" />
                         <ContentPresenter HorizontalAlignment="Stretch" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" />
                     </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-
-                            <Setter Property="Source" TargetName="arrow" Value="pack://application:,,,/PcBridge.App;component/Resources/Images/ArrowUp.png" />
+                            <Setter TargetName="Arrow" Property="Data" Value="M 0 10 L 10 0 L 20 10 Z" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -753,7 +760,6 @@
                         <!-- Show Content when IsExpanded is True -->
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="Content" Property="Visibility" Value="Visible" />
-                            <!-- <Setter TargetName="ExpanderToggleButton" Property="Background" Value="#FFC0C0C0" /> -->
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1207,7 +1213,8 @@
                                                 Width="140" />
                                     </DockPanel>
 
-                                    <Grid x:Name="PART_MonthView" Grid.ColumnSpan="3" HorizontalAlignment="Center"
+                                    <Grid x:Name="PART_MonthView" Grid.ColumnSpan="3" Grid.Column="0"
+                                          HorizontalAlignment="Center"
                                           Margin="6,-1,6,6" Grid.Row="1" Visibility="Visible">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
@@ -1228,7 +1235,7 @@
                                             <RowDefinition Height="35" />
                                         </Grid.RowDefinitions>
                                     </Grid>
-                                    <Grid x:Name="PART_YearView" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
+                                    <Grid Grid.Column="0" x:Name="PART_YearView" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch"
                                           Margin="6,-3,7,6" Grid.Row="1" Visibility="Hidden">
                                         <Grid.ColumnDefinitions>
