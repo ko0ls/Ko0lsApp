@@ -24,7 +24,7 @@
 
     <!-- Language row -->
     <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-      <Label Content="Language:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+      <Label Content="{utils:Loc View.Settings.Language}" VerticalAlignment="Center" Margin="0,0,10,0"/>
       <ComboBox
         x:Name="LanguageComboBox"
         MinWidth="180"
@@ -33,8 +33,8 @@
 
     <!-- Buttons row -->
     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-      <Button x:Name="SaveButton" MinWidth="80" Margin="5,0,0,0" Click="SaveButton_Click"/>
-      <Button x:Name="CancelButton" MinWidth="80" Margin="5,0,0,0" Click="CancelButton_Click"/>
+      <Button Content="{utils:Loc View.Settings.Save}" MinWidth="80" Margin="5,0,0,0" Click="SaveButton_Click"/>
+      <Button Content="{utils:Loc View.Settings.Cancel}" MinWidth="80" Margin="5,0,0,0" Click="CancelButton_Click"/>
     </StackPanel>
   </Grid>
 </Window>

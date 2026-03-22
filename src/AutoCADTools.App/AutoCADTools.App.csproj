@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -70,7 +70,7 @@
 
   <!-- Deploy plugin bundle to %ProgramData%\Autodesk\ApplicationPlugins\ -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="powershell -ExecutionPolicy Bypass -Command &quot;$out='$(TargetDir)';$bundle=Join-Path $env:ProgramData 'Autodesk\ApplicationPlugins\AutoCADTools.bundle\Contents';$pkg=Join-Path $env:ProgramData 'Autodesk\ApplicationPlugins\AutoCADTools.bundle';if(-Not(Test-Path $bundle)){New-Item -ItemType Directory -Path $bundle -Force|Out-Null};Copy-Item &quot;$out\*.dll&quot; $bundle -Force;Copy-Item &quot;$out\*.pdb&quot; $bundle -Force;Copy-Item &quot;$out\PackageContents.xml&quot; $bundle -Force;Copy-Item '$(ProjectDir)PackageContents.xml' $pkg -Force&quot;"/>
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)deploy.ps1&quot; &quot;$(OutputPath)&quot;"/>
   </Target>
 
 </Project>

@@ -21,4 +21,7 @@
   <data name="Error.InvalidDimensionGeometry" xml:space="preserve"><value>Dimension2D: invalid geometry.</value></data>
   <data name="Error.ChangeTrackingNotStarted" xml:space="preserve"><value>Change tracking has not started.</value></data>
   <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve"><value>Change tracking has already started.</value></data>
+  <data name="View.Settings.Language" xml:space="preserve"><value>Language:</value></data>
+  <data name="View.Settings.Save" xml:space="preserve"><value>Save</value></data>
+  <data name="View.Settings.Cancel" xml:space="preserve"><value>Cancel</value></data>
 </root>

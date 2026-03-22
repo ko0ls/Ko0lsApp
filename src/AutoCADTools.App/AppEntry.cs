@@ -1,8 +1,11 @@
 #nullable enable
 
+using System;
+using System.Linq;
 using AutoCADTools.App.Utils;
 using AutoCADTools.Core.Localization;
 using AutoCADTools.Core.Utils;
+using AutoCADTools.Presentation.Utils;
 using AutoCADTools.Storage;
 using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.Runtime;
@@ -42,11 +45,15 @@ namespace AutoCADTools.App
           LocalizationManager.SetLanguage("en");
         }
 
+        // Trigger LocalizationService singleton init so LanguageChanged is subscribed
+        _ = LocalizationService.Instance;
+
         if (ComponentManager.Ribbon == null)
           ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
         else {
           var editor = Application.DocumentManager.MdiActiveDocument.Editor;
           CreatePanel();
+          LocalizationManager.LanguageChanged += OnLanguageChanged;
           editor.WriteMessage($"\n{"App.Loaded".GetString()}");
         }
       }
@@ -67,12 +74,33 @@ namespace AutoCADTools.App
         if (ComponentManager.Ribbon == null) return;
 
         CreatePanel();
+        LocalizationManager.LanguageChanged += OnLanguageChanged;
 
         ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
       }
       catch (System.Exception ex) {
         MessageUtils.Error(ex.Message);
       }
+    }
+
+    private static void OnLanguageChanged(object? sender, EventArgs e)
+    {
+      RebuildRibbon();
+    }
+
+    private static void RebuildRibbon()
+    {
+      if (ComponentManager.Ribbon == null) return;
+      const string tabName = "Ko0ls Tab";
+      foreach (var tab in ComponentManager.Ribbon.Tabs) {
+        if (tab.Title == tabName) {
+          foreach (var panel in tab.Panels.ToList()) {
+            tab.Panels.Remove(panel);
+          }
+          break;
+        }
+      }
+      CreatePanel();
     }
 
     private static void CreatePanel()
@@ -83,24 +111,6 @@ namespace AutoCADTools.App
     }
 
     // ── Stub command methods ────────────────────────────────────────
-
-    [CommandMethod("KOOLS_CMD_LINE")]
-    public void CmdLine()
-    {
-      // TODO: implement
-    }
-
-    [CommandMethod("KOOLS_CMD_CIRCLE")]
-    public void CmdCircle()
-    {
-      // TODO: implement
-    }
-
-    [CommandMethod("KOOLS_CMD_ARC")]
-    public void CmdArc()
-    {
-      // TODO: implement
-    }
 
     [CommandMethod("KOOLS_CMD_SETTINGS")]
     public void CmdSettings()

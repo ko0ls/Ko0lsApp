@@ -23,12 +23,16 @@ public class LocalizationService : INotifyPropertyChanged
 
   private void OnLanguageChanged(object? sender, EventArgs e)
   {
-    // Fire PropertyChanged("Item[]") so all active {Loc} bindings rebind.
-    // Dispatch to UI thread if called from a background thread.
-    if (Application.Current?.Dispatcher.CheckAccess() == false)
-      Application.Current.Dispatcher.BeginInvoke(() =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]")));
-    else
+    // Set CultureInfo on the WPF UI thread synchronously BEFORE firing PropertyChanged,
+    // so that GetString() bindings resolve with the new culture immediately.
+    // BeginInvoke caused a race: PropertyChanged fired before CultureInfo was updated.
+    if (Application.Current?.Dispatcher.CheckAccess() == false) {
+      Application.Current.Dispatcher.Invoke(() => {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+      });
+    }
+    else {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+    }
   }
 }

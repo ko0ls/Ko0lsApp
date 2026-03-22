@@ -17,9 +17,6 @@ namespace AutoCADTools.Presentation.Views
       LanguageComboBox.DisplayMemberPath = nameof(LanguageOption.DisplayName);
       LanguageComboBox.SelectedValuePath = nameof(LanguageOption.Code);
       LanguageComboBox.SelectedValue = _viewModel.SelectedLanguage;
-
-      SaveButton.Content = "Save";
-      CancelButton.Content = "Cancel";
     }
 
     private void SaveButton_Click(object sender, RoutedEventArgs e)
