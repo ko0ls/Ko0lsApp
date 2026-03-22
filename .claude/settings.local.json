@@ -109,7 +109,10 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:aps.autodesk.com)",
       "WebFetch(domain:adndevblog.typepad.com)",
-      "WebFetch(domain:stackoverflow.com)"
+      "WebFetch(domain:stackoverflow.com)",
+      "Bash(Get-ChildItem -Path \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.Core\\\\bin\\\\Debug\\\\2023\\\\net48\" -Recurse -Filter \"*.resources.dll\")",
+      "Bash(Select-Object FullName)",
+      "Bash(curl -s https://api.github.com/repos/ko0ls/LanguageResources)"
     ]
   }
 }
