@@ -1,5 +1,4 @@
 using System.Windows.Input;
-using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Utils;
 using AutoCADTools.Presentation.Utils.HelperTracking;
 using AutoCADTools.Presentation.Canvas.Utils;
@@ -19,7 +18,6 @@ public class CanvasViewModel : BindableObject
     set => SetProperty(ref _isShowDim, value, nameof(IsShowDim));
   }
 
-  public string ShowDimensionLabel => "Command.ShowDimension".GetString();
 
   public System.Windows.Controls.Canvas? Canvas => _canvas;
   public object? ZoomBorder => _zoomBorder;
