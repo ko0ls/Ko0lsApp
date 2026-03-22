@@ -52,9 +52,11 @@
     <ProjectReference Include="..\AutoCADTools.Core\AutoCADTools.Core.csproj"/>
     <ProjectReference Include="..\AutoCADTools.Service\AutoCADTools.Service.csproj"/>
     <ProjectReference Include="..\AutoCADTools.Presentation\AutoCADTools.Presentation.csproj"/>
+    <ProjectReference Include="..\AutoCADTools.Storage\AutoCADTools.Storage.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5"/>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122"/>
     <PackageReference Include="Wpf.Controls.PanAndZoom" Version="2.0.0"/>

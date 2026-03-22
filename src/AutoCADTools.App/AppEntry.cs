@@ -3,6 +3,7 @@
 using AutoCADTools.App.Utils;
 using AutoCADTools.Core.Localization;
 using AutoCADTools.Core.Utils;
+using AutoCADTools.Storage;
 using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.Windows;
@@ -15,6 +16,7 @@ namespace AutoCADTools.App
   public class AppEntry : IExtensionApplication
   {
     private static ServiceProvider? _serviceProvider;
+    private static ISettingsRepository? _settingsRepository;
     private static Presentation.Canvas.CanvasViewModel? _instanceVm;
 
     public static void RegisterViewModel(Presentation.Canvas.CanvasViewModel vm)
@@ -31,7 +33,14 @@ namespace AutoCADTools.App
         services.AddTransient<Presentation.Canvas.CanvasViewModel>();
         _serviceProvider = services.BuildServiceProvider();
 
-        LocalizationManager.SetLanguage("en");
+        _settingsRepository = new SettingsRepository();
+        try {
+          var lang = _settingsRepository.GetLanguage();
+          LocalizationManager.SetLanguage(lang);
+        }
+        catch {
+          LocalizationManager.SetLanguage("en");
+        }
 
         if (ComponentManager.Ribbon == null)
           ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
@@ -69,9 +78,7 @@ namespace AutoCADTools.App
     private static void CreatePanel()
     {
       RibbonUtils.CreatePanel("App.Title".GetString(), "Ko0ls Tab")
-        .AddButton("Command.DrawLine".GetString(), "KOOLS_CMD_LINE", "Command.DrawLineTooltip".GetString(), iconKey: "line")
-        .AddButton("Command.DrawCircle".GetString(), "KOOLS_CMD_CIRCLE", "Command.DrawCircleTooltip".GetString(), iconKey: "circle")
-        .AddButton("Command.DrawArc".GetString(), "KOOLS_CMD_ARC", "Command.DrawArcTooltip".GetString(), iconKey: "arc")
+        .AddButton("Command.Settings".GetString(), "KOOLS_CMD_SETTINGS", "Command.Settings".GetString(), iconKey: "settings")
         .Build();
     }
 
@@ -93,6 +100,14 @@ namespace AutoCADTools.App
     public void CmdArc()
     {
       // TODO: implement
+    }
+
+    [CommandMethod("KOOLS_CMD_SETTINGS")]
+    public void CmdSettings()
+    {
+      var vm = new Presentation.ViewModels.SettingViewModel(_settingsRepository!);
+      var window = new Presentation.Views.SettingsWindow(vm);
+      Application.ShowModalWindow(window);
     }
   }
 }

@@ -99,4 +99,10 @@
   <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve">
     <value>Change tracking has already started.</value>
   </data>
+  <data name="View.Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Command.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
 </root>
