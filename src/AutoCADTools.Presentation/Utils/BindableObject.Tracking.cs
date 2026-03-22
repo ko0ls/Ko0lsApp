@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Utils.HelperTracking;
 
 namespace AutoCADTools.Presentation.Utils;
@@ -215,14 +216,14 @@ public abstract partial class BindableObject
   private void ThrowIfTrackingNotStarted()
   {
     if (!IsTracking) {
-      throw new InvalidOperationException("Change tracking has not started");
+      throw new InvalidOperationException("Error.ChangeTrackingNotStarted".GetString());
     }
   }
 
   private void ThrowIfTrackingStarted()
   {
     if (IsTracking) {
-      throw new InvalidOperationException("Change tracking has already started");
+      throw new InvalidOperationException("Error.ChangeTrackingAlreadyStarted".GetString());
     }
   }
 

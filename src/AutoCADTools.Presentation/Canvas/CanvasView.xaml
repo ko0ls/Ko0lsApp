@@ -6,6 +6,7 @@
              xmlns:paz="clr-namespace:Wpf.Controls.PanAndZoom;assembly=Wpf.Controls.PanAndZoom"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:converters="clr-namespace:AutoCADTools.Presentation.Canvas.Converters"
+             xmlns:utils="clr-namespace:AutoCADTools.Presentation.Utils"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
   <UserControl.Resources>
@@ -43,7 +44,7 @@
       </paz:ZoomBorder>
     </ScrollViewer>
 
-    <CheckBox Content="Show Dimension"
+    <CheckBox Content="{utils:Loc Command.ShowDimension}"
               HorizontalAlignment="Right"
               VerticalAlignment="Bottom"
               Margin="9"

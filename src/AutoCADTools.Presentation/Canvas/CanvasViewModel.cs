@@ -18,6 +18,7 @@ public class CanvasViewModel : BindableObject
     set => SetProperty(ref _isShowDim, value, nameof(IsShowDim));
   }
 
+
   public System.Windows.Controls.Canvas? Canvas => _canvas;
   public object? ZoomBorder => _zoomBorder;
 

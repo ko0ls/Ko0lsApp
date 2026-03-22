@@ -97,7 +97,10 @@
       "Bash(ilspycmd -p -o ilspy_app \"tests/AutoCADTools.Test/bin/Debug/2023/net8.0-windows/AutoCADTools.dll\")",
       "Bash(grep -rl \"Accore\\\\|Acdb\\\\|Acmgd\\\\|Autodesk\\\\|Point3d\\\\|Vector3d\\\\|ObjectId\\\\|TransactionManager\" 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/src/AutoCADTools.Presentation' --include=*.cs)",
       "Bash(grep -rl Autodesk. 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/src/AutoCADTools.Presentation' --include=*.cs)",
-      "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/tests/AutoCADTools.CanvasTest/bin' -name *.dll -o -name *.exe)"
+      "Bash(find 'D:/KO0LS/CODE/Tools 2026/Autocad/Ko0lsApp/tests/AutoCADTools.CanvasTest/bin' -name *.dll -o -name *.exe)",
+      "Bash(powershell -Command \"Get-ChildItem '$env:ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents' -ErrorAction SilentlyContinue | Select-Object Name\")",
+      "Bash(powershell -Command \"Test-Path \\(Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents'\\)\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"$out='D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug\\\\2023\\\\net48';$bundle=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents';$pkg=Join-Path $env:ProgramData 'Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle';if\\(-Not\\(Test-Path $bundle\\)\\){New-Item -ItemType Directory -Path $bundle -Force|Out-Null};Copy-Item \\\\\"$out\\\\*.*\\\\\" $bundle -Recurse -Force;Copy-Item 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\PackageContents.xml' $pkg -Force;Write-Host 'Done'\")"
     ]
   }
 }

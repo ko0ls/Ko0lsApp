@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage>
+  <CompanyDetails Name="Ko0ls" Url="https://github.com/ko0ls/Ko0lsApp"/>
+  <Components>
+    <RuntimeRequirements SchemaVersion="1.0" AppVersion="1.0" OS="Win32|Win64" Platform="AutoCAD|AutoCAD*" SeriesMin="R24.1" ProductCode="{ko0ls1234-5678-9abc-def0-123456789abc}"/>
+    <ComponentEntry
+      AppName="AutoCADTools"
+      ModuleName="./Contents/AutoCADTools.dll"
+      AppDescription="AutoCAD Tools for Ko0lsApp"
+      LoadOnAutoCADStartup="True"
+    />
+  </Components>
+</ApplicationPackage>
