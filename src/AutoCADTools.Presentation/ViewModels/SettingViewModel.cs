@@ -7,12 +7,12 @@ using AutoCADTools.Storage;
 
 namespace AutoCADTools.Presentation.ViewModels
 {
-  public class LanguageOption
+  public class LanguageItem
   {
-    public string Code { get; set; }
-    public string DisplayName { get; set; }
+    public string Code { get; }
+    public string DisplayName { get; }
 
-    public LanguageOption(string code, string displayName)
+    public LanguageItem(string code, string displayName)
     {
       Code = code;
       DisplayName = displayName;
@@ -21,34 +21,53 @@ namespace AutoCADTools.Presentation.ViewModels
 
   public class SettingViewModel : BindableObject
   {
-    private string _selectedLanguage;
     private readonly ISettingsRepository _repository;
+    private LanguageItem _selectedLanguageItem;
+    private LanguageItem _currentLanguage;
 
     public SettingViewModel(ISettingsRepository repository)
     {
       _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-      _selectedLanguage = _repository.GetLanguage();
+      _currentLanguage = new LanguageItem(_repository.GetLanguage(), "Language.View.Settings.LanguageCurrent".GetString());
+      var savedCode = repository.GetLanguage();
+      _selectedLanguageItem = new LanguageItem(savedCode, savedCode == "vi" ? "Tiếng Việt" : "English");
       SaveCommand = new RelayCommand(OnSave);
+      CancelCommand = new RelayCommand(OnCancel);
     }
 
-    public string SelectedLanguage
+    public LanguageItem SelectedLanguageItem
     {
-      get => _selectedLanguage;
-      set => SetProperty(ref _selectedLanguage, value);
+      get => _selectedLanguageItem;
+      set => SetProperty(ref _selectedLanguageItem, value);
     }
 
-    public IReadOnlyList<LanguageOption> AvailableLanguages { get; } = new List<LanguageOption>
+    public IReadOnlyList<LanguageItem> AvailableLanguages { get; } = new LanguageItem[]
     {
-      new LanguageOption("en", "English"),
-      new LanguageOption("vi", "Tiếng Việt"),
+      new LanguageItem("en", "English"),
+      new LanguageItem("vi", "Tiếng Việt"),
     };
 
     public ICommand SaveCommand { get; }
+    public ICommand CancelCommand { get; }
 
-    public void OnSave()
+    public event Action? CloseRequested;
+
+    public string Title => "View.Settings.Title".GetString();
+    public string LanguageLabel => "View.Settings.Language".GetString();
+    public string SaveLabel => "View.Settings.Save".GetString();
+    public string CancelLabel => "View.Settings.Cancel".GetString();
+
+    private void OnSave()
     {
-      LocalizationManager.SetLanguage(SelectedLanguage);
-      _repository.SaveLanguage(SelectedLanguage);
+      if (SelectedLanguageItem == null) return;
+      LocalizationManager.SetLanguage(SelectedLanguageItem.Code);
+      _repository.SaveLanguage(SelectedLanguageItem.Code);
+      CloseRequested?.Invoke();
+    }
+
+    private void OnCancel()
+    {
+      CloseRequested?.Invoke();
     }
   }
 }
