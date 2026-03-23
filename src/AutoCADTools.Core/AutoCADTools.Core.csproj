@@ -17,4 +17,19 @@
     <Reference Include="WindowsBase"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\Resources\Strings.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\Resources\Strings.en.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localization\Resources\Strings.vi.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

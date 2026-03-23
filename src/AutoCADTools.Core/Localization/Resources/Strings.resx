@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="App.Title" xml:space="preserve"><value>Ko0ls Tools</value></data>
+  <data name="App.Loaded" xml:space="preserve"><value>AutoCADTools loaded successfully.</value></data>
+  <data name="App.InitializationFailed" xml:space="preserve"><value>AutoCADTools initialization failed: {0}</value></data>
+  <data name="Command.ShowDimension" xml:space="preserve"><value>Show Dimension</value></data>
+  <data name="Command.Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="View.Settings.Title" xml:space="preserve"><value>Settings</value></data>
+  <data name="Panel.Settings.Title" xml:space="preserve"><value>Settings</value></data>
+  <data name="Message.Title.Notification" xml:space="preserve"><value>Notification</value></data>
+  <data name="Message.Title.Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="Message.Title.Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Error.RibbonNotInitialized" xml:space="preserve"><value>ComponentManager.Ribbon is null.</value></data>
+  <data name="Error.CommandExecutionFailed" xml:space="preserve"><value>Error executing command '{0}': {1}</value></data>
+  <data name="Error.PointsNullOrEmpty" xml:space="preserve"><value>Points cannot be null or empty.</value></data>
+  <data name="Error.ZeroVector" xml:space="preserve"><value>Vectors must not be zero vectors.</value></data>
+  <data name="Error.InvalidDimensionGeometry" xml:space="preserve"><value>Dimension2D: invalid geometry.</value></data>
+  <data name="Error.ChangeTrackingNotStarted" xml:space="preserve"><value>Change tracking has not started.</value></data>
+  <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve"><value>Change tracking has already started.</value></data>
+  <data name="View.Settings.Language" xml:space="preserve"><value>Language:</value></data>
+  <data name="View.Settings.Button.Save" xml:space="preserve"><value>Save</value></data>
+  <data name="View.Settings.Button.Cancel" xml:space="preserve"><value>Cancel</value></data>
+</root>

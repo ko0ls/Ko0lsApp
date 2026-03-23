@@ -53,6 +53,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AutoCADTools.Core\AutoCADTools.Core.csproj"/>
     <ProjectReference Include="..\AutoCADTools.Service\AutoCADTools.Service.csproj"/>
+    <ProjectReference Include="..\AutoCADTools.Storage\AutoCADTools.Storage.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

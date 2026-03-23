@@ -42,15 +42,6 @@
   <data name="Command.ShowDimension" xml:space="preserve">
     <value>Hiển thị Kích thước</value>
   </data>
-  <data name="Command.DrawLine" xml:space="preserve">
-    <value>Vẽ Đường thẳng</value>
-  </data>
-  <data name="Command.DrawCircle" xml:space="preserve">
-    <value>Vẽ Hình tròn</value>
-  </data>
-  <data name="Command.DrawArc" xml:space="preserve">
-    <value>Vẽ Cung tròn</value>
-  </data>
   <data name="App.Title" xml:space="preserve">
     <value>Công cụ Ko0ls</value>
   </data>
@@ -68,15 +59,6 @@
   </data>
   <data name="Message.Title.Error" xml:space="preserve">
     <value>Lỗi</value>
-  </data>
-  <data name="Command.DrawLineTooltip" xml:space="preserve">
-    <value>Vẽ đường thẳng</value>
-  </data>
-  <data name="Command.DrawCircleTooltip" xml:space="preserve">
-    <value>Vẽ hình tròn</value>
-  </data>
-  <data name="Command.DrawArcTooltip" xml:space="preserve">
-    <value>Vẽ cung tròn</value>
   </data>
   <data name="Error.RibbonNotInitialized" xml:space="preserve">
     <value>ComponentManager.Ribbon bị null. Hãy đảm bảo phương thức này được gọi sau khi AutoCAD ribbon đã khởi tạo.</value>
@@ -98,5 +80,23 @@
   </data>
   <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve">
     <value>Change tracking đã được bắt đầu.</value>
+  </data>
+  <data name="View.Settings.Title" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Command.Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Panel.Settings.Title" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="View.Settings.Language" xml:space="preserve">
+    <value>Ngôn ngữ:</value>
+  </data>
+  <data name="View.Settings.Button.Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="View.Settings.Button.Cancel" xml:space="preserve">
+    <value>Hủy</value>
   </data>
 </root>

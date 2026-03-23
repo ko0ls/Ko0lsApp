@@ -29,9 +29,11 @@ namespace AutoCADTools.Core.Localization
       LanguageChanged?.Invoke(null, EventArgs.Empty);
     }
 
-    public static string GetString( this string key)
+    public static string GetString(this string key)
     {
-      return _resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+      // GetString is called from the WPF UI thread where CultureInfo.CurrentUICulture
+      // is set by AppEntry.OnLanguageChanged before this returns.
+      return _resourceManager.GetString(key) ?? key;
     }
   }
 }

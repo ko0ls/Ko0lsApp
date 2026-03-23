@@ -1,0 +1,47 @@
+<Window x:Class="AutoCADTools.Presentation.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:AutoCADTools.Presentation.ViewModels"
+        xmlns:utils="clr-namespace:AutoCADTools.Presentation.Utils"
+        Title="{utils:Loc View.Settings.Title}"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Width="255"
+        Height="110"
+        d:DataContext="{d:DesignInstance vm:SettingViewModel, IsDesignTimeCreatable=True}"
+        ShowInTaskbar="False">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Common.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <DockPanel Margin="9">
+    <DockPanel LastChildFill="True" DockPanel.Dock="Top"
+               VerticalAlignment="Center">
+      <TextBlock Text="{utils:Loc View.Settings.Language}"
+                 Margin="0,0,9,0"
+                 VerticalAlignment="Center"/>
+      <ComboBox
+        ItemsSource="{Binding AvailableLanguages}"
+        SelectedItem="{Binding SelectedLanguageItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        DisplayMemberPath="DisplayName"
+        HorizontalAlignment="Stretch"/>
+    </DockPanel>
+    <StackPanel DockPanel.Dock="Bottom"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0 9 0 0">
+      <Button Content="{utils:Loc View.Settings.Button.Save}"
+              Command="{Binding SaveCommand}"
+              Margin="0 0 9 0"/>
+      <Button Content="{utils:Loc View.Settings.Button.Cancel}"
+              Command="{Binding CancelCommand}"
+              Margin="0"/>
+    </StackPanel>
+  </DockPanel>
+</Window>

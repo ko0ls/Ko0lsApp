@@ -42,15 +42,6 @@
   <data name="Command.ShowDimension" xml:space="preserve">
     <value>Show Dimension</value>
   </data>
-  <data name="Command.DrawLine" xml:space="preserve">
-    <value>Draw Line</value>
-  </data>
-  <data name="Command.DrawCircle" xml:space="preserve">
-    <value>Draw Circle</value>
-  </data>
-  <data name="Command.DrawArc" xml:space="preserve">
-    <value>Draw Arc</value>
-  </data>
   <data name="App.Title" xml:space="preserve">
     <value>Ko0ls Tools</value>
   </data>
@@ -68,15 +59,6 @@
   </data>
   <data name="Message.Title.Error" xml:space="preserve">
     <value>Error</value>
-  </data>
-  <data name="Command.DrawLineTooltip" xml:space="preserve">
-    <value>Draw a line</value>
-  </data>
-  <data name="Command.DrawCircleTooltip" xml:space="preserve">
-    <value>Draw a circle</value>
-  </data>
-  <data name="Command.DrawArcTooltip" xml:space="preserve">
-    <value>Draw an arc</value>
   </data>
   <data name="Error.RibbonNotInitialized" xml:space="preserve">
     <value>ComponentManager.Ribbon is null. Ensure this method is called after the AutoCAD ribbon has been initialised.</value>
@@ -98,5 +80,23 @@
   </data>
   <data name="Error.ChangeTrackingAlreadyStarted" xml:space="preserve">
     <value>Change tracking has already started.</value>
+  </data>
+  <data name="View.Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Command.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Panel.Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="View.Settings.Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="View.Settings.Button.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="View.Settings.Button.Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>
