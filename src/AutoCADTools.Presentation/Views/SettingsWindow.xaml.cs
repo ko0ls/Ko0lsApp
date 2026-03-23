@@ -1,10 +1,11 @@
-using System;
 using AutoCADTools.Presentation.ViewModels;
 
 namespace AutoCADTools.Presentation.Views
 {
   public partial class SettingsWindow : System.Windows.Window
   {
+    private bool _closeRequestedHandler;
+
     public SettingsWindow(SettingViewModel viewModel)
     {
       InitializeComponent();
@@ -14,6 +15,9 @@ namespace AutoCADTools.Presentation.Views
 
     private void OnCloseRequested()
     {
+      if (_closeRequestedHandler) return;
+      _closeRequestedHandler = true;
+
       if (DataContext is SettingViewModel vm)
       {
         vm.CloseRequested -= OnCloseRequested;
