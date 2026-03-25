@@ -33,7 +33,6 @@ namespace AutoCADTools.Presentation._3D.Shapes3D
         BackMaterial = null
       };
 
-      model.Freeze();
       return model;
     }
 
