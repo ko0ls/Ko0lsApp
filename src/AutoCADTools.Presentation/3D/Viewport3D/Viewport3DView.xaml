@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:my="clr-namespace:AutoCADTools.Presentation._3D.Viewport3D"
+             xmlns:local="clr-namespace:AutoCADTools.Presentation._3D.Viewport3D"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600"
              Background="#FF1E1E1E">
@@ -26,7 +26,7 @@
       </ModelVisual3D>
       <ModelVisual3D>
         <ModelVisual3D.Content>
-          <DirectionalLight Direction="-1,-1,-1" Color="White"/>
+          <DirectionalLight Direction="-1 -1 -1" Color="White"/>
         </ModelVisual3D.Content>
       </ModelVisual3D>
 
@@ -44,31 +44,31 @@
                 Background="#CC1E1E1E"
                 Width="110">
 
-      <Button Content="Top"       Command="{Binding PresetTopCommand}"     Margin="2" Padding="4,2"/>
-      <Button Content="Front"     Command="{Binding PresetFrontCommand}"   Margin="2" Padding="4,2"/>
-      <Button Content="Left"      Command="{Binding PresetLeftCommand}"   Margin="2" Padding="4,2"/>
-      <Button Content="Isometric" Command="{Binding PresetIsoCommand}"     Margin="2" Padding="4,2"/>
+      <Button Content="Top"       Command="{Binding PresetTopCommand}"     Margin="2" Padding="4 2"/>
+      <Button Content="Front"     Command="{Binding PresetFrontCommand}"   Margin="2" Padding="4 2"/>
+      <Button Content="Left"      Command="{Binding PresetLeftCommand}"   Margin="2" Padding="4 2"/>
+      <Button Content="Isometric" Command="{Binding PresetIsoCommand}"     Margin="2" Padding="4 2"/>
 
       <Separator Margin="2"/>
 
-      <Button Content="Orbit"     Command="{Binding OrbitCommand}"        Margin="2" Padding="4,2"/>
-      <Button Content="Pan"        Command="{Binding PanCommand}"          Margin="2" Padding="4,2"/>
-      <Button Content="Select"     Command="{Binding SelectCommand}"      Margin="2" Padding="4,2"/>
+      <Button Content="Orbit"     Command="{Binding OrbitCommand}"        Margin="2" Padding="4 2"/>
+      <Button Content="Pan"        Command="{Binding PanCommand}"          Margin="2" Padding="4 2"/>
+      <Button Content="Select"     Command="{Binding SelectCommand}"      Margin="2" Padding="4 2"/>
 
       <Separator Margin="2"/>
 
-      <Button Content="Zoom In"   Command="{Binding ZoomInCommand}"       Margin="2" Padding="4,2"/>
-      <Button Content="Zoom Out"  Command="{Binding ZoomOutCommand}"      Margin="2" Padding="4,2"/>
-      <Button Content="Zoom Fit"  Command="{Binding ZoomFitCommand}"      Margin="2" Padding="4,2"/>
+      <Button Content="Zoom In"   Command="{Binding ZoomInCommand}"       Margin="2" Padding="4 2"/>
+      <Button Content="Zoom Out"  Command="{Binding ZoomOutCommand}"      Margin="2" Padding="4 2"/>
+      <Button Content="Zoom Fit"  Command="{Binding ZoomFitCommand}"      Margin="2" Padding="4 2"/>
 
       <Separator Margin="2"/>
 
-      <Button Content="+ Add Box"    Command="{Binding AddBoxCommand}"     Margin="2" Padding="4,2"/>
-      <Button Content="+ Add Plane"  Command="{Binding AddPlaneCommand}"  Margin="2" Padding="4,2"/>
+      <Button Content="+ Add Box"   Command="{Binding AddBoxCommand}"     Margin="2" Padding="4 2"/>
+      <Button Content="+ Add Plane"  Command="{Binding AddPlaneCommand}"  Margin="2" Padding="4 2"/>
 
       <Separator Margin="2"/>
 
-      <Button Content="Clear Scene"   Command="{Binding ClearSceneCommand}" Margin="2" Padding="4,2"/>
+      <Button Content="Clear Scene"   Command="{Binding ClearSceneCommand}" Margin="2" Padding="4 2"/>
     </StackPanel>
 
     <!-- Status bar overlay (bottom) -->

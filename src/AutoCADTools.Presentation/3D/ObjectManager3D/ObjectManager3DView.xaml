@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:my="clr-namespace:AutoCADTools.Presentation._3D.ObjectManager3D"
+             xmlns:local="clr-namespace:AutoCADTools.Presentation._3D.ObjectManager3D"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="220"
              Background="#FF2D2D30">
@@ -18,7 +18,7 @@
     <TextBox Grid.Row="0"
              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
              Background="#FF3E3E42" Foreground="White"
-             BorderThickness="0" Padding="6,4" Margin="4"
+             BorderThickness="0" Padding="6 4" Margin="4"
              VerticalContentAlignment="Center">
       <TextBox.Style>
         <Style TargetType="TextBox">
@@ -46,7 +46,7 @@
               BorderThickness="0"
               Padding="4">
       <TreeView.ItemTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type my:ObjectTreeItem}" ItemsSource="{Binding Children}">
+        <HierarchicalDataTemplate DataType="{x:Type local:ObjectTreeItem}" ItemsSource="{Binding Children}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
           </StackPanel>
@@ -62,9 +62,9 @@
 
     <!-- Bottom toolbar -->
     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="4">
-      <Button Content="+ Layer" Command="{Binding CreateLayerCommand}" Margin="2" Padding="6,2" FontSize="11"/>
-      <Button Content="+ Group" Command="{Binding CreateGroupCommand}" Margin="2" Padding="6,2" FontSize="11"/>
-      <Button Content="Del" Command="{Binding DeleteSelectedCommand}" Margin="2" Padding="6,2" FontSize="11"/>
+      <Button Content="+ Layer" Command="{Binding CreateLayerCommand}" Margin="2" Padding="6 2" FontSize="11"/>
+      <Button Content="+ Group" Command="{Binding CreateGroupCommand}" Margin="2" Padding="6 2" FontSize="11"/>
+      <Button Content="Del" Command="{Binding DeleteSelectedCommand}" Margin="2" Padding="6 2" FontSize="11"/>
     </StackPanel>
   </Grid>
 </UserControl>

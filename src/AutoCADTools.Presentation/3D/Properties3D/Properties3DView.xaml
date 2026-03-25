@@ -3,33 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AutoCADTools.Presentation._3D.Properties3D"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="250"
              Background="#FF2D2D30">
   <ScrollViewer VerticalScrollBarVisibility="Auto">
     <StackPanel Margin="8">
-      <TextBlock Text="Properties" FontWeight="Bold" FontSize="14" Foreground="White" Margin="0,0,0,8"/>
+      <TextBlock Text="Properties" FontWeight="Bold" FontSize="14" Foreground="White" Margin="0 0 0 8"/>
 
       <!-- Identity -->
-      <Expander Header="Identity" IsExpanded="{Binding IsIdentityExpanded}" Foreground="White" Margin="0,4">
-        <StackPanel Margin="8,4">
+      <Expander Header="Identity" IsExpanded="{Binding IsIdentityExpanded}" Foreground="White" Margin="0 4">
+        <StackPanel Margin="8 4">
           <TextBlock Text="Name" Foreground="LightGray" FontSize="11"/>
           <TextBox Text="{Binding ObjectName, Mode=OneWay}" IsReadOnly="True"
-                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2"/>
+                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2"/>
 
-          <TextBlock Text="Type" Foreground="LightGray" FontSize="11" Margin="0,4,0,0"/>
+          <TextBlock Text="Type" Foreground="LightGray" FontSize="11" Margin="0 4 0 0"/>
           <TextBox Text="{Binding ObjectType, Mode=OneWay}" IsReadOnly="True"
-                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2"/>
+                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2"/>
 
-          <TextBlock Text="Id" Foreground="LightGray" FontSize="11" Margin="0,4,0,0"/>
+          <TextBlock Text="Id" Foreground="LightGray" FontSize="11" Margin="0 4 0 0"/>
           <TextBox Text="{Binding ObjectId, Mode=OneWay}" IsReadOnly="True"
-                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2"/>
+                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2"/>
         </StackPanel>
       </Expander>
 
       <!-- Transform -->
-      <Expander Header="Transform" IsExpanded="{Binding IsTransformExpanded}" Foreground="White" Margin="0,4">
-        <StackPanel Margin="8,4">
+      <Expander Header="Transform" IsExpanded="{Binding IsTransformExpanded}" Foreground="White" Margin="0 4">
+        <StackPanel Margin="8 4">
           <TextBlock Text="Position" Foreground="LightGray" FontSize="11"/>
           <Grid>
             <Grid.ColumnDefinitions>
@@ -37,34 +38,34 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding TransformGroup.PositionX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,2"/>
-            <TextBox Grid.Column="1" Text="{Binding TransformGroup.PositionY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,2"/>
-            <TextBox Grid.Column="2" Text="{Binding TransformGroup.PositionZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,0"/>
+            <TextBox Grid.Column="0" Text="{Binding TransformGroup.PositionX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
+            <TextBox Grid.Column="1" Text="{Binding TransformGroup.PositionY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
+            <TextBox Grid.Column="2" Text="{Binding TransformGroup.PositionZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0"/>
           </Grid>
           <TextBlock Text="X                    Y                    Z" Foreground="Gray" FontSize="9"/>
 
-          <TextBlock Text="Scale" Foreground="LightGray" FontSize="11" Margin="0,8,0,0"/>
+          <TextBlock Text="Scale" Foreground="LightGray" FontSize="11" Margin="0 8 0 0"/>
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding TransformGroup.ScaleX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,2"/>
-            <TextBox Grid.Column="1" Text="{Binding TransformGroup.ScaleY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,2"/>
-            <TextBox Grid.Column="2" Text="{Binding TransformGroup.ScaleZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2,0"/>
+            <TextBox Grid.Column="0" Text="{Binding TransformGroup.ScaleX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
+            <TextBox Grid.Column="1" Text="{Binding TransformGroup.ScaleY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
+            <TextBox Grid.Column="2" Text="{Binding TransformGroup.ScaleZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0"/>
           </Grid>
         </StackPanel>
       </Expander>
 
       <!-- Material -->
-      <Expander Header="Material" IsExpanded="{Binding IsMaterialExpanded}" Foreground="White" Margin="0,4">
-        <StackPanel Margin="8,4">
+      <Expander Header="Material" IsExpanded="{Binding IsMaterialExpanded}" Foreground="White" Margin="0 4">
+        <StackPanel Margin="8 4">
           <TextBlock Text="Color (Diffuse)" Foreground="LightGray" FontSize="11"/>
           <TextBox Text="{Binding MaterialGroup.DiffuseColor, UpdateSourceTrigger=PropertyChanged}"
-                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0,2"/>
+                   Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2"/>
 
-          <TextBlock Text="Transparency" Foreground="LightGray" FontSize="11" Margin="0,8,0,0"/>
+          <TextBlock Text="Transparency" Foreground="LightGray" FontSize="11" Margin="0 8 0 0"/>
           <Slider Minimum="0" Maximum="1"
                   Value="{Binding MaterialGroup.Transparency, UpdateSourceTrigger=PropertyChanged}"
                   Background="#FF3E3E42" Foreground="White"/>
@@ -74,7 +75,7 @@
       <!-- No selection message -->
       <TextBlock Text="No object selected"
                  Visibility="{Binding HasMultipleSelection, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                 Foreground="Gray" FontStyle="Italic" Margin="0,16"
+                 Foreground="Gray" FontStyle="Italic" Margin="0 16 0 0"
                  HorizontalAlignment="Center"/>
     </StackPanel>
   </ScrollViewer>
