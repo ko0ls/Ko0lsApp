@@ -1,0 +1,70 @@
+<UserControl x:Class="AutoCADTools.Presentation._3D.ObjectManager3D.ObjectManager3DView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:my="clr-namespace:AutoCADTools.Presentation._3D.ObjectManager3D"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="220"
+             Background="#FF2D2D30">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Search -->
+    <TextBox Grid.Row="0"
+             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+             Background="#FF3E3E42" Foreground="White"
+             BorderThickness="0" Padding="6,4" Margin="4"
+             VerticalContentAlignment="Center">
+      <TextBox.Style>
+        <Style TargetType="TextBox">
+          <Style.Triggers>
+            <Trigger Property="Text" Value="">
+              <Setter Property="Background">
+                <Setter.Value>
+                  <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                    <VisualBrush.Visual>
+                      <TextBlock Text="  Search..." Foreground="Gray" FontStyle="Italic"/>
+                    </VisualBrush.Visual>
+                  </VisualBrush>
+                </Setter.Value>
+              </Setter>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </TextBox.Style>
+    </TextBox>
+
+    <!-- Tree -->
+    <TreeView Grid.Row="1"
+              ItemsSource="{Binding TreeItems}"
+              Background="#FF2D2D30" Foreground="White"
+              BorderThickness="0"
+              Padding="4">
+      <TreeView.ItemTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type my:ObjectTreeItem}" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+      </TreeView.ItemTemplate>
+      <TreeView.ItemContainerStyle>
+        <Style TargetType="TreeViewItem">
+          <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+        </Style>
+      </TreeView.ItemContainerStyle>
+    </TreeView>
+
+    <!-- Bottom toolbar -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="4">
+      <Button Content="+ Layer" Command="{Binding CreateLayerCommand}" Margin="2" Padding="6,2" FontSize="11"/>
+      <Button Content="+ Group" Command="{Binding CreateGroupCommand}" Margin="2" Padding="6,2" FontSize="11"/>
+      <Button Content="Del" Command="{Binding DeleteSelectedCommand}" Margin="2" Padding="6,2" FontSize="11"/>
+    </StackPanel>
+  </Grid>
+</UserControl>
