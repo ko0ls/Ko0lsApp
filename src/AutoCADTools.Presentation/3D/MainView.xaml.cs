@@ -2,9 +2,9 @@ using System.Windows;
 
 namespace AutoCADTools.Presentation._3D
 {
-  public partial class Viewport3DWindow : Window
+  public partial class MainView : Window
   {
-    public Viewport3DWindow(object dataContext)
+    public MainView(object dataContext)
     {
       InitializeComponent();
       DataContext = dataContext;

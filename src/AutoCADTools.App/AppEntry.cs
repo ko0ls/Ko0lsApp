@@ -43,6 +43,8 @@ namespace AutoCADTools.App
         services.AddTransient<Presentation._3D.Viewport3D.Viewport3DViewModel>();
         services.AddTransient<Presentation._3D.Properties3D.Properties3DViewModel>();
         services.AddTransient<Presentation._3D.ObjectManager3D.ObjectManager3DViewModel>();
+        services.AddTransient<Presentation._3D.Viewport3DWindowViewModel>();
+        services.AddTransient<Presentation._3D.MainViewModel>();
 
         _serviceProvider = services.BuildServiceProvider();
 
@@ -136,16 +138,15 @@ namespace AutoCADTools.App
     {
       if (_serviceProvider == null) return;
       try {
-        var windowVm = new Presentation._3D.Viewport3DWindowViewModel(
-          _serviceProvider.GetRequiredService<Presentation._3D.Viewport3D.Viewport3DViewModel>(),
-          _serviceProvider.GetRequiredService<Presentation._3D.Properties3D.Properties3DViewModel>(),
-          _serviceProvider.GetRequiredService<Presentation._3D.ObjectManager3D.ObjectManager3DViewModel>());
-        var window = new Presentation._3D.Viewport3DWindow(windowVm);
+        var mainVm = new Presentation._3D.MainViewModel(
+          _serviceProvider.GetRequiredService<Presentation.Canvas.CanvasViewModel>(),
+          _serviceProvider.GetRequiredService<Presentation._3D.Viewport3DWindowViewModel>());
+        var window = new Presentation._3D.MainView(mainVm);
         Application.ShowModalWindow(window);
       }
       catch (System.Exception ex) {
         Application.DocumentManager.MdiActiveDocument?.Editor
-          .WriteMessage($"\n3D View error: {ex.Message}");
+          .WriteMessage($"\nMain View error: {ex.Message}");
       }
     }
   }
