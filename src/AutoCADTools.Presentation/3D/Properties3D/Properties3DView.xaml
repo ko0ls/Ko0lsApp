@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoCADTools.Presentation._3D.Properties3D"
+             xmlns:converters="clr-namespace:AutoCADTools.Presentation.Canvas.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="250"
              Background="#FF2D2D30">
+  <UserControl.Resources>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+  </UserControl.Resources>
   <ScrollViewer VerticalScrollBarVisibility="Auto">
     <StackPanel Margin="8">
       <TextBlock Text="Properties" FontWeight="Bold" FontSize="14" Foreground="White" Margin="0 0 0 8"/>
@@ -38,9 +42,9 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding TransformGroup.PositionX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
-            <TextBox Grid.Column="1" Text="{Binding TransformGroup.PositionY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
-            <TextBox Grid.Column="2" Text="{Binding TransformGroup.PositionZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0"/>
+            <TextBox Grid.Column="0" Text="{Binding TransformGroup.PositionX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2 0"/>
+            <TextBox Grid.Column="1" Text="{Binding TransformGroup.PositionY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2 0"/>
+            <TextBox Grid.Column="2" Text="{Binding TransformGroup.PositionZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0 0"/>
           </Grid>
           <TextBlock Text="X                    Y                    Z" Foreground="Gray" FontSize="9"/>
 
@@ -51,9 +55,9 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding TransformGroup.ScaleX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
-            <TextBox Grid.Column="1" Text="{Binding TransformGroup.ScaleY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2"/>
-            <TextBox Grid.Column="2" Text="{Binding TransformGroup.ScaleZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0"/>
+            <TextBox Grid.Column="0" Text="{Binding TransformGroup.ScaleX, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2 0"/>
+            <TextBox Grid.Column="1" Text="{Binding TransformGroup.ScaleY, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 2 0"/>
+            <TextBox Grid.Column="2" Text="{Binding TransformGroup.ScaleZ, UpdateSourceTrigger=PropertyChanged}" Background="#FF3E3E42" Foreground="White" BorderThickness="0" Margin="0 2 0 0"/>
           </Grid>
         </StackPanel>
       </Expander>

@@ -79,7 +79,7 @@
                FontSize="11"
                Background="#CC1E1E1E">
       <Run Text="Mode: "/><Run Text="{Binding CurrentToolMode}"/>
-      <Run Text="  |  Selected: "/><Run Text="{Binding SelectedObjects.Count, FallbackValue=0}"/>
+      <Run Text="  |  Selected: "/><Run Text="{Binding SelectedObjects.Count, Mode=OneWay, FallbackValue=0}"/>
     </TextBlock>
   </Grid>
 </UserControl>

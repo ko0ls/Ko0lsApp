@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:paz="clr-namespace:Wpf.Controls.PanAndZoom;assembly=Wpf.Controls.PanAndZoom"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:converters="clr-namespace:AutoCADTools.Presentation.Canvas.Converters"
              xmlns:utils="clr-namespace:AutoCADTools.Presentation.Utils"
              mc:Ignorable="d"
@@ -25,21 +24,10 @@
                       Focusable="True"
                       Stretch="None"
                       PanButton="Middle"
-                      ZoomSpeed="1.2">
-        <i:Interaction.Triggers>
-          <i:EventTrigger EventName="MouseMove">
-            <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"
-                                   PassEventArgsToCommand="True"/>
-          </i:EventTrigger>
-          <i:EventTrigger EventName="MouseDown">
-            <i:InvokeCommandAction Command="{Binding MouseDownCommand}"
-                                   PassEventArgsToCommand="True"/>
-          </i:EventTrigger>
-          <i:EventTrigger EventName="MouseUp">
-            <i:InvokeCommandAction Command="{Binding MouseUpCommand}"
-                                   PassEventArgsToCommand="True"/>
-          </i:EventTrigger>
-        </i:Interaction.Triggers>
+                      ZoomSpeed="1.2"
+                      MouseMove="ZoomBorder_MouseMove"
+                      MouseDown="ZoomBorder_MouseDown"
+                      MouseUp="ZoomBorder_MouseUp">
         <Canvas x:Name="MyCanvas" Background="Transparent" />
       </paz:ZoomBorder>
     </ScrollViewer>
@@ -52,18 +40,4 @@
               IsChecked="{Binding IsShowDim}"
               Visibility="{Binding ShowDimCheckBox, Converter={StaticResource BoolToVisibilityConverter}}" />
   </Grid>
-
-  <i:Interaction.Triggers>
-    <i:EventTrigger EventName="Loaded">
-      <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}">
-        <i:InvokeCommandAction.CommandParameter>
-          <MultiBinding Converter="{StaticResource ConverterMultiParameter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
-            <Binding ElementName="MyCanvas" />
-            <Binding ElementName="MyZoomBorder" />
-          </MultiBinding>
-        </i:InvokeCommandAction.CommandParameter>
-      </i:InvokeCommandAction>
-    </i:EventTrigger>
-  </i:Interaction.Triggers>
 </UserControl>
