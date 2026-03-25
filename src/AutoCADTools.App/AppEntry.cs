@@ -34,6 +34,18 @@ namespace AutoCADTools.App
       try {
         var services = new ServiceCollection();
         services.AddTransient<Presentation.Canvas.CanvasViewModel>();
+
+        // 3D system
+        services.AddSingleton<Service._3D.IObjectManager3D, Service._3D.ObjectManager3D>();
+        services.AddSingleton<Service._3D.ICameraService, Service._3D.CameraService>();
+        services.AddSingleton<Service._3D.IViewportService, Service._3D.ViewportService>();
+        services.AddSingleton<Presentation._3D.Viewport3D.Selection.SelectionService>();
+        services.AddTransient<Presentation._3D.Viewport3D.Viewport3DViewModel>();
+        services.AddTransient<Presentation._3D.Properties3D.Properties3DViewModel>();
+        services.AddTransient<Presentation._3D.ObjectManager3D.ObjectManager3DViewModel>();
+        services.AddTransient<Presentation._3D.Viewport3DWindowViewModel>();
+        services.AddTransient<Presentation._3D.MainViewModel>();
+
         _serviceProvider = services.BuildServiceProvider();
 
         _settingsRepository = new SettingsRepository();
@@ -107,6 +119,7 @@ namespace AutoCADTools.App
     {
       RibbonUtils.CreatePanel("Panel.Settings.Title".GetString(), "Ko0ls Tab")
         .AddButton("Command.Settings".GetString(), "KOOLS_CMD_SETTINGS", "Command.Settings".GetString(), iconKey: "settings")
+        .AddButton("3D View", "KOOLS_CMD_3DVIEW", "Open 3D Viewport", iconKey: "")
         .Build();
     }
 
@@ -118,6 +131,23 @@ namespace AutoCADTools.App
       var vm = new Presentation.ViewModels.SettingViewModel(_settingsRepository!);
       var window = new Presentation.Views.SettingsWindow(vm);
       Application.ShowModalWindow(window);
+    }
+
+    [CommandMethod("KOOLS_CMD_3DVIEW")]
+    public void Cmd3DView()
+    {
+      if (_serviceProvider == null) return;
+      try {
+        var mainVm = new Presentation._3D.MainViewModel(
+          _serviceProvider.GetRequiredService<Presentation.Canvas.CanvasViewModel>(),
+          _serviceProvider.GetRequiredService<Presentation._3D.Viewport3DWindowViewModel>());
+        var window = new Presentation._3D.MainView(mainVm);
+        Application.ShowModalWindow(window);
+      }
+      catch (System.Exception ex) {
+        Application.DocumentManager.MdiActiveDocument?.Editor
+          .WriteMessage($"\nMain View error: {ex.Message}");
+      }
     }
   }
 }
