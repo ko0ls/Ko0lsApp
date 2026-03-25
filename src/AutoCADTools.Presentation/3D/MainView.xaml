@@ -4,18 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:AutoCADTools.Presentation._3D"
-        xmlns:canvas="clr-namespace:AutoCADTools.Presentation.Canvas"
+        xmlns:vp3d="clr-namespace:AutoCADTools.Presentation._3D.Viewport3D"
         mc:Ignorable="d"
         Title="AutoCAD Tools" Height="700" Width="1100"
         MinHeight="500" MinWidth="800"
         Background="#FF1E1E1E"
         WindowStartupLocation="CenterScreen">
-  <TabControl Background="#FF1E1E1E" BorderThickness="0">
-    <!-- 2D Canvas tab -->
-    <TabItem Header="2D Canvas">
-      <canvas:CanvasView DataContext="{Binding CanvasViewModel}"/>
-    </TabItem>
-
+  <TabControl x:Name="MainTabControl" Background="#FF1E1E1E" BorderThickness="0">
+    <!-- 2D Canvas tab — CanvasView is created lazily in code-behind on first activation
+         to avoid XAML assembly resolution of Microsoft.Xaml.Behaviors -->
+    <TabItem x:Name="CanvasTab" Header="2D Canvas"/>
     <!-- 3D View tab -->
     <TabItem Header="3D View">
       <local:Viewport3DControl DataContext="{Binding ViewportWindowViewModel}"/>
