@@ -41,6 +41,12 @@ public class SwallowFoundationPreviewDrawer
     var planScale = CalculatePlanScale(model, canvasWidth, planHeight, margin);
     var sectionScale = CalculateSectionScale(model, canvasWidth, planHeight, margin);
 
+    if (double.IsNaN(planScale) || double.IsInfinity(planScale) ||
+        double.IsNaN(sectionScale) || double.IsInfinity(sectionScale))
+    {
+      return;
+    }
+
     DrawPlan(model, margin, margin, planScale);
     DrawSection(model, margin, margin + planHeight, sectionScale);
   }
@@ -52,6 +58,17 @@ public class SwallowFoundationPreviewDrawer
     var availW = canvasWidth - 2 * margin;
     var availH = canvasHeight - 2 * margin;
     if (availW < 1 || availH < 1) return 1;
+
+    if (double.IsNaN(availW) || double.IsInfinity(availW) ||
+        double.IsNaN(availH) || double.IsInfinity(availH) ||
+        double.IsNaN(totalWidthPx) || double.IsInfinity(totalWidthPx) ||
+        double.IsNaN(totalHeightPx) || double.IsInfinity(totalHeightPx) ||
+        availW < 1 || availH < 1 ||
+        totalWidthPx < 1e-9 || totalHeightPx < 1e-9)
+    {
+      return 1;
+    }
+
     return Math.Min(availW / totalWidthPx, availH / totalHeightPx) * 0.9;
   }
 
@@ -59,15 +76,27 @@ public class SwallowFoundationPreviewDrawer
   {
     var totalWidthPx = model.LengthX * model.Scale + 2 * model.ConcretePadWidth;
     var totalHeightPx = model.ColumnWidthX + model.StepHeightH1 + model.StepHeightH2 + model.ConcretePadThickness;
-    if (totalHeightPx < 1) totalHeightPx = 1;
     var availW = canvasWidth - 2 * margin;
     var availH = canvasHeight - 2 * margin;
     if (availW < 1 || availH < 1) return 1;
+
+    if (double.IsNaN(availW) || double.IsInfinity(availW) ||
+        double.IsNaN(availH) || double.IsInfinity(availH) ||
+        double.IsNaN(totalWidthPx) || double.IsInfinity(totalWidthPx) ||
+        double.IsNaN(totalHeightPx) || double.IsInfinity(totalHeightPx) ||
+        availW < 1 || availH < 1 ||
+        totalWidthPx < 1e-9 || totalHeightPx < 1e-9)
+    {
+      return 1;
+    }
+
     return Math.Min(availW / totalWidthPx, availH / totalHeightPx) * 0.9;
   }
 
   public void DrawPlan(SwallowFoundationModel model, double originX, double originY, double scalePreview)
   {
+    if (double.IsNaN(scalePreview) || double.IsInfinity(scalePreview)) return;
+
     var s = scalePreview;
 
     var Lx = model.LengthX * s;
@@ -207,6 +236,8 @@ public class SwallowFoundationPreviewDrawer
 
   public void DrawSection(SwallowFoundationModel model, double originX, double originY, double scalePreview)
   {
+    if (double.IsNaN(scalePreview) || double.IsInfinity(scalePreview)) return;
+
     var s = scalePreview;
 
     var Lx = model.LengthX * s;
