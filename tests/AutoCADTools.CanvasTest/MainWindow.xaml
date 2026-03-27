@@ -3,122 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:paz="clr-namespace:Wpf.Controls.PanAndZoom;assembly=Wpf.Controls.PanAndZoom"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:converters="clr-namespace:AutoCADTools.Presentation.Canvas.Converters"
+        xmlns:canvas2d="clr-namespace:AutoCADTools.CanvasTest.Canvas2D"
+        xmlns:canvas3d="clr-namespace:AutoCADTools.CanvasTest.Canvas3D"
         mc:Ignorable="d"
-        Title="Canvas Test" Height="600" Width="900"
+        Title="Canvas Test"
+        Height="680"
+        Width="1080"
         Background="White">
-
-  <Window.Resources>
-    <converters:ConverterMultiParameter x:Key="ConverterMultiParameter" />
-  </Window.Resources>
-
   <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition />
-      <ColumnDefinition Width="220" />
-    </Grid.ColumnDefinitions>
-
-    <!-- Canvas area -->
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
-
-      <Border BorderThickness="5" BorderBrush="Black" Margin="10">
-        <paz:ZoomBorder x:Name="MyZoomBorder"
-                        Background="Bisque"
-                        ClipToBounds="True"
-                        Focusable="True"
-                        Stretch="None"
-                        PanButton="Middle"
-                        ZoomSpeed="1.2">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="MouseMove">
-              <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"
-                                     PassEventArgsToCommand="True" />
-            </i:EventTrigger>
-            <i:EventTrigger EventName="MouseDown">
-              <i:InvokeCommandAction Command="{Binding MouseDownCommand}"
-                                     PassEventArgsToCommand="True" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-          <Canvas x:Name="MyCanvas" Background="Transparent" />
-        </paz:ZoomBorder>
-      </Border>
-
-      <!-- Bottom toolbar -->
-      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,10">
-        <TextBlock Text="Scale:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Bold" />
-        <ComboBox Width="100"
-                  VerticalAlignment="Center"
-                  DisplayMemberPath="ScaleText"
-                  ItemsSource="{Binding AllScales}"
-                  SelectedItem="{Binding SelectedScale}" />
-        <Button Width="100" Margin="10,0,0,0" Content="Zoom to Fit"
-                Command="{Binding ZoomToFitCommand}" />
-      </StackPanel>
-    </Grid>
-
-    <!-- Info panel -->
-    <Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="#DDD" Padding="12">
-      <StackPanel>
-        <TextBlock Text="Canvas Info" FontSize="14" FontWeight="Bold" Margin="0,0,0,12" />
-
-        <TextBlock Text="Position" FontWeight="Bold" Margin="0,0,0,4" />
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="X:" Width="60" />
-          <TextBlock Text="{Binding XValue, StringFormat='{}{0:F1}'}" FontFamily="Consolas" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="Y:" Width="60" />
-          <TextBlock Text="{Binding YValue, StringFormat='{}{0:F1}'}" FontFamily="Consolas" />
-        </StackPanel>
-
-        <TextBlock Text="Zoom" FontWeight="Bold" Margin="0,12,0,4" />
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="ZoomX:" Width="60" />
-          <TextBlock Text="{Binding ZoomX, StringFormat='{}{0:F4}'}" FontFamily="Consolas" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="ZoomY:" Width="60" />
-          <TextBlock Text="{Binding ZoomY, StringFormat='{}{0:F4}'}" FontFamily="Consolas" />
-        </StackPanel>
-
-        <TextBlock Text="Offset" FontWeight="Bold" Margin="0,12,0,4" />
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="OffsetX:" Width="60" />
-          <TextBlock Text="{Binding OffsetX, StringFormat='{}{0:F1}'}" FontFamily="Consolas" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,2">
-          <TextBlock Text="OffsetY:" Width="60" />
-          <TextBlock Text="{Binding OffsetY, StringFormat='{}{0:F1}'}" FontFamily="Consolas" />
-        </StackPanel>
-
-        <Separator Margin="0,16" />
-
-        <TextBlock Text="Controls" FontWeight="Bold" Margin="0,0,0,6" FontSize="11" />
-        <TextBlock Text="Pan: Middle mouse drag" FontSize="10" Foreground="Gray" />
-        <TextBlock Text="Zoom: Scroll wheel" FontSize="10" Foreground="Gray" />
-        <TextBlock Text="Reset: Right-click" FontSize="10" Foreground="Gray" />
-        <TextBlock Text="Fit: Double middle-click" FontSize="10" Foreground="Gray" />
-      </StackPanel>
-    </Border>
+    <TabControl Margin="8">
+      <TabItem Header="Canvas 2D">
+        <canvas2d:Canvas2DTestView />
+      </TabItem>
+      <TabItem Header="Canvas 3D">
+        <canvas3d:Canvas3DTestView />
+      </TabItem>
+    </TabControl>
   </Grid>
-
-  <i:Interaction.Triggers>
-    <i:EventTrigger EventName="Loaded">
-      <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}">
-        <i:InvokeCommandAction.CommandParameter>
-          <MultiBinding Converter="{StaticResource ConverterMultiParameter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
-            <Binding ElementName="MyCanvas" />
-            <Binding ElementName="MyZoomBorder" />
-          </MultiBinding>
-        </i:InvokeCommandAction.CommandParameter>
-      </i:InvokeCommandAction>
-    </i:EventTrigger>
-  </i:Interaction.Triggers>
 </Window>

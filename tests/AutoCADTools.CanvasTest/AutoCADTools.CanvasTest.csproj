@@ -52,6 +52,14 @@
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Settings\Grid2DSetting.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeight.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeightGroup.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Models\Material3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Models\Transform3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Shape3DBase.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Axis3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Box3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Grid3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Plane3D.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\3D\Shapes3D\Utils\MeshGenerator.cs" />
     <EmbeddedResource Include="..\..\src\AutoCADTools.Presentation\Canvas\LineWeightData\LineWeightData.json" />
   </ItemGroup>
 

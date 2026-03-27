@@ -4,9 +4,9 @@ using AutoCADTools.Presentation.Canvas.Utils;
 using AutoCADTools.Presentation.Canvas.Shapes;
 using AutoCADTools.Presentation.Canvas.Annotation;
 
-namespace AutoCADTools.CanvasTest;
+namespace AutoCADTools.CanvasTest.Canvas2D;
 
-public class CanvasTestViewModel : BindableObject
+public class Canvas2DTestViewModel : BindableObject
 {
   private System.Windows.Controls.Canvas? _canvas;
   private Wpf.Controls.PanAndZoom.ZoomBorder? _zoomBorder;
@@ -80,7 +80,7 @@ public class CanvasTestViewModel : BindableObject
   public ICommand MouseMoveCommand { get; }
   public ICommand MouseDownCommand { get; }
 
-  public CanvasTestViewModel()
+  public Canvas2DTestViewModel()
   {
     AllScales.Add(new ScaleModel(10));
     AllScales.Add(new ScaleModel(20));
