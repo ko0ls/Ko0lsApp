@@ -14,7 +14,15 @@
     </Grid.ColumnDefinitions>
 
     <Border Margin="10" BorderBrush="#FF3E3E42" BorderThickness="1" Background="#FF111111">
-      <Viewport3D ClipToBounds="True">
+      <Viewport3D x:Name="MainViewport"
+                  ClipToBounds="True"
+                  Focusable="True"
+                  MouseDown="Viewport_MouseDown"
+                  MouseMove="Viewport_MouseMove"
+                  MouseUp="Viewport_MouseUp"
+                  MouseWheel="Viewport_MouseWheel"
+                  MouseLeave="Viewport_MouseLeave"
+                  KeyDown="Viewport_KeyDown">
         <Viewport3D.Camera>
           <Binding Path="Camera" />
         </Viewport3D.Camera>
@@ -38,6 +46,26 @@
         <TextBlock Text="Camera" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,6" />
         <TextBlock Text="Position: (24, -24, 18)" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
         <TextBlock Text="LookDirection: (-24, 24, -18)" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+
+        <Separator Margin="0,12,0,12" />
+
+        <TextBlock Text="Controls" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,6" />
+        <TextBlock Text="• Right drag: Orbit" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Middle drag: Pan" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Wheel: Zoom" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Left click: Select" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Move mouse: Hover highlight" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Esc: Clear selection" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+
+        <Separator Margin="0,12,0,12" />
+
+        <TextBlock Text="Controls" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,6" />
+        <TextBlock Text="• Right drag: Orbit" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Middle drag: Pan" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Wheel: Zoom" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Left click: Select" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Move mouse: Hover highlight" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
+        <TextBlock Text="• Esc: Clear selection" Foreground="#FFD0D0D0" Margin="0,2,0,0" />
       </StackPanel>
     </Border>
   </Grid>
