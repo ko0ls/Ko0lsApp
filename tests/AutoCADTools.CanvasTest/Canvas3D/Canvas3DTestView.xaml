@@ -22,7 +22,8 @@
                   MouseUp="Viewport_MouseUp"
                   MouseWheel="Viewport_MouseWheel"
                   MouseLeave="Viewport_MouseLeave"
-                  KeyDown="Viewport_KeyDown">
+                  KeyDown="Viewport_KeyDown"
+                  KeyUp="Viewport_KeyUp">
         <Viewport3D.Camera>
           <Binding Path="Camera" />
         </Viewport3D.Camera>

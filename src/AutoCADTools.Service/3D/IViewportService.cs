@@ -10,6 +10,7 @@ namespace AutoCADTools.Service._3D
     EnumViewportMode CurrentMode { get; set; }
     Point LastMousePosition { get; }
     bool IsShiftDown { get; }
+    void SetOrbitOnMiddle(bool value);
 
     void OnMouseMove(Point screenPt, bool isLeftBtnDown, bool isRightBtnDown, bool isMiddleBtnDown);
     void OnMouseWheel(int delta);

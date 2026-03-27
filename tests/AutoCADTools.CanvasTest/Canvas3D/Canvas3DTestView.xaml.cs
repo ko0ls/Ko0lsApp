@@ -46,7 +46,10 @@ public partial class Canvas3DTestView : UserControl
 
     if (e.ChangedButton == MouseButton.Middle)
     {
-      _isPanning = true;
+      if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+        _isOrbiting = true;
+      else
+        _isPanning = true;
       MainViewport.CaptureMouse();
       return;
     }
@@ -111,6 +114,16 @@ public partial class Canvas3DTestView : UserControl
     {
       _viewModel.ClearSelection();
       _viewModel.ClearHover();
+    }
+  }
+
+  private void Viewport_KeyUp(object sender, KeyEventArgs e)
+  {
+    if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
+    {
+      _isOrbiting = false;
+      _isPanning = false;
+      MainViewport.ReleaseMouseCapture();
     }
   }
 

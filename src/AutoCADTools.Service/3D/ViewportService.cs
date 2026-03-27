@@ -12,6 +12,7 @@ namespace AutoCADTools.Service._3D
     private EnumViewportMode _previousMode = EnumViewportMode.Select;
     private Point _lastMousePosition;
     private bool _isShiftDown;
+    private bool _orbitOnMiddle;
     private ICameraService _cameraService;
 
     public ICameraService CameraService
@@ -37,6 +38,8 @@ namespace AutoCADTools.Service._3D
 
     public bool IsShiftDown => _isShiftDown;
 
+    public void SetOrbitOnMiddle(bool value) => _orbitOnMiddle = value;
+
     public event EventHandler<EnumViewportMode> ModeChanged;
 
     public void OnMouseMove(Point screenPt, bool isLeftBtnDown, bool isRightBtnDown, bool isMiddleBtnDown)
@@ -55,8 +58,8 @@ namespace AutoCADTools.Service._3D
         case EnumViewportMode.Orbit:
           if (isLeftBtnDown || isRightBtnDown)
             _cameraService.Orbit(new Vector3D(0, 1, 0), deltaX * 0.5);
-          if (isMiddleBtnDown)
-            _cameraService.Orbit(new Vector3D(1, 0, 0), -deltaY * 0.5);
+          if (isMiddleBtnDown && _orbitOnMiddle)
+            _cameraService.Orbit(new Vector3D(0, 1, 0), deltaX * 0.5);
           break;
 
         case EnumViewportMode.Pan:
