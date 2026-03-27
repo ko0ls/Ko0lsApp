@@ -120,4 +120,22 @@
   <data name="Label.LengthY" xml:space="preserve">
     <value>Ly</value>
   </data>
+  <data name="Validation.GreaterThan" xml:space="preserve">
+    <value>Giá trị phải lớn hơn {0}.</value>
+  </data>
+  <data name="Validation.GreaterThanOrEqual" xml:space="preserve">
+    <value>Giá trị phải lớn hơn hoặc bằng {0}.</value>
+  </data>
+  <data name="Validation.SmallerThan" xml:space="preserve">
+    <value>Giá trị phải nhỏ hơn {0}.</value>
+  </data>
+  <data name="Validation.SmallerThanOrEqual" xml:space="preserve">
+    <value>Giá trị phải nhỏ hơn hoặc bằng {0}.</value>
+  </data>
+  <data name="Validation.NotEmpty" xml:space="preserve">
+    <value>Trường này không được để trống.</value>
+  </data>
+  <data name="Validation.CannotNull" xml:space="preserve">
+    <value>Giá trị không được null.</value>
+  </data>
 </root>

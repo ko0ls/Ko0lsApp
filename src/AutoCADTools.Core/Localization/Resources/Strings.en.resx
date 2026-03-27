@@ -120,4 +120,22 @@
   <data name="Label.LengthY" xml:space="preserve">
     <value>Ly</value>
   </data>
+  <data name="Validation.GreaterThan" xml:space="preserve">
+    <value>Value must be greater than {0}.</value>
+  </data>
+  <data name="Validation.GreaterThanOrEqual" xml:space="preserve">
+    <value>Value must be greater than or equal to {0}.</value>
+  </data>
+  <data name="Validation.SmallerThan" xml:space="preserve">
+    <value>Value must be smaller than {0}.</value>
+  </data>
+  <data name="Validation.SmallerThanOrEqual" xml:space="preserve">
+    <value>Value must be smaller than or equal to {0}.</value>
+  </data>
+  <data name="Validation.NotEmpty" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+  <data name="Validation.CannotNull" xml:space="preserve">
+    <value>Value cannot be null.</value>
+  </data>
 </root>
