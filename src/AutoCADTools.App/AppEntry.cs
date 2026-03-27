@@ -149,5 +149,18 @@ namespace AutoCADTools.App
           .WriteMessage($"\nMain View error: {ex.Message}");
       }
     }
+
+    [CommandMethod("vmd")]
+    public void CmdSwallowFoundation()
+    {
+      try {
+        var window = new Presentation.Views.SwallowFoundationWindow();
+        Application.ShowModalWindow(window);
+      }
+      catch (System.Exception ex) {
+        Application.DocumentManager.MdiActiveDocument?.Editor
+          .WriteMessage($"\nSwallow foundation error: {ex.Message}");
+      }
+    }
   }
 }
