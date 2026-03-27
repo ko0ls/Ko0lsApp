@@ -7,7 +7,14 @@
              d:DesignHeight="560"
              d:DesignWidth="920"
              Background="#FF1E1E1E">
-  <Grid>
+  <Grid x:Name="RootGrid"
+        Background="Transparent"
+        PreviewMouseDown="Viewport_MouseDown"
+        PreviewMouseMove="Viewport_MouseMove"
+        PreviewMouseUp="Viewport_MouseUp"
+        PreviewMouseWheel="Viewport_MouseWheel"
+        PreviewKeyDown="Viewport_KeyDown"
+        PreviewKeyUp="Viewport_KeyUp">
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
       <ColumnDefinition Width="250" />
@@ -16,14 +23,7 @@
     <Border Margin="10" BorderBrush="#FF3E3E42" BorderThickness="1" Background="#FF111111">
       <Viewport3D x:Name="MainViewport"
                   ClipToBounds="True"
-                  Focusable="True"
-                  MouseDown="Viewport_MouseDown"
-                  MouseMove="Viewport_MouseMove"
-                  MouseUp="Viewport_MouseUp"
-                  MouseWheel="Viewport_MouseWheel"
-                  MouseLeave="Viewport_MouseLeave"
-                  KeyDown="Viewport_KeyDown"
-                  KeyUp="Viewport_KeyUp">
+                  Focusable="True">
         <Viewport3D.Camera>
           <Binding Path="Camera" />
         </Viewport3D.Camera>

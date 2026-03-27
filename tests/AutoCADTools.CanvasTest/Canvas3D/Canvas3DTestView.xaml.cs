@@ -11,10 +11,11 @@ namespace AutoCADTools.CanvasTest.Canvas3D;
 
 public partial class Canvas3DTestView : UserControl
 {
+  private enum ViewportMode { Select, Orbit, Pan }
+
   private readonly Canvas3DTestViewModel _viewModel;
   private Point _lastMousePosition;
-  private bool _isOrbiting;
-  private bool _isPanning;
+  private ViewportMode _currentMode = ViewportMode.Select;
   private Point3D _cameraTarget;
 
   public Canvas3DTestView()
@@ -39,18 +40,18 @@ public partial class Canvas3DTestView : UserControl
 
     if (e.ChangedButton == MouseButton.Right)
     {
-      _isOrbiting = true;
-      MainViewport.CaptureMouse();
+      _currentMode = ViewportMode.Orbit;
+      RootGrid.CaptureMouse();
       return;
     }
 
     if (e.ChangedButton == MouseButton.Middle)
     {
       if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-        _isOrbiting = true;
+        _currentMode = ViewportMode.Orbit;
       else
-        _isPanning = true;
-      MainViewport.CaptureMouse();
+        _currentMode = ViewportMode.Pan;
+      RootGrid.CaptureMouse();
       return;
     }
 
@@ -68,32 +69,34 @@ public partial class Canvas3DTestView : UserControl
     var deltaY = current.Y - _lastMousePosition.Y;
     _lastMousePosition = current;
 
-    if (_isOrbiting)
+    if (_currentMode == ViewportMode.Orbit &&
+        (Mouse.RightButton == MouseButtonState.Pressed || Mouse.MiddleButton == MouseButtonState.Pressed))
     {
       Orbit(deltaX, deltaY);
       return;
     }
 
-    if (_isPanning)
+    if (_currentMode == ViewportMode.Pan && Mouse.MiddleButton == MouseButtonState.Pressed)
     {
       Pan(deltaX, deltaY);
       return;
     }
 
-    var hoverHit = HitTestTopShape(current);
-    _viewModel.SetHoveredShape(hoverHit);
+    // Hover highlight khi đang ở Select mode
+    if (_currentMode == ViewportMode.Select)
+    {
+      var hoverHit = HitTestTopShape(current);
+      _viewModel.SetHoveredShape(hoverHit);
+    }
   }
 
   private void Viewport_MouseUp(object sender, MouseButtonEventArgs e)
   {
-    if (e.ChangedButton == MouseButton.Right)
-      _isOrbiting = false;
-
-    if (e.ChangedButton == MouseButton.Middle)
-      _isPanning = false;
-
-    if (!_isOrbiting && !_isPanning)
-      MainViewport.ReleaseMouseCapture();
+    if (e.ChangedButton == MouseButton.Right || e.ChangedButton == MouseButton.Middle)
+    {
+      _currentMode = ViewportMode.Select;
+      RootGrid.ReleaseMouseCapture();
+    }
   }
 
   private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -104,7 +107,7 @@ public partial class Canvas3DTestView : UserControl
 
   private void Viewport_MouseLeave(object sender, MouseEventArgs e)
   {
-    if (!_isOrbiting && !_isPanning)
+    if (_currentMode == ViewportMode.Select)
       _viewModel.ClearHover();
   }
 
@@ -121,8 +124,7 @@ public partial class Canvas3DTestView : UserControl
   {
     if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
     {
-      _isOrbiting = false;
-      _isPanning = false;
+      _currentMode = ViewportMode.Select;
       MainViewport.ReleaseMouseCapture();
     }
   }
