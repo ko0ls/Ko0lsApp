@@ -11,17 +11,17 @@ public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer? _previewDrawer;
 
-  // Drawing scale
+  // Drawing scale (e.g. 1:3)
   private double _scale = 3;
-  // Foundation dimensions
-  private double _lengthX = 1500;
-  private double _lengthY = 1800;
-  private double _stepHeightH1 = 500;
-  // Step heights (second step)
-  private double _stepHeightH2 = 200;
+  // Foundation dimensions (mm)
+  private double _lengthX = 1500;                     // Footing width (X direction)
+  private double _lengthY = 1800;                      // Footing length (Y direction)
+  private double _stepHeightH1 = 500;                  // Maximum footing thickness (includes chamfer), mm
+  // Step heights
+  private double _stepHeightH2 = 200;                  // Non-chamfered footing thickness, mm → chamfer = H1-H2
   // Concrete leveling pad
-  private double _concretePadWidth = 100;
-  private double _concretePadThickness = 100;
+  private double _concretePadExtension = 100;         // Concrete pad extension beyond footing Lx/Ly, mm
+  private double _concretePadThickness = 100;          // Concrete leveling pad thickness, mm
   // Column neck dimensions
   private double _columnWidthX = 220;
   private double _columnWidthY = 220;
@@ -133,7 +133,6 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(0)]
   public double FoundationBottomLevel
   {
     get => _foundationBottomLevel;
@@ -141,7 +140,6 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(0)]
   public double FloorLevel
   {
     get => _floorLevel;
@@ -149,7 +147,6 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(0)]
   public double FloorLevelT1
   {
     get => _floorLevelT1;
@@ -158,10 +155,10 @@ public class SwallowFoundationViewModel : BindableObject
 
   [CannotNull]
   [GreaterThanOrEqual(0)]
-  public double ConcretePadWidth
+  public double ConcretePadExtension
   {
-    get => _concretePadWidth;
-    set => SetProperty(ref _concretePadWidth, value);
+    get => _concretePadExtension;
+    set => SetProperty(ref _concretePadExtension, value);
   }
 
   [CannotNull]
@@ -195,6 +192,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
+  [GreaterThanOrEqual(0)]
   public double ColumnPositionX
   {
     get => _columnPositionX;
@@ -202,6 +200,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
+  [GreaterThanOrEqual(0)]
   public double ColumnPositionY
   {
     get => _columnPositionY;
@@ -255,7 +254,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(0)]
+  [GreaterThan(0)]
   public double Cover
   {
     get => _cover;
@@ -263,7 +262,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(1)]
+  [GreaterThanOrEqual(2)]
   public int ColumnRebarCountX
   {
     get => _columnRebarCountX;
@@ -271,7 +270,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(1)]
+  [GreaterThanOrEqual(2)]
   public int ColumnRebarCountY
   {
     get => _columnRebarCountY;
@@ -279,7 +278,7 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  [GreaterThanOrEqual(0)]
+  [GreaterThan(0)]
   public double LapLength
   {
     get => _lapLength;
@@ -305,7 +304,7 @@ public class SwallowFoundationViewModel : BindableObject
       LengthX, LengthY, AxisOffsetX, AxisOffsetY,
       StepHeightH1, StepHeightH2,
       FoundationBottomLevel, FloorLevel, FloorLevelT1,
-      ConcretePadWidth, ConcretePadThickness,
+      ConcretePadExtension, ConcretePadThickness,
       IsRectangularColumn,
       ColumnWidthX, ColumnWidthY,
       ColumnPositionX, ColumnPositionY,

@@ -69,8 +69,8 @@ public class SwallowFoundationModel
   /// <summary>Floor elevation T1 (mm).</summary>
   public double FloorLevelT1 { get; set; }
 
-  /// <summary>Concrete pad width / bleed area around footing (mm).</summary>
-  public double ConcretePadWidth { get; set; }
+  /// <summary>Concrete pad extension beyond footing Lx/Ly (mm).</summary>
+  public double ConcretePadExtension { get; set; }
 
   /// <summary>Concrete pad thickness (mm).</summary>
   public double ConcretePadThickness { get; set; }
@@ -152,7 +152,7 @@ public class SwallowFoundationModel
       double foundationBottomLevel,
       double floorLevel,
       double floorLevelT1,
-      double concretePadWidth,
+      double concretePadExtension,
       double concretePadThickness,
       bool isRectangularColumn,
       double columnWidthX,
@@ -183,7 +183,7 @@ public class SwallowFoundationModel
     FoundationBottomLevel = foundationBottomLevel;
     FloorLevel = floorLevel;
     FloorLevelT1 = floorLevelT1;
-    ConcretePadWidth = concretePadWidth;
+    ConcretePadExtension = concretePadExtension;
     ConcretePadThickness = concretePadThickness;
     IsRectangularColumn = isRectangularColumn;
     IsCircularColumn = !isRectangularColumn;

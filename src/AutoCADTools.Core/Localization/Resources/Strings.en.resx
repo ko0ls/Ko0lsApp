@@ -201,8 +201,8 @@
   <data name="SwallowFoundation.Label.FloorLevelT1" xml:space="preserve">
     <value>Floor Level T1</value>
   </data>
-  <data name="SwallowFoundation.Label.ConcretePadWidth" xml:space="preserve">
-    <value>Pad Width</value>
+  <data name="SwallowFoundation.Label.ConcretePadExtension" xml:space="preserve">
+    <value>Pad Extension</value>
   </data>
   <data name="SwallowFoundation.Label.ConcretePadThickness" xml:space="preserve">
     <value>Pad Thickness</value>

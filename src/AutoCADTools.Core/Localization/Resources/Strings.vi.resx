@@ -201,8 +201,8 @@
   <data name="SwallowFoundation.Label.FloorLevelT1" xml:space="preserve">
     <value>Cao độ sàn T1</value>
   </data>
-  <data name="SwallowFoundation.Label.ConcretePadWidth" xml:space="preserve">
-    <value>Bề rộng BT lót</value>
+  <data name="SwallowFoundation.Label.ConcretePadExtension" xml:space="preserve">
+    <value>Phần nhô BT lót</value>
   </data>
   <data name="SwallowFoundation.Label.ConcretePadThickness" xml:space="preserve">
     <value>Bề dày BT lót</value>

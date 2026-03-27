@@ -444,7 +444,7 @@ public class SwallowFoundationDrawer
     double Ly = Model.LengthY * S;
     double cpX = Model.ColumnPositionX * S;
     double cpY = Model.ColumnPositionY * S;
-    double padW = Model.ConcretePadWidth * S;
+    double padW = Model.ConcretePadExtension * S;
     double cwX = Model.ColumnWidthX * S;
     double cwY = Model.ColumnWidthY * S;
 
@@ -708,7 +708,7 @@ public class SwallowFoundationDrawer
     double cwX = Model.ColumnWidthX * S;
     double cwY = Model.ColumnWidthY * S;
     double padT = Model.ConcretePadThickness * S;
-    double padW = Model.ConcretePadWidth * S;
+    double padW = Model.ConcretePadExtension * S;
     double colBaseZ = Model.FoundationBottomLevel * S + h1 + h2;
     double fBot = Model.FoundationBottomLevel * S;
     double textH = 0.25 * S;

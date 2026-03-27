@@ -296,13 +296,13 @@
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- ConcretePadWidth -->
+            <!-- ConcretePadExtension -->
             <TextBlock Grid.Row="0" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.ConcretePadWidth}"
+                       Text="{utils:Loc SwallowFoundation.Label.ConcretePadExtension}"
                        VerticalAlignment="Center"
                        Margin="0 0 8 4"/>
             <TextBox Grid.Row="0" Grid.Column="1"
-                     Text="{Binding ConcretePadWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     Text="{Binding ConcretePadExtension, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
                      Width="100"
                      HorizontalAlignment="Left"

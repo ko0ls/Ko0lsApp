@@ -53,8 +53,8 @@ public class SwallowFoundationPreviewDrawer
 
   private double CalculatePlanScale(SwallowFoundationModel model, double canvasWidth, double canvasHeight, double margin)
   {
-    var totalWidthPx = model.LengthX * model.Scale + 2 * model.ConcretePadWidth;
-    var totalHeightPx = model.LengthY * model.Scale + 2 * model.ConcretePadWidth;
+    var totalWidthPx = model.LengthX * model.Scale + 2 * model.ConcretePadExtension;
+    var totalHeightPx = model.LengthY * model.Scale + 2 * model.ConcretePadExtension;
     var availW = canvasWidth - 2 * margin;
     var availH = canvasHeight - 2 * margin;
     if (availW < 1 || availH < 1) return 1;
@@ -74,7 +74,7 @@ public class SwallowFoundationPreviewDrawer
 
   private double CalculateSectionScale(SwallowFoundationModel model, double canvasWidth, double canvasHeight, double margin)
   {
-    var totalWidthPx = model.LengthX * model.Scale + 2 * model.ConcretePadWidth;
+    var totalWidthPx = model.LengthX * model.Scale + 2 * model.ConcretePadExtension;
     var totalHeightPx = model.ColumnWidthX + model.StepHeightH1 + model.StepHeightH2 + model.ConcretePadThickness;
     var availW = canvasWidth - 2 * margin;
     var availH = canvasHeight - 2 * margin;
@@ -101,8 +101,8 @@ public class SwallowFoundationPreviewDrawer
 
     var Lx = model.LengthX * s;
     var Ly = model.LengthY * s;
-    var padW = model.ConcretePadWidth * s;
-    var padH = model.ConcretePadWidth * s;
+    var padW = model.ConcretePadExtension * s;
+    var padH = model.ConcretePadExtension * s;
     var colPosX = model.ColumnPositionX * s;
     var colPosY = model.ColumnPositionY * s;
     var colW = model.ColumnWidthX * s;
@@ -241,7 +241,7 @@ public class SwallowFoundationPreviewDrawer
     var s = scalePreview;
 
     var Lx = model.LengthX * s;
-    var padW = model.ConcretePadWidth * s;
+    var padW = model.ConcretePadExtension * s;
     var padThick = model.ConcretePadThickness * s;
     var H1 = model.StepHeightH1 * s;
     var H2 = model.StepHeightH2 * s;
