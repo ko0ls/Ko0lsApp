@@ -35,13 +35,21 @@ namespace AutoCADTools.Presentation._3D.Viewport3D
       var pos = e.GetPosition(MainViewport);
       var left = e.LeftButton == MouseButtonState.Pressed;
       var right = e.RightButton == MouseButtonState.Pressed;
-      _viewModel.ViewportService.OnMouseMove(pos, left, right);
+      var middle = e.MiddleButton == MouseButtonState.Pressed;
+      _viewModel.ViewportService.OnMouseMove(pos, left, right, middle);
     }
 
     private void Viewport_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (_viewModel == null || _selectionService == null) return;
       MainViewport.Focus();
+
+      // Shift + Middle Mouse Button → temporarily switch to Orbit mode
+      if (e.MiddleButton == MouseButtonState.Pressed && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+      {
+        _viewModel.ViewportService.CurrentMode = Core._3D.Enums.EnumViewportMode.Orbit;
+        return;
+      }
 
       if (_viewModel.ViewportService.CurrentMode == Core._3D.Enums.EnumViewportMode.Select)
       {
@@ -83,6 +91,12 @@ namespace AutoCADTools.Presentation._3D.Viewport3D
     {
       if (_viewModel == null) return;
       _viewModel.ViewportService.OnKeyDown(e.Key);
+    }
+
+    private void Viewport_KeyUp(object sender, KeyEventArgs e)
+    {
+      if (_viewModel == null) return;
+      _viewModel.ViewportService.OnKeyUp(e.Key);
     }
   }
 }

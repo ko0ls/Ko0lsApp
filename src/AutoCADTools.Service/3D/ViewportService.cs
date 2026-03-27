@@ -11,6 +11,7 @@ namespace AutoCADTools.Service._3D
     private EnumViewportMode _currentMode = EnumViewportMode.Select;
     private EnumViewportMode _previousMode = EnumViewportMode.Select;
     private Point _lastMousePosition;
+    private bool _isShiftDown;
     private ICameraService _cameraService;
 
     public ICameraService CameraService
@@ -34,9 +35,11 @@ namespace AutoCADTools.Service._3D
 
     public Point LastMousePosition => _lastMousePosition;
 
+    public bool IsShiftDown => _isShiftDown;
+
     public event EventHandler<EnumViewportMode> ModeChanged;
 
-    public void OnMouseMove(Point screenPt, bool isLeftBtnDown, bool isRightBtnDown)
+    public void OnMouseMove(Point screenPt, bool isLeftBtnDown, bool isRightBtnDown, bool isMiddleBtnDown)
     {
       var deltaX = screenPt.X - _lastMousePosition.X;
       var deltaY = screenPt.Y - _lastMousePosition.Y;
@@ -50,9 +53,9 @@ namespace AutoCADTools.Service._3D
       switch (CurrentMode)
       {
         case EnumViewportMode.Orbit:
-          if (isLeftBtnDown)
+          if (isLeftBtnDown || isRightBtnDown)
             _cameraService.Orbit(new Vector3D(0, 1, 0), deltaX * 0.5);
-          if (isRightBtnDown)
+          if (isMiddleBtnDown)
             _cameraService.Orbit(new Vector3D(1, 0, 0), -deltaY * 0.5);
           break;
 
@@ -74,6 +77,9 @@ namespace AutoCADTools.Service._3D
 
     public void OnKeyDown(Key key)
     {
+      if (key == Key.LeftShift || key == Key.RightShift)
+        _isShiftDown = true;
+
       switch (key)
       {
         case Key.Space:
@@ -112,6 +118,12 @@ namespace AutoCADTools.Service._3D
           _cameraService.SetPresetView(EnumPresetView.Isometric);
           break;
       }
+    }
+
+    public void OnKeyUp(Key key)
+    {
+      if (key == Key.LeftShift || key == Key.RightShift)
+        _isShiftDown = false;
     }
   }
 }
