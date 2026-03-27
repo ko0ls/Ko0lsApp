@@ -99,4 +99,25 @@
   <data name="View.Settings.Button.Cancel" xml:space="preserve">
     <value>Hủy</value>
   </data>
+  <data name="SwallowFoundation.View.Plan" xml:space="preserve">
+    <value>Mặt bằng</value>
+  </data>
+  <data name="SwallowFoundation.View.Section" xml:space="preserve">
+    <value>Mặt cắt</value>
+  </data>
+  <data name="SwallowFoundation.Label.Elevation" xml:space="preserve">
+    <value>Cao độ</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepH1" xml:space="preserve">
+    <value>H1</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepH2" xml:space="preserve">
+    <value>H2</value>
+  </data>
+  <data name="Label.LengthX" xml:space="preserve">
+    <value>Lx</value>
+  </data>
+  <data name="Label.LengthY" xml:space="preserve">
+    <value>Ly</value>
+  </data>
 </root>
