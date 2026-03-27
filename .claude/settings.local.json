@@ -112,7 +112,11 @@
       "WebFetch(domain:stackoverflow.com)",
       "Bash(Get-ChildItem -Path \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.Core\\\\bin\\\\Debug\\\\2023\\\\net48\" -Recurse -Filter \"*.resources.dll\")",
       "Bash(Select-Object FullName)",
-      "Bash(curl -s https://api.github.com/repos/ko0ls/LanguageResources)"
+      "Bash(curl -s https://api.github.com/repos/ko0ls/LanguageResources)",
+      "Bash(findstr /i \"passed\\\\|failed\\\\|skipped\\\\|error\\\\|total\")",
+      "Bash(findstr \"passed\")",
+      "Bash(cp -r \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/.claude/worktrees/agent-a4c017a0/tests/AutoCADTools.CanvasTest/Canvas2D\" \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/tests/AutoCADTools.CanvasTest/\")",
+      "Bash(cp -r \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/.claude/worktrees/agent-a4c017a0/tests/AutoCADTools.CanvasTest/Canvas3D\" \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/tests/AutoCADTools.CanvasTest/\")"
     ]
   }
 }

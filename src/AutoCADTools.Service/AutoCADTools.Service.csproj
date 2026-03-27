@@ -16,6 +16,26 @@
     <Reference Include="WindowsBase"/>
   </ItemGroup>
 
+  <!-- AutoCAD DLL references -->
+  <ItemGroup>
+    <Reference Include="accoremgd">
+      <HintPath>$(ProgramFiles)\Autodesk\AutoCAD $(AutodeskVersion)\accoremgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="acdbmgd">
+      <HintPath>$(ProgramFiles)\Autodesk\AutoCAD $(AutodeskVersion)\acdbmgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="acdbmgdbrep">
+      <HintPath>$(ProgramFiles)\Autodesk\AutoCAD $(AutodeskVersion)\acdbmgdbrep.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="acmgd">
+      <HintPath>$(ProgramFiles)\Autodesk\AutoCAD $(AutodeskVersion)\acmgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\AutoCADTools.Core\AutoCADTools.Core.csproj"/>
   </ItemGroup>
