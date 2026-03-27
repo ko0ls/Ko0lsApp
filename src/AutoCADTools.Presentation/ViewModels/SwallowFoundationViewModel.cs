@@ -11,36 +11,43 @@ public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer? _previewDrawer;
 
-  private string _foundationName = "";
-  private int _quantity;
+  // Drawing scale
   private double _scale = 3;
-  private double _lengthX;
-  private double _lengthY;
-  private double _axisOffsetX;
-  private double _axisOffsetY;
-  private double _stepHeightH1;
-  private double _stepHeightH2;
-  private double _foundationBottomLevel;
-  private double _floorLevel;
-  private double _floorLevelT1;
-  private double _concretePadWidth;
-  private double _concretePadThickness;
+  // Foundation dimensions
+  private double _lengthX = 1500;
+  private double _lengthY = 1800;
+  private double _stepHeightH1 = 500;
+  // Step heights (second step)
+  private double _stepHeightH2 = 200;
+  // Concrete leveling pad
+  private double _concretePadWidth = 100;
+  private double _concretePadThickness = 100;
+  // Column neck dimensions
+  private double _columnWidthX = 220;
+  private double _columnWidthY = 220;
+  // Rebar / concrete cover
+  private double _cover = 30;
+  // Identity
+  private string _foundationName = "M1";
+  private int _quantity = 1;
+  private double _axisOffsetX = 750;
+  private double _axisOffsetY = 900;
+  private double _foundationBottomLevel = -1500;
+  private double _floorLevel = -450;
+  private double _floorLevelT1 = -50;
   private bool _isRectangularColumn = true;
-  private double _columnWidthX;
-  private double _columnWidthY;
-  private double _columnPositionX;
-  private double _columnPositionY;
-  private string _rebarX = "";
-  private string _rebarY = "";
+  private double _columnPositionX = 750;
+  private double _columnPositionY = 900;
+  private string _rebarX = "d10a200";
+  private string _rebarY = "d10a200";
   private bool _drawColumnRebar;
   private bool _isAlternateRebarSpacing;
-  private string _columnRebar = "";
-  private string _stirrupRebar = "";
+  private string _columnRebar = "d16";
+  private string _stirrupRebar = "d6a100";
   private bool _isPrimaryDirection = true;
-  private double _cover;
-  private int _columnRebarCountX;
-  private int _columnRebarCountY;
-  private double _lapLength;
+  private int _columnRebarCountX = 2;
+  private int _columnRebarCountY = 2;
+  private double _lapLength = 40;
 
   public SwallowFoundationViewModel(SwallowFoundationPreviewDrawer previewDrawer)
   {
