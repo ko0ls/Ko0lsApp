@@ -368,7 +368,7 @@ public class SwallowFoundationPreviewDrawer
     var dimFontSize = Math.Max(9, 11 * scalePreview / model.Scale);
 
     AddTextBlock(
-      "SwallowFoundation.Label.Elevation".GetString() + " " + model.FloorLevel.ToString("F0", CultureInfo.InvariantCulture),
+      "SwallowFoundation.Label.Elevation".GetString() + " " + model.GroundLevel.ToString("F0", CultureInfo.InvariantCulture),
       originX,
       originY - dimFontSize - 4,
       dimFontSize, GrayBrush,

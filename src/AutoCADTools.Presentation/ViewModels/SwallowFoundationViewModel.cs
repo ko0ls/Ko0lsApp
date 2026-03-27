@@ -31,11 +31,11 @@ public class SwallowFoundationViewModel : BindableObject
   // Identity
   private string _foundationName = "M1";
   private int _quantity = 1;
-  private double _axisOffsetX = 750;
-  private double _axisOffsetY = 900;
+  private double _axisPositionX = 750;
+  private double _axisPositionY = 900;
   private double _foundationBottomLevel = -1500;
-  private double _floorLevel = -450;
-  private double _floorLevelT1 = -50;
+  private double _groundLevel = -450;
+  private double _floorLevel1 = -50;
   private bool _isRectangularColumn = true;
   private double _columnPositionX = 750;
   private double _columnPositionY = 900;
@@ -48,14 +48,14 @@ public class SwallowFoundationViewModel : BindableObject
   };
 
   private bool _drawColumnRebar;
-  private bool _isAlternateRebarSpacing;
+  private bool _isStaggeredLayout;
   private int _columnRebar = 16;
   private string _stirrupRebar = "d6a100";
   // Primary rebar direction: "X" or "Y" (X = rebar along X is main/bottom layer)
   private string _primaryDirection = "X";
   private int _columnRebarCountX = 2;
   private int _columnRebarCountY = 2;
-  private double _lapLength = 40;
+  private double _lapSpliceLength = 40;
 
   public SwallowFoundationViewModel(SwallowFoundationPreviewDrawer previewDrawer)
   {
@@ -111,17 +111,17 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  public double AxisOffsetX
+  public double AxisPositionX
   {
-    get => _axisOffsetX;
-    set => SetProperty(ref _axisOffsetX, value);
+    get => _axisPositionX;
+    set => SetProperty(ref _axisPositionX, value);
   }
 
   [CannotNull]
-  public double AxisOffsetY
+  public double AxisPositionY
   {
-    get => _axisOffsetY;
-    set => SetProperty(ref _axisOffsetY, value);
+    get => _axisPositionY;
+    set => SetProperty(ref _axisPositionY, value);
   }
 
   [CannotNull]
@@ -148,17 +148,17 @@ public class SwallowFoundationViewModel : BindableObject
   }
 
   [CannotNull]
-  public double FloorLevel
+  public double GroundLevel
   {
-    get => _floorLevel;
-    set => SetProperty(ref _floorLevel, value);
+    get => _groundLevel;
+    set => SetProperty(ref _groundLevel, value);
   }
 
   [CannotNull]
-  public double FloorLevelT1
+  public double FloorLevel1
   {
-    get => _floorLevelT1;
-    set => SetProperty(ref _floorLevelT1, value);
+    get => _floorLevel1;
+    set => SetProperty(ref _floorLevel1, value);
   }
 
   [CannotNull]
@@ -235,10 +235,10 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _drawColumnRebar, value);
   }
 
-  public bool IsAlternateRebarSpacing
+  public bool IsStaggeredLayout
   {
-    get => _isAlternateRebarSpacing;
-    set => SetProperty(ref _isAlternateRebarSpacing, value);
+    get => _isStaggeredLayout;
+    set => SetProperty(ref _isStaggeredLayout, value);
   }
 
   public int ColumnRebar
@@ -289,10 +289,10 @@ public class SwallowFoundationViewModel : BindableObject
 
   [CannotNull]
   [GreaterThan(0)]
-  public double LapLength
+  public double LapSpliceLength
   {
-    get => _lapLength;
-    set => SetProperty(ref _lapLength, value);
+    get => _lapSpliceLength;
+    set => SetProperty(ref _lapSpliceLength, value);
   }
 
   public ICommand OKCommand { get; }
@@ -311,19 +311,19 @@ public class SwallowFoundationViewModel : BindableObject
   {
     return new SwallowFoundationModel(
       FoundationName, Quantity, Scale,
-      LengthX, LengthY, AxisOffsetX, AxisOffsetY,
+      LengthX, LengthY, AxisPositionX, AxisPositionY,
       StepHeightH1, StepHeightH2,
-      FoundationBottomLevel, FloorLevel, FloorLevelT1,
+      FoundationBottomLevel, GroundLevel, FloorLevel1,
       ConcretePadExtension, ConcretePadThickness,
       IsRectangularColumn,
       ColumnWidthX, ColumnWidthY,
       ColumnPositionX, ColumnPositionY,
       RebarX, RebarY,
-      DrawColumnRebar, IsAlternateRebarSpacing,
+      DrawColumnRebar, IsStaggeredLayout,
       ColumnRebar, StirrupRebar,
       IsPrimaryDirection, Cover,
       ColumnRebarCountX, ColumnRebarCountY,
-      LapLength);
+      LapSpliceLength);
   }
 
   private void OnOK()

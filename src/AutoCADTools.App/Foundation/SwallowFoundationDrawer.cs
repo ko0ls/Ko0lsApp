@@ -616,7 +616,7 @@ public class SwallowFoundationDrawer
       LayerDimension, null, null, tr, btr);
 
     // ── Axis offset dims ────────────────────────────────────────────
-    if (Math.Abs(Model.AxisOffsetX) > 0.1)
+    if (Math.Abs(Model.AxisPositionX) > 0.1)
     {
       double yOff = bp.Y - Ly / 2 - dimOff;
       AddRotatedDimensionEntity(0,
@@ -626,7 +626,7 @@ public class SwallowFoundationDrawer
         LayerDimension, "AxisOffset", "OffsetX", tr, btr);
     }
 
-    if (Math.Abs(Model.AxisOffsetY) > 0.1)
+    if (Math.Abs(Model.AxisPositionY) > 0.1)
     {
       double xOff = bp.X - Lx / 2 - dimOff;
       AddRotatedDimensionEntity(Math.PI / 2,
@@ -757,15 +757,15 @@ public class SwallowFoundationDrawer
     // ── Elevation labels ───────────────────────────────────────────
     double lblX = sec.X - Lx / 2 - 1.5;
 
-    AddDbText(new Point3d(lblX, sec.Y + Model.FloorLevel * S, sec.Z), $"{-Model.FoundationBottomLevel / 1000:F3}", textH, LayerLabel, tr, btr);
-    AddDbText(new Point3d(lblX, sec.Y + Model.FloorLevel * S + 0.3 * S, sec.Z), "MC", textH, LayerLabel, tr, btr);
-    AddDbText(new Point3d(lblX, sec.Y + Model.FloorLevelT1 * S, sec.Z), $"{-Model.FloorLevelT1 / 1000:F3}", textH, LayerLabel, tr, btr);
+    AddDbText(new Point3d(lblX, sec.Y + Model.GroundLevel * S, sec.Z), $"{-Model.FoundationBottomLevel / 1000:F3}", textH, LayerLabel, tr, btr);
+    AddDbText(new Point3d(lblX, sec.Y + Model.GroundLevel * S + 0.3 * S, sec.Z), "MC", textH, LayerLabel, tr, btr);
+    AddDbText(new Point3d(lblX, sec.Y + Model.FloorLevel1 * S, sec.Z), $"{-Model.FloorLevel1 / 1000:F3}", textH, LayerLabel, tr, btr);
     AddDbText(new Point3d(lblX, sec.Y + Model.FoundationBottomLevel * S, sec.Z), $"{Model.FoundationBottomLevel / 1000:F3}", textH, LayerLabel, tr, btr);
 
     // ── Section label A-A ──────────────────────────────────────────
-    AddMText(new Point3d(sec.X, sec.Y + Model.FloorLevel * S + 1.5 * S, sec.Z),
+    AddMText(new Point3d(sec.X, sec.Y + Model.GroundLevel * S + 1.5 * S, sec.Z),
       "A", textH * 2, LayerLabel, tr, btr);
-    AddDbText(new Point3d(sec.X + 0.5 * S, sec.Y + Model.FloorLevel * S + 1.5 * S, sec.Z),
+    AddDbText(new Point3d(sec.X + 0.5 * S, sec.Y + Model.GroundLevel * S + 1.5 * S, sec.Z),
       "- A", textH, LayerLabel, tr, btr);
   }
 
@@ -807,12 +807,12 @@ public class SwallowFoundationDrawer
 
     // ── Elevation dim ──────────────────────────────────────────────
     double elevX = sec.X - Lx / 2 - 2.5 * S;
-    if (Math.Abs(Model.FloorLevel - Model.FoundationBottomLevel) > 1)
+    if (Math.Abs(Model.GroundLevel - Model.FoundationBottomLevel) > 1)
     {
       AddRotatedDimensionEntity(Math.PI / 2,
         new Point3d(elevX - 0.5, sec.Y, sec.Z),
         new Point3d(elevX, fBot, sec.Z),
-        new Point3d(elevX, sec.Y + Model.FloorLevel * S, sec.Z),
+        new Point3d(elevX, sec.Y + Model.GroundLevel * S, sec.Z),
         LayerElevation, "Elevation", "Floor", tr, btr);
     }
   }
@@ -873,7 +873,7 @@ public class SwallowFoundationDrawer
       if (crCount > 0 && crDia > 0)
       {
         double rebarY1 = colBaseZ;
-        double rebarY2 = colBaseZ + Model.FloorLevel * S;
+        double rebarY2 = colBaseZ + Model.GroundLevel * S;
         double spY = crCount > 1 ? (rebarY2 - rebarY1) / (crCount + 1) : 0;
 
         for (int i = 1; i <= crCount; i++)
@@ -886,10 +886,10 @@ public class SwallowFoundationDrawer
           lnCr.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
         }
 
-        if (Model.LapLength > 0)
+        if (Model.LapSpliceLength > 0)
         {
           AddMText(new Point3d(sec.X, colBaseZ - 0.5 * S, sec.Z),
-            $"Lap {Model.LapLength / 1000:F3}m", tagH, LayerLabel, tr, btr);
+            $"Lap {Model.LapSpliceLength / 1000:F3}m", tagH, LayerLabel, tr, btr);
         }
       }
 
@@ -897,7 +897,7 @@ public class SwallowFoundationDrawer
       if (stCount > 0 && stDia > 0 && stSpacing > 0)
       {
         double sY1 = colBaseZ;
-        double sY2 = Math.Min(colBaseZ + stSpacing * S, colBaseZ + Model.FloorLevel * S);
+        double sY2 = Math.Min(colBaseZ + stSpacing * S, colBaseZ + Model.GroundLevel * S);
         double sX1 = sec.X - cwX / 2;
         double sX2 = sec.X + cwX / 2;
 

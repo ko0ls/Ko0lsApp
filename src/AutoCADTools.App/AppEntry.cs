@@ -150,7 +150,7 @@ namespace AutoCADTools.App
       }
     }
 
-    [CommandMethod("vmd")]
+    [CommandMethod("vmd1")]
     public void CmdSwallowFoundation()
     {
       try {

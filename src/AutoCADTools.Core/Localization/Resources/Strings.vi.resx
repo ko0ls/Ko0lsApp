@@ -175,49 +175,49 @@
     <value>Tỷ lệ</value>
   </data>
   <data name="SwallowFoundation.Label.LengthX" xml:space="preserve">
-    <value>Chiều dài X (Lx)</value>
+    <value>Chiều dài X (Lx) (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.LengthY" xml:space="preserve">
-    <value>Chiều dài Y (Ly)</value>
+    <value>Chiều dài Y (Ly) (mm)</value>
   </data>
-  <data name="SwallowFoundation.Label.AxisOffsetX" xml:space="preserve">
-    <value>Offset trục X</value>
+  <data name="SwallowFoundation.Label.AxisPositionX" xml:space="preserve">
+    <value>Vị trí trục phương X (mm)</value>
   </data>
-  <data name="SwallowFoundation.Label.AxisOffsetY" xml:space="preserve">
-    <value>Offset trục Y</value>
+  <data name="SwallowFoundation.Label.AxisPositionY" xml:space="preserve">
+    <value>Vị trí trục phương Y (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.StepHeightH1" xml:space="preserve">
-    <value>Chiều cao bậc H1</value>
+    <value>Chiều cao bậc H1 (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.StepHeightH2" xml:space="preserve">
-    <value>Chiều cao bậc H2</value>
+    <value>Chiều cao bậc H2 (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.FoundationBottomLevel" xml:space="preserve">
-    <value>Cao độ đáy móng</value>
+    <value>Cao độ đáy móng (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.FloorLevel" xml:space="preserve">
-    <value>Cao độ sàn</value>
+    <value>Cao độ sân (mm)</value>
   </data>
-  <data name="SwallowFoundation.Label.FloorLevelT1" xml:space="preserve">
-    <value>Cao độ sàn T1</value>
+  <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve">
+    <value>Cao độ sàn tầng 1 (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ConcretePadExtension" xml:space="preserve">
-    <value>Phần nhô BT lót</value>
+    <value>Phần mở rộng bê tông lót (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ConcretePadThickness" xml:space="preserve">
-    <value>Bề dày BT lót</value>
+    <value>Bề dày BT lót (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnWidthX" xml:space="preserve">
-    <value>Bề rộng cột X</value>
+    <value>Bề rộng cột X (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnWidthY" xml:space="preserve">
-    <value>Bề rộng cột Y</value>
+    <value>Bề rộng cột Y (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnPositionX" xml:space="preserve">
-    <value>Vị trí cột X</value>
+    <value>Vị trí cột phương X (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnPositionY" xml:space="preserve">
-    <value>Vị trí cột Y</value>
+    <value>Vị trí cột phương Y (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnShape" xml:space="preserve">
     <value>Hình dạng cột</value>
@@ -238,10 +238,10 @@
     <value>Vẽ thép cột</value>
   </data>
   <data name="SwallowFoundation.Label.IsAlternateRebarSpacing" xml:space="preserve">
-    <value>Cách đều</value>
+    <value>Bố trí so le</value>
   </data>
   <data name="SwallowFoundation.Label.AlternateRebarSpacing" xml:space="preserve">
-    <value>Cách đều</value>
+    <value>Bố trí so le</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnRebar" xml:space="preserve">
     <value>Thép cột</value>
@@ -253,7 +253,7 @@
     <value>Phương làm việc chính</value>
   </data>
   <data name="SwallowFoundation.Label.Cover" xml:space="preserve">
-    <value>Lớp bảo vệ</value>
+    <value>Lớp bảo vệ (mm)</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnRebarCountX" xml:space="preserve">
     <value>Số thanh X</value>
@@ -261,8 +261,8 @@
   <data name="SwallowFoundation.Label.ColumnRebarCountY" xml:space="preserve">
     <value>Số thanh Y</value>
   </data>
-  <data name="SwallowFoundation.Label.LapLength" xml:space="preserve">
-    <value>Chiều dài nối</value>
+  <data name="SwallowFoundation.Label.LapSpliceLength" xml:space="preserve">
+    <value>Chiều dài nối chồng (mm)</value>
   </data>
   <data name="SwallowFoundation.Button.OK" xml:space="preserve">
     <value>Đồng ý</value>

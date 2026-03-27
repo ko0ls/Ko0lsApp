@@ -24,4 +24,7 @@
   <data name="View.Settings.Language" xml:space="preserve"><value>Language:</value></data>
   <data name="View.Settings.Button.Save" xml:space="preserve"><value>Save</value></data>
   <data name="View.Settings.Button.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve">
+    <value />
+  </data>
 </root>

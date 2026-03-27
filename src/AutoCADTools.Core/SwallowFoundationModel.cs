@@ -9,9 +9,9 @@ public enum ColumnShape
 public class SwallowFoundationModel
 {
   private bool _isRectangularColumn = true;
-  private bool _isCircularColumn = false;
-  private bool _drawColumnRebar = false;
-  private bool _isAlternateRebarSpacing = false;
+  private bool _isCircularColumn;
+  private bool _drawColumnRebar;
+  private bool _isStaggeredLayout;
   private double _scale = 3;
 
   public bool IsRectangularColumn
@@ -49,10 +49,10 @@ public class SwallowFoundationModel
   public double LengthY { get; set; }
 
   /// <summary>Column axis offset in X direction (mm).</summary>
-  public double AxisOffsetX { get; set; }
+  public double AxisPositionX { get; set; }
 
   /// <summary>Column axis offset in Y direction (mm).</summary>
-  public double AxisOffsetY { get; set; }
+  public double AxisPositionY { get; set; }
 
   /// <summary>Step height at column base (mm).</summary>
   public double StepHeightH1 { get; set; }
@@ -63,11 +63,11 @@ public class SwallowFoundationModel
   /// <summary>Foundation bottom elevation (mm).</summary>
   public double FoundationBottomLevel { get; set; }
 
-  /// <summary>Floor elevation (mm).</summary>
-  public double FloorLevel { get; set; }
+  /// <summary>Ground elevation (mm).</summary>
+  public double GroundLevel { get; set; }
 
   /// <summary>Floor elevation T1 (mm).</summary>
-  public double FloorLevelT1 { get; set; }
+  public double FloorLevel1 { get; set; }
 
   /// <summary>Concrete pad extension beyond footing Lx/Ly (mm).</summary>
   public double ConcretePadExtension { get; set; }
@@ -99,10 +99,10 @@ public class SwallowFoundationModel
     set => _drawColumnRebar = value;
   }
 
-  public bool IsAlternateRebarSpacing
+  public bool IsStaggeredLayout
   {
-    get => _isAlternateRebarSpacing;
-    set => _isAlternateRebarSpacing = value;
+    get => _isStaggeredLayout;
+    set => _isStaggeredLayout = value;
   }
 
   /// <summary>Column rebar, e.g. "2d25" = phi2 @ 25mm.</summary>
@@ -133,7 +133,7 @@ public class SwallowFoundationModel
   public double Cover { get; set; }
 
   /// <summary>Lap splice length for column rebars (mm).</summary>
-  public double LapLength { get; set; }
+  public double LapSpliceLength { get; set; }
 
   public SwallowFoundationModel()
   {
@@ -145,13 +145,13 @@ public class SwallowFoundationModel
       double scale,
       double lengthX,
       double lengthY,
-      double axisOffsetX,
-      double axisOffsetY,
+      double axisPositionX,
+      double axisPositionY,
       double stepHeightH1,
       double stepHeightH2,
       double foundationBottomLevel,
-      double floorLevel,
-      double floorLevelT1,
+      double groundLevel,
+      double floorLevel1,
       double concretePadExtension,
       double concretePadThickness,
       bool isRectangularColumn,
@@ -162,27 +162,27 @@ public class SwallowFoundationModel
       string rebarX,
       string rebarY,
       bool drawColumnRebar,
-      bool isAlternateRebarSpacing,
+      bool isStaggeredLayout,
       int columnRebar,
       string stirrupRebar,
       bool isPrimaryDirection,
       double cover,
       int columnRebarCountX,
       int columnRebarCountY,
-      double lapLength)
+      double lapSpliceLength)
   {
     FoundationName = foundationName;
     Quantity = quantity;
     Scale = scale;
     LengthX = lengthX;
     LengthY = lengthY;
-    AxisOffsetX = axisOffsetX;
-    AxisOffsetY = axisOffsetY;
+    AxisPositionX = axisPositionX;
+    AxisPositionY = axisPositionY;
     StepHeightH1 = stepHeightH1;
     StepHeightH2 = stepHeightH2;
     FoundationBottomLevel = foundationBottomLevel;
-    FloorLevel = floorLevel;
-    FloorLevelT1 = floorLevelT1;
+    GroundLevel = groundLevel;
+    FloorLevel1 = floorLevel1;
     ConcretePadExtension = concretePadExtension;
     ConcretePadThickness = concretePadThickness;
     IsRectangularColumn = isRectangularColumn;
@@ -194,13 +194,13 @@ public class SwallowFoundationModel
     RebarX = rebarX;
     RebarY = rebarY;
     DrawColumnRebar = drawColumnRebar;
-    IsAlternateRebarSpacing = isAlternateRebarSpacing;
+    IsStaggeredLayout = isStaggeredLayout;
     ColumnRebar = columnRebar;
     StirrupRebar = stirrupRebar;
     IsPrimaryDirection = isPrimaryDirection;
     Cover = cover;
     ColumnRebarCountX = columnRebarCountX;
     ColumnRebarCountY = columnRebarCountY;
-    LapLength = lapLength;
+    LapSpliceLength = lapSpliceLength;
   }
 }
