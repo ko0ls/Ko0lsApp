@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         Title="{utils:Loc SwallowFoundation.Window.Title}"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
         Width="900"
         Height="650"
         MinWidth="700"
@@ -24,44 +23,47 @@
     </ResourceDictionary>
   </Window.Resources>
 
-  <!-- ─── Row 0: Title bar (inherited from Window.Title) ─── -->
-  <!-- ─── Row 1: Content (Canvas | Form) ─── -->
-  <!-- ─── Row 2: OK / Cancel buttons ─── -->
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
+  <!--
+    Layout: DockPanel
+    - Canvas fills all available space on the left (DockPanel.Dock=Left)
+      → grows when window is maximized
+    - Form scrolls on the right (remaining space)
+    - Buttons dock at bottom (DockPanel.Dock=Bottom)
+  -->
+  <DockPanel>
+    <!-- ── Bottom: OK / Cancel buttons ── -->
+    <Border DockPanel.Dock="Bottom"
+            BorderBrush="#ACACAC"
+            BorderThickness="0 1 0 0"
+            Padding="9">
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Right">
+        <Button Content="{utils:Loc SwallowFoundation.Button.OK}"
+                Command="{Binding OKCommand}"
+                Width="100"
+                Margin="0 0 9 0"/>
+        <Button Content="{utils:Loc SwallowFoundation.Button.Cancel}"
+                Command="{Binding CancelCommand}"
+                Width="100"/>
+      </StackPanel>
+    </Border>
 
-    <!-- ── Content area: Canvas (left) + Form (right) ── -->
-    <Grid Grid.Row="0">
+    <!-- ── Content: Form (left, scrollable) | Canvas (right, fills available space) ── -->
+    <Grid>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
+        <!-- Form: minimum fixed width -->
+        <ColumnDefinition Width="280" MinWidth="260"/>
+        <!-- Vertical separator -->
         <ColumnDefinition Width="Auto"/>
+        <!-- Canvas: fills all available horizontal space -->
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <!-- ── Left: 2D Preview Canvas ── -->
-      <Border Grid.Column="0"
-              BorderBrush="#ACACAC"
-              BorderThickness="1"
-              Margin="9 9 4 9">
-        <Canvas x:Name="PreviewCanvas"
-                ClipToBounds="True"
-                Background="White"/>
-      </Border>
-
-      <!-- Vertical separator -->
-      <Rectangle Grid.Column="1"
-                 Width="1"
-                 Fill="#ACACAC"
-                 Margin="0 9"/>
-
-      <!-- ── Right: Input Form Panel ── -->
-      <ScrollViewer Grid.Column="2"
+      <!-- ── Left: Input Form Panel ── -->
+      <ScrollViewer Grid.Column="0"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
-                    Margin="4 9 9 9">
+                    Margin="9">
         <StackPanel>
 
           <!-- Foundation Identification -->
@@ -245,8 +247,7 @@
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.FoundationBottomLevel}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 4"
-                       ToolTip="[TODO] i18n: Foundation Bottom Level"/>
+                       Margin="0 0 8 4"/>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding FoundationBottomLevel, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
@@ -258,8 +259,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.FloorLevel}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 4"
-                       ToolTip="[TODO] i18n: Floor Level"/>
+                       Margin="0 0 8 4"/>
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding FloorLevel, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
@@ -271,8 +271,7 @@
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.FloorLevelT1}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 0"
-                       ToolTip="[TODO] i18n: Floor Level T1"/>
+                       Margin="0 0 8 0"/>
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding FloorLevelT1, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
@@ -301,8 +300,7 @@
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.ConcretePadWidth}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 4"
-                       ToolTip="[TODO] i18n: Concrete Pad Width"/>
+                       Margin="0 0 8 4"/>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding ConcretePadWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
@@ -314,8 +312,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.ConcretePadThickness}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 0"
-                       ToolTip="[TODO] i18n: Concrete Pad Thickness"/>
+                       Margin="0 0 8 0"/>
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding ConcretePadThickness, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
@@ -342,10 +339,10 @@
                        VerticalAlignment="Center"
                        Margin="0 0 8 4"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0 0 0 4">
-              <RadioButton Content="{utils:Loc SwallowFoundation.Label.Rectangular}"
+              <RadioButton Content="{utils:Loc SwallowFoundation.Label.ColumnShape.Rectangular}"
                            IsChecked="{Binding IsRectangularColumn}"
                            Margin="0 0 12 0"/>
-              <RadioButton Content="{utils:Loc SwallowFoundation.Label.Circular}"
+              <RadioButton Content="{utils:Loc SwallowFoundation.Label.ColumnShape.Circular}"
                            IsChecked="{Binding IsCircularColumn}"/>
             </StackPanel>
           </Grid>
@@ -505,7 +502,7 @@
 
             <!-- IsPrimaryDirection -->
             <TextBlock Grid.Row="2" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.PrimaryDirection}"
+                       Text="{utils:Loc SwallowFoundation.Label.IsPrimaryDirection}"
                        VerticalAlignment="Center"
                        Margin="0 0 8 4"/>
             <CheckBox Grid.Row="2" Grid.Column="1"
@@ -563,23 +560,22 @@
 
         </StackPanel>
       </ScrollViewer>
-    </Grid>
 
-    <!-- ── Bottom: OK / Cancel buttons ── -->
-    <Border Grid.Row="1"
-            BorderBrush="#ACACAC"
-            BorderThickness="0 1 0 0"
-            Padding="9">
-      <StackPanel Orientation="Horizontal"
-                  HorizontalAlignment="Right">
-        <Button Content="{utils:Loc SwallowFoundation.Button.OK}"
-                Command="{Binding OKCommand}"
-                Width="100"
-                Margin="0 0 9 0"/>
-        <Button Content="{utils:Loc SwallowFoundation.Button.Cancel}"
-                Command="{Binding CancelCommand}"
-                Width="100"/>
-      </StackPanel>
-    </Border>
-  </Grid>
+      <!-- Vertical separator -->
+      <Rectangle Grid.Column="1"
+                Width="1"
+                Fill="#ACACAC"
+                Margin="0 9"/>
+
+      <!-- ── Right: 2D Preview Canvas ── -->
+      <Border Grid.Column="2"
+              BorderBrush="#ACACAC"
+              BorderThickness="1 0 0 0"
+              Margin="9">
+        <Canvas x:Name="PreviewCanvas"
+                ClipToBounds="True"
+                Background="White"/>
+      </Border>
+    </Grid>
+  </DockPanel>
 </Window>

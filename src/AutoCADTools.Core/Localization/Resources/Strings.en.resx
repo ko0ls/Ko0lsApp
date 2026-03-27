@@ -219,6 +219,9 @@
   <data name="SwallowFoundation.Label.ColumnPositionY" xml:space="preserve">
     <value>Column Position Y</value>
   </data>
+  <data name="SwallowFoundation.Label.ColumnShape" xml:space="preserve">
+    <value>Column Shape</value>
+  </data>
   <data name="SwallowFoundation.Label.ColumnShape.Rectangular" xml:space="preserve">
     <value>Rectangular</value>
   </data>
@@ -235,6 +238,9 @@
     <value>Draw Column Rebar</value>
   </data>
   <data name="SwallowFoundation.Label.IsAlternateRebarSpacing" xml:space="preserve">
+    <value>Alternate Spacing</value>
+  </data>
+  <data name="SwallowFoundation.Label.AlternateRebarSpacing" xml:space="preserve">
     <value>Alternate Spacing</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnRebar" xml:space="preserve">

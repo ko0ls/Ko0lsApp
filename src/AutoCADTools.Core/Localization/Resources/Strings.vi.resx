@@ -219,6 +219,9 @@
   <data name="SwallowFoundation.Label.ColumnPositionY" xml:space="preserve">
     <value>Vị trí cột Y</value>
   </data>
+  <data name="SwallowFoundation.Label.ColumnShape" xml:space="preserve">
+    <value>Hình dạng cột</value>
+  </data>
   <data name="SwallowFoundation.Label.ColumnShape.Rectangular" xml:space="preserve">
     <value>Chữ nhật</value>
   </data>
@@ -235,6 +238,9 @@
     <value>Vẽ thép cột</value>
   </data>
   <data name="SwallowFoundation.Label.IsAlternateRebarSpacing" xml:space="preserve">
+    <value>Cách đều</value>
+  </data>
+  <data name="SwallowFoundation.Label.AlternateRebarSpacing" xml:space="preserve">
     <value>Cách đều</value>
   </data>
   <data name="SwallowFoundation.Label.ColumnRebar" xml:space="preserve">
