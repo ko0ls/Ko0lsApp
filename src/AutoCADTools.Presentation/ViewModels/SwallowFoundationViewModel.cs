@@ -284,7 +284,7 @@ public class SwallowFoundationViewModel : BindableObject
 
   public event Action? CloseRequested;
 
-  private void RefreshPreview()
+  public void RefreshPreview()
   {
     if (_previewDrawer == null) return;
     var model = ToModel();

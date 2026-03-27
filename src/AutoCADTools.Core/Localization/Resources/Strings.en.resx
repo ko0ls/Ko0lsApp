@@ -138,4 +138,130 @@
   <data name="Validation.CannotNull" xml:space="preserve">
     <value>Value cannot be null.</value>
   </data>
+  <data name="SwallowFoundation.Window.Title" xml:space="preserve">
+    <value>Draw Swallow Foundation</value>
+  </data>
+  <data name="SwallowFoundation.Group.Foundation" xml:space="preserve">
+    <value>Foundation</value>
+  </data>
+  <data name="SwallowFoundation.Group.FootingDimensions" xml:space="preserve">
+    <value>Footing Dimensions</value>
+  </data>
+  <data name="SwallowFoundation.Group.StepHeights" xml:space="preserve">
+    <value>Step Heights</value>
+  </data>
+  <data name="SwallowFoundation.Group.FoundationLevels" xml:space="preserve">
+    <value>Foundation Levels</value>
+  </data>
+  <data name="SwallowFoundation.Group.ConcretePad" xml:space="preserve">
+    <value>Concrete Pad</value>
+  </data>
+  <data name="SwallowFoundation.Group.Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="SwallowFoundation.Group.Rebar" xml:space="preserve">
+    <value>Rebar</value>
+  </data>
+  <data name="SwallowFoundation.Group.ColumnRebarDetails" xml:space="preserve">
+    <value>Column Rebar Details</value>
+  </data>
+  <data name="SwallowFoundation.Label.FoundationName" xml:space="preserve">
+    <value>Foundation Name</value>
+  </data>
+  <data name="SwallowFoundation.Label.Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SwallowFoundation.Label.Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="SwallowFoundation.Label.LengthX" xml:space="preserve">
+    <value>Length X (Lx)</value>
+  </data>
+  <data name="SwallowFoundation.Label.LengthY" xml:space="preserve">
+    <value>Length Y (Ly)</value>
+  </data>
+  <data name="SwallowFoundation.Label.AxisOffsetX" xml:space="preserve">
+    <value>Axis Offset X</value>
+  </data>
+  <data name="SwallowFoundation.Label.AxisOffsetY" xml:space="preserve">
+    <value>Axis Offset Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepHeightH1" xml:space="preserve">
+    <value>Step Height H1</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepHeightH2" xml:space="preserve">
+    <value>Step Height H2</value>
+  </data>
+  <data name="SwallowFoundation.Label.FoundationBottomLevel" xml:space="preserve">
+    <value>Foundation Bottom Level</value>
+  </data>
+  <data name="SwallowFoundation.Label.FloorLevel" xml:space="preserve">
+    <value>Floor Level</value>
+  </data>
+  <data name="SwallowFoundation.Label.FloorLevelT1" xml:space="preserve">
+    <value>Floor Level T1</value>
+  </data>
+  <data name="SwallowFoundation.Label.ConcretePadWidth" xml:space="preserve">
+    <value>Pad Width</value>
+  </data>
+  <data name="SwallowFoundation.Label.ConcretePadThickness" xml:space="preserve">
+    <value>Pad Thickness</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnWidthX" xml:space="preserve">
+    <value>Column Width X</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnWidthY" xml:space="preserve">
+    <value>Column Width Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnPositionX" xml:space="preserve">
+    <value>Column Position X</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnPositionY" xml:space="preserve">
+    <value>Column Position Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnShape.Rectangular" xml:space="preserve">
+    <value>Rectangular</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnShape.Circular" xml:space="preserve">
+    <value>Circular</value>
+  </data>
+  <data name="SwallowFoundation.Label.RebarX" xml:space="preserve">
+    <value>Rebar X</value>
+  </data>
+  <data name="SwallowFoundation.Label.RebarY" xml:space="preserve">
+    <value>Rebar Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.DrawColumnRebar" xml:space="preserve">
+    <value>Draw Column Rebar</value>
+  </data>
+  <data name="SwallowFoundation.Label.IsAlternateRebarSpacing" xml:space="preserve">
+    <value>Alternate Spacing</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebar" xml:space="preserve">
+    <value>Column Rebar</value>
+  </data>
+  <data name="SwallowFoundation.Label.StirrupRebar" xml:space="preserve">
+    <value>Stirrup Rebar</value>
+  </data>
+  <data name="SwallowFoundation.Label.IsPrimaryDirection" xml:space="preserve">
+    <value>Primary Direction</value>
+  </data>
+  <data name="SwallowFoundation.Label.Cover" xml:space="preserve">
+    <value>Cover</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebarCountX" xml:space="preserve">
+    <value>Rebar Count X</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebarCountY" xml:space="preserve">
+    <value>Rebar Count Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.LapLength" xml:space="preserve">
+    <value>Lap Length</value>
+  </data>
+  <data name="SwallowFoundation.Button.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="SwallowFoundation.Button.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
