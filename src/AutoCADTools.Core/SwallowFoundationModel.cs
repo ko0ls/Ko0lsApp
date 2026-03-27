@@ -106,7 +106,7 @@ public class SwallowFoundationModel
   }
 
   /// <summary>Column rebar, e.g. "2d25" = phi2 @ 25mm.</summary>
-  public string ColumnRebar { get; set; } = "";
+  public int ColumnRebar { get; set; } = 16;
 
   /// <summary>Stirrup rebar, e.g. "8a150" = phi8 @ 150mm.</summary>
   public string StirrupRebar { get; set; } = "";
@@ -163,7 +163,7 @@ public class SwallowFoundationModel
       string rebarY,
       bool drawColumnRebar,
       bool isAlternateRebarSpacing,
-      string columnRebar,
+      int columnRebar,
       string stirrupRebar,
       bool isPrimaryDirection,
       double cover,

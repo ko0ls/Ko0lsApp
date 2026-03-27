@@ -866,8 +866,9 @@ public class SwallowFoundationDrawer
     // ── Column rebars ───────────────────────────────────────────────
     if (Model.DrawColumnRebar)
     {
-      var (crCount, crDia, _) = ParseRebarSpec(Model.ColumnRebar);
       var (stCount, stDia, stSpacing) = ParseRebarSpec(Model.StirrupRebar);
+      int crCount = Model.ColumnRebarCountX;
+      double crDia = Model.ColumnRebar * S;
 
       if (crCount > 0 && crDia > 0)
       {

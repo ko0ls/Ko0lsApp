@@ -160,7 +160,7 @@
     <value>Cột</value>
   </data>
   <data name="SwallowFoundation.Group.Rebar" xml:space="preserve">
-    <value>Thép</value>
+    <value>Thép móng</value>
   </data>
   <data name="SwallowFoundation.Group.ColumnRebarDetails" xml:space="preserve">
     <value>Chi tiết thép cột</value>
@@ -249,8 +249,8 @@
   <data name="SwallowFoundation.Label.StirrupRebar" xml:space="preserve">
     <value>Thép đai</value>
   </data>
-  <data name="SwallowFoundation.Label.IsPrimaryDirection" xml:space="preserve">
-    <value>Hướng chính</value>
+  <data name="SwallowFoundation.Label.PrimaryDirection" xml:space="preserve">
+    <value>Phương làm việc chính</value>
   </data>
   <data name="SwallowFoundation.Label.Cover" xml:space="preserve">
     <value>Lớp bảo vệ</value>

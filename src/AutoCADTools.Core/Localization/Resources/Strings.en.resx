@@ -160,7 +160,7 @@
     <value>Column</value>
   </data>
   <data name="SwallowFoundation.Group.Rebar" xml:space="preserve">
-    <value>Rebar</value>
+    <value>Footing Rebar</value>
   </data>
   <data name="SwallowFoundation.Group.ColumnRebarDetails" xml:space="preserve">
     <value>Column Rebar Details</value>
@@ -249,8 +249,8 @@
   <data name="SwallowFoundation.Label.StirrupRebar" xml:space="preserve">
     <value>Stirrup Rebar</value>
   </data>
-  <data name="SwallowFoundation.Label.IsPrimaryDirection" xml:space="preserve">
-    <value>Primary Direction</value>
+  <data name="SwallowFoundation.Label.PrimaryDirection" xml:space="preserve">
+    <value>Primary Rebar Direction</value>
   </data>
   <data name="SwallowFoundation.Label.Cover" xml:space="preserve">
     <value>Cover</value>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using AutoCADTools.Core;
 using AutoCADTools.Presentation.Drawing;
@@ -40,11 +41,18 @@ public class SwallowFoundationViewModel : BindableObject
   private double _columnPositionY = 900;
   private string _rebarX = "d10a200";
   private string _rebarY = "d10a200";
+  // Available rebar diameters (mm)
+  public IEnumerable<int> ColumnRebarOptions { get; } = new[]
+  {
+    6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 30, 32, 36, 40
+  };
+
   private bool _drawColumnRebar;
   private bool _isAlternateRebarSpacing;
-  private string _columnRebar = "d16";
+  private int _columnRebar = 16;
   private string _stirrupRebar = "d6a100";
-  private bool _isPrimaryDirection = true;
+  // Primary rebar direction: "X" or "Y" (X = rebar along X is main/bottom layer)
+  private string _primaryDirection = "X";
   private int _columnRebarCountX = 2;
   private int _columnRebarCountY = 2;
   private double _lapLength = 40;
@@ -233,8 +241,7 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _isAlternateRebarSpacing, value);
   }
 
-  [NotEmpty]
-  public string ColumnRebar
+  public int ColumnRebar
   {
     get => _columnRebar;
     set => SetProperty(ref _columnRebar, value);
@@ -247,11 +254,14 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _stirrupRebar, value);
   }
 
-  public bool IsPrimaryDirection
+  public string PrimaryDirection
   {
-    get => _isPrimaryDirection;
-    set => SetProperty(ref _isPrimaryDirection, value);
+    get => _primaryDirection;
+    set => SetProperty(ref _primaryDirection, value);
   }
+
+  // Computed: true if primary direction is X, false if Y
+  public bool IsPrimaryDirection => _primaryDirection == "X";
 
   [CannotNull]
   [GreaterThan(0)]

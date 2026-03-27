@@ -357,7 +357,7 @@ public class SwallowFoundationPreviewDrawer
     // --- Column Rebars ---
     if (model.DrawColumnRebar)
     {
-      var rebarDia = ParseRebarDiameter(model.ColumnRebar) * s;
+      var rebarDia = model.ColumnRebar * s;
       if (rebarDia > 0)
       {
         DrawSectionColumnRebars(model, colStubLeft, colStubTop, colW, colStubHeight, rebarDia);

@@ -30,21 +30,19 @@
     - Form scrolls on the right (remaining space)
     - Buttons dock at bottom (DockPanel.Dock=Bottom)
   -->
-  <DockPanel>
+  <DockPanel Margin="9">
     <!-- ── Bottom: OK / Cancel buttons ── -->
     <Border DockPanel.Dock="Bottom"
-            BorderBrush="#ACACAC"
-            BorderThickness="0 1 0 0"
-            Padding="9">
+            BorderBrush="{StaticResource Container.Static.Border.Default}"
+            BorderThickness="0 1 0 0">
       <StackPanel Orientation="Horizontal"
-                  HorizontalAlignment="Right">
+                  HorizontalAlignment="Right"
+                  Margin="0 9 0 0">
         <Button Content="{utils:Loc SwallowFoundation.Button.OK}"
                 Command="{Binding OKCommand}"
-                Width="100"
                 Margin="0 0 9 0"/>
         <Button Content="{utils:Loc SwallowFoundation.Button.Cancel}"
-                Command="{Binding CancelCommand}"
-                Width="100"/>
+                Command="{Binding CancelCommand}"/>
       </StackPanel>
     </Border>
 
@@ -52,7 +50,7 @@
     <Grid>
       <Grid.ColumnDefinitions>
         <!-- Form: minimum fixed width -->
-        <ColumnDefinition Width="280" MinWidth="260"/>
+        <ColumnDefinition Width="400" MinWidth="00"/>
         <!-- Vertical separator -->
         <ColumnDefinition Width="Auto"/>
         <!-- Canvas: fills all available horizontal space -->
@@ -72,7 +70,7 @@
                      Margin="0 0 0 4"/>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -89,8 +87,7 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding FoundationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource InputTextBox}"
-                     Width="Auto"
-                     HorizontalAlignment="Stretch"
+                     HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
             <!-- Quantity -->
@@ -101,7 +98,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -113,7 +109,6 @@
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -126,7 +121,7 @@
                      Margin="0 0 0 4"/>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -144,7 +139,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding LengthX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -156,7 +150,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding LengthY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -168,7 +161,6 @@
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding AxisOffsetX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -180,7 +172,6 @@
             <TextBox Grid.Row="3" Grid.Column="1"
                      Text="{Binding AxisOffsetY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -193,7 +184,7 @@
                      Margin="0 0 0 4"/>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -209,7 +200,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding StepHeightH1, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -221,7 +211,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding StepHeightH2, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -234,7 +223,7 @@
                      Margin="0 0 0 4"/>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -251,7 +240,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding FoundationBottomLevel, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -263,7 +251,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding FloorLevel, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -275,7 +262,6 @@
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding FloorLevelT1, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -288,7 +274,7 @@
                      Margin="0 0 0 4"/>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -304,7 +290,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding ConcretePadExtension, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -316,7 +301,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding ConcretePadThickness, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -327,9 +311,9 @@
           <TextBlock Text="{utils:Loc SwallowFoundation.Group.Column}"
                      FontWeight="Bold"
                      Margin="0 0 0 4"/>
-          <Grid Margin="0 0 0 4">
+          <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -343,12 +327,12 @@
                            IsChecked="{Binding IsRectangularColumn}"
                            Margin="0 0 12 0"/>
               <RadioButton Content="{utils:Loc SwallowFoundation.Label.ColumnShape.Circular}"
-                           IsChecked="{Binding IsCircularColumn}"/>
+                           IsChecked="{Binding IsRectangularColumn, Converter={StaticResource InverseBooleanConverter}}"/>
             </StackPanel>
           </Grid>
           <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -366,7 +350,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding ColumnWidthX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -378,7 +361,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding ColumnWidthY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -390,7 +372,6 @@
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding ColumnPositionX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -402,7 +383,6 @@
             <TextBox Grid.Row="3" Grid.Column="1"
                      Text="{Binding ColumnPositionY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"/>
           </Grid>
 
@@ -413,12 +393,13 @@
           <TextBlock Text="{utils:Loc SwallowFoundation.Group.Rebar}"
                      FontWeight="Bold"
                      Margin="0 0 0 4"/>
-          <Grid Margin="0 0 0 4">
+          <Grid Margin="0 0 0 8">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -431,7 +412,6 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding RebarX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource InputTextBox}"
-                     Width="100"
                      HorizontalAlignment="Left"
                      Margin="0 0 0 4"/>
 
@@ -439,20 +419,29 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.RebarY}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 0"/>
+                       Margin="0 0 8 4"/>
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding RebarY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource InputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"/>
-          </Grid>
+                     HorizontalAlignment="Left"
+                     Margin="0 0 0 4"/>
 
-          <CheckBox Content="{utils:Loc SwallowFoundation.Label.DrawColumnRebar}"
-                    IsChecked="{Binding DrawColumnRebar}"
-                    Margin="0 0 0 4"/>
-          <CheckBox Content="{utils:Loc SwallowFoundation.Label.AlternateRebarSpacing}"
-                    IsChecked="{Binding IsAlternateRebarSpacing}"
-                    Margin="0 0 0 8"/>
+            <!-- PrimaryDirection -->
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       Text="{utils:Loc SwallowFoundation.Label.PrimaryDirection}"
+                       VerticalAlignment="Center"
+                       Margin="0 0 8 0"/>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+              <RadioButton Content="X"
+                           IsChecked="{Binding PrimaryDirection, Converter={StaticResource StringMatchConverter}, ConverterParameter=X}"
+                           GroupName="PrimaryDirection"
+                           Margin="0 0 12 0" VerticalAlignment="Center"/>
+              <RadioButton Content="Y"
+                           IsChecked="{Binding PrimaryDirection, Converter={StaticResource StringMatchConverter}, ConverterParameter=Y}"
+                           GroupName="PrimaryDirection"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+          </Grid>
 
           <!-- Separator -->
           <Separator Margin="0 0 0 8"/>
@@ -461,102 +450,95 @@
           <TextBlock Text="{utils:Loc SwallowFoundation.Group.ColumnRebarDetails}"
                      FontWeight="Bold"
                      Margin="0 0 0 4"/>
-          <Grid Margin="0 0 0 8">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
 
-            <!-- ColumnRebar -->
-            <TextBlock Grid.Row="0" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.ColumnRebar}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <TextBox Grid.Row="0" Grid.Column="1"
-                     Text="{Binding ColumnRebar, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource InputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"
-                     Margin="0 0 0 4"/>
+          <CheckBox Content="{utils:Loc SwallowFoundation.Label.DrawColumnRebar}"
+                    IsChecked="{Binding DrawColumnRebar}"
+                    Margin="0 0 0 4"/>
+          <StackPanel IsEnabled="{Binding DrawColumnRebar}">
+            <CheckBox Content="{utils:Loc SwallowFoundation.Label.AlternateRebarSpacing}"
+                      IsChecked="{Binding IsAlternateRebarSpacing}"
+                      Margin="0 0 0 8"/>
+            <Grid Margin="0 0 0 8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
 
-            <!-- StirrupRebar -->
-            <TextBlock Grid.Row="1" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.StirrupRebar}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                     Text="{Binding StirrupRebar, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource InputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"
-                     Margin="0 0 0 4"/>
+              <!-- ColumnRebar -->
+              <TextBlock Grid.Row="0" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.ColumnRebar}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 4"/>
+              <ComboBox Grid.Row="0" Grid.Column="1"
+                        ItemsSource="{Binding ColumnRebarOptions}"
+                        SelectedItem="{Binding ColumnRebar}"
+                        IsEditable="True"
+                        HorizontalAlignment="Left"
+                        Margin="0 0 0 4"/>
 
-            <!-- IsPrimaryDirection -->
-            <TextBlock Grid.Row="2" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.IsPrimaryDirection}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <CheckBox Grid.Row="2" Grid.Column="1"
-                      IsChecked="{Binding IsPrimaryDirection}"
-                      VerticalAlignment="Center"
-                      Margin="0 0 0 4"/>
+              <!-- StirrupRebar -->
+              <TextBlock Grid.Row="1" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.StirrupRebar}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 4"/>
+              <TextBox Grid.Row="1" Grid.Column="1"
+                       Text="{Binding StirrupRebar, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                       Style="{StaticResource InputTextBox}"
+                       HorizontalAlignment="Left"
+                       Margin="0 0 0 4"/>
 
-            <!-- Cover -->
-            <TextBlock Grid.Row="3" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.Cover}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <TextBox Grid.Row="3" Grid.Column="1"
-                     Text="{Binding Cover, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"
-                     Margin="0 0 0 4"/>
+              <!-- Cover -->
+              <TextBlock Grid.Row="2" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.Cover}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 4"/>
+              <TextBox Grid.Row="2" Grid.Column="1"
+                       Text="{Binding Cover, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                       Style="{StaticResource NumericInputTextBox}"
+                       HorizontalAlignment="Left"
+                       Margin="0 0 0 4"/>
 
-            <!-- ColumnRebarCountX -->
-            <TextBlock Grid.Row="4" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.ColumnRebarCountX}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <TextBox Grid.Row="4" Grid.Column="1"
-                     Text="{Binding ColumnRebarCountX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"
-                     Margin="0 0 0 4"/>
+              <!-- ColumnRebarCountX -->
+              <TextBlock Grid.Row="3" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.ColumnRebarCountX}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 4"/>
+              <TextBox Grid.Row="3" Grid.Column="1"
+                       Text="{Binding ColumnRebarCountX, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                       Style="{StaticResource NumericInputTextBox}"
+                       HorizontalAlignment="Left"
+                       Margin="0 0 0 4"/>
 
-            <!-- ColumnRebarCountY -->
-            <TextBlock Grid.Row="5" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.ColumnRebarCountY}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 4"/>
-            <TextBox Grid.Row="5" Grid.Column="1"
-                     Text="{Binding ColumnRebarCountY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"
-                     Margin="0 0 0 4"/>
+              <!-- ColumnRebarCountY -->
+              <TextBlock Grid.Row="4" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.ColumnRebarCountY}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 4"/>
+              <TextBox Grid.Row="4" Grid.Column="1"
+                       Text="{Binding ColumnRebarCountY, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                       Style="{StaticResource NumericInputTextBox}"
+                       HorizontalAlignment="Left"
+                       Margin="0 0 0 4"/>
 
-            <!-- LapLength -->
-            <TextBlock Grid.Row="6" Grid.Column="0"
-                       Text="{utils:Loc SwallowFoundation.Label.LapLength}"
-                       VerticalAlignment="Center"
-                       Margin="0 0 8 0"/>
-            <TextBox Grid.Row="6" Grid.Column="1"
-                     Text="{Binding LapLength, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Style="{StaticResource NumericInputTextBox}"
-                     Width="100"
-                     HorizontalAlignment="Left"/>
-          </Grid>
+              <!-- LapLength -->
+              <TextBlock Grid.Row="5" Grid.Column="0"
+                         Text="{utils:Loc SwallowFoundation.Label.LapLength}"
+                         VerticalAlignment="Center"
+                         Margin="0 0 8 0"/>
+              <TextBox Grid.Row="5" Grid.Column="1"
+                       Text="{Binding LapLength, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                       Style="{StaticResource NumericInputTextBox}"
+                       HorizontalAlignment="Left"/>
+            </Grid>
+          </StackPanel>
 
         </StackPanel>
       </ScrollViewer>
@@ -564,12 +546,12 @@
       <!-- Vertical separator -->
       <Rectangle Grid.Column="1"
                 Width="1"
-                Fill="#ACACAC"
+                Fill="{StaticResource Container.Static.Border.Default}"
                 Margin="0 9"/>
 
       <!-- ── Right: 2D Preview Canvas ── -->
       <Border Grid.Column="2"
-              BorderBrush="#ACACAC"
+              BorderBrush="{StaticResource Container.Static.Border.Default}"
               BorderThickness="1 0 0 0"
               Margin="9">
         <Canvas x:Name="PreviewCanvas"
