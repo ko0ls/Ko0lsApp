@@ -309,8 +309,7 @@ public class Dimension2D
     _zIndex = zIndex;
 
     InitSetting(_scale, _dimSetting);
-    if (!InitGeometry())
-      throw new ArgumentException("Error.InvalidDimensionGeometry".GetString());
+    if (!InitGeometry()) return;
 
     DrawDimLine();
 

@@ -181,7 +181,7 @@ public class SwallowFoundationDrawer
       Layer = layer
     };
 
-    rd.TextPosition = new Point3d(dimPoint.X + 0.2, dimPoint.Y + 0.2, 0);
+    rd.TextPosition = new Point3d(dimPoint.X + 0.5, dimPoint.Y + 0.5, 0);
 
     if (!string.IsNullOrEmpty(xdataKey!) && xdataValue != null)
       SetXDataString(rd, xdataKey!, xdataValue);
@@ -535,6 +535,22 @@ public class SwallowFoundationDrawer
     string label = $"{Model.FoundationName}(SL:{Model.Quantity:D2})";
     AddMText(new Point3d(bp.X + Lx / 2 + 0.3, bp.Y + Ly / 2 + 0.3, bp.Z),
       label, 0.35 * S, LayerLabel, tr, btr);
+
+    // ── Lx / Ly dimension labels (outside footing) ─────────────────
+    // Lx: below the bottom edge of footing
+    double dimLabelOff = padW + 1.0 * S;
+    double lblY = bp.Y - Ly / 2 - dimLabelOff;
+    AddDbText(
+      new Point3d(bp.X, lblY, bp.Z),
+      "Lx = " + Model.LengthX.ToString("F0"),
+      0.35 * S, LayerLabel, tr, btr);
+
+    // Ly: right of the right edge of footing
+    double lblX = bp.X + Lx / 2 + dimLabelOff;
+    AddDbText(
+      new Point3d(lblX, bp.Y, bp.Z),
+      "Ly = " + Model.LengthY.ToString("F0"),
+      0.35 * S, LayerLabel, tr, btr);
   }
 
   // ╔══════════════════════════════════════════════════════════════╗
