@@ -5,6 +5,7 @@ using System.Windows.Media;
 using AutoCADTools.Core;
 using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Canvas.Annotation;
+using AutoCADTools.Presentation.Canvas.Settings;
 using AutoCADTools.Presentation.Canvas.Shapes;
 using AutoCADTools.Presentation.Canvas.Utils;
 
@@ -36,19 +37,19 @@ public class SwallowFoundationPreviewDrawer
     var planBounds = GetCanvasBoundingBox(_canvas);
     if (!planBounds.IsEmpty) {
       var sectionGap = 50.0;
-      var sectionOriginX = planBounds.Left; // align left with plan
       var sectionOriginY = planBounds.Bottom + sectionGap; // below plan
-      DrawSection(model, sectionOriginX, sectionOriginY);
+      DrawSection(model, originX + model.ConcretePadExtension, sectionOriginY);
     }
     else {
-      DrawSection(model, 0, 0);
+      DrawSection(model, originX + model.ConcretePadExtension, 0);
     }
   }
 
   private void DrawPlan(SwallowFoundationModel model, double originX, double originY)
   {
-    var Lx = model.LengthX;
-    var Ly = model.LengthY;
+    var dimSetting = new Dimension2DSetting { TextPlacement = EnumTextPlacement.BesideDim } ;
+    var lx = model.LengthX;
+    var ly = model.LengthY;
     var pad = model.ConcretePadExtension;
     var colPosX = model.ColumnPositionX;
     var colPosY = model.ColumnPositionY;
@@ -57,8 +58,8 @@ public class SwallowFoundationPreviewDrawer
     var axisPositionX = model.AxisPositionX;
     var axisPositionY = model.AxisPositionY;
 
-    var totalW = Lx + 2 * pad;
-    var totalH = Ly + 2 * pad;
+    var totalW = lx + 2 * pad;
+    var totalH = ly + 2 * pad;
 
     var footingLeft = originX + pad;
     var footingTop = originY + pad;
@@ -68,7 +69,7 @@ public class SwallowFoundationPreviewDrawer
     _ = new Polygon2D(_canvas, padRectPoints, LineThickness, Brushes.Gray, Brushes.Gray, zIndex: 0);
 
     // --- Footing outline ---
-    var footingRectPoints = CreateRectPoints(footingLeft, footingTop, Lx, Ly);
+    var footingRectPoints = CreateRectPoints(footingLeft, footingTop, lx, ly);
     _ = new Polygon2D(_canvas, footingRectPoints, LineThickness, Brushes.Blue, Brushes.White, zIndex: 1);
 
     // --- Axis lines (dashed gray) ---
@@ -80,10 +81,10 @@ public class SwallowFoundationPreviewDrawer
     var hAxisStartPoint = new Point(originX, axCy);
     var hAxisEndPoint = new Point(originX + totalW, axCy);
 
-    _ = new Grid2D(_canvas, _scale, "*", vAxisStartPoint, vAxisEndPoint, EnumGridSymbolStyle.Circle,
-      EnumGridSymbolStyle.Circle, 10, 10);
-    _ = new Grid2D(_canvas, _scale, "*", hAxisStartPoint, hAxisEndPoint, EnumGridSymbolStyle.Circle,
-      EnumGridSymbolStyle.Circle, 10, 10);
+    _ = new Grid2D(_canvas, _scale, "-", vAxisStartPoint, vAxisEndPoint, EnumGridSymbolStyle.None,
+      EnumGridSymbolStyle.Circle, 5, 35, zIndex: 4);
+    _ = new Grid2D(_canvas, _scale, "-", hAxisStartPoint, hAxisEndPoint, EnumGridSymbolStyle.None,
+      EnumGridSymbolStyle.Circle, 5, 35, zIndex: 4);
 
     // --- Column ---
     var colLeftExtend = footingLeft + colPosX - colW / 2 - 50;
@@ -121,21 +122,31 @@ public class SwallowFoundationPreviewDrawer
     }
 
     // --- Dimension: Lx (horizontal, below footing) ---
-    var dimLxStartPoint = new Point(footingLeft, footingTop + Ly + pad);
-    var dimLxEndPoint = new Point(footingLeft + Lx, footingTop + Ly + pad);
+    var dimLxStartPoint = new Point(footingLeft, footingTop + ly + pad);
+    var dimLxEndPoint = new Point(footingLeft + lx, footingTop + ly + pad);
+    var dimVerticalAxis = new Point(footingLeft + axisPositionX, footingTop + ly + pad);
     var dimLxDirection = UtilsVector.CreateVector(dimLxStartPoint, dimLxEndPoint);
-    var dimLxPlacePoint = new Point(0, footingTop + Ly + pad) + dimLxDirection.Rotate(90) * 20 * _scale;
+    var dimLxPlacePoint = new Point(0, footingTop + ly + pad) + dimLxDirection.Rotate(90) * 20 * _scale;
+    _ = new Dimension2D(_canvas, _scale, dimLxStartPoint, dimVerticalAxis, dimLxPlacePoint, dimLxDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+    _ = new Dimension2D(_canvas, _scale, dimVerticalAxis, dimLxEndPoint, dimLxPlacePoint, dimLxDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting);
     _ = new Dimension2D(_canvas, _scale, dimLxStartPoint, dimLxEndPoint, dimLxPlacePoint, dimLxDirection,
-      EnumDimensionLevel.Level1, assignTextValue: "Lx");
+      EnumDimensionLevel.Level2, assignTextValue: "Lx");
 
     // --- Dimension: Ly (vertical, right of footing) ---
-    var dimLyStartPoint = new Point(footingLeft + Lx + pad, footingTop);
-    var dimLyEndPoint = new Point(footingLeft + Lx + pad, footingTop + Ly);
+    var dimLyStartPoint = new Point(footingLeft + lx + pad, footingTop);
+    var dimLyEndPoint = new Point(footingLeft + lx + pad, footingTop + ly);
+    var dimHorizontalAxis = new Point(footingLeft + lx + pad, footingTop + axisPositionY);
     var dimLyDirection = UtilsVector.CreateVector(dimLyStartPoint, dimLyEndPoint);
-    var dimLyPlacePoint = new Point(footingLeft + Lx + pad, 0) +
+    var dimLyPlacePoint = new Point(footingLeft + lx + pad, 0) +
                           dimLyDirection.Rotate(-90) * 20 * _scale;
+    _ = new Dimension2D(_canvas, _scale, dimLyStartPoint, dimHorizontalAxis, dimLyPlacePoint, dimLyDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+    _ = new Dimension2D(_canvas, _scale, dimHorizontalAxis, dimLyEndPoint, dimLyPlacePoint, dimLyDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
     _ = new Dimension2D(_canvas, _scale, dimLyStartPoint, dimLyEndPoint, dimLyPlacePoint, dimLyDirection,
-      EnumDimensionLevel.Level1, assignTextValue: "Ly");
+      EnumDimensionLevel.Level2, assignTextValue: "Ly", dimSetting: dimSetting);
 
     // --- Plan title ---
     _ = new TextNote2D(_canvas, _scale, "SwallowFoundation.View.Plan".GetString(), 5,
@@ -145,7 +156,114 @@ public class SwallowFoundationPreviewDrawer
 
   private void DrawSection(SwallowFoundationModel model, double originX, double originY)
   {
-    // TODO: implement section drawing (step H1/H2, column stub, rebars, dimensions)
+    var dimSetting = new Dimension2DSetting { TextPlacement = EnumTextPlacement.BesideDim } ;
+    var lx = model.LengthX;
+    var pad = model.ConcretePadExtension;
+    var padThick = model.ConcretePadThickness;
+    var colW = model.ColumnWidthX;
+    var foundationBottomLevel = model.FoundationBottomLevel;
+    var floorLevel1 = model.FloorLevel1;
+    var colPositionX = model.ColumnPositionX;
+    var vAxisPositionX = model.AxisPositionX;
+
+    var totalW = lx + 2 * pad;
+
+    // Note: WPF canvas Y increases downward.
+    // Section originY = top of footing (bottom of column stub).
+    // All section elements have POSITIVE Y (drawn downward from originY).
+
+    // --- H1 / H2 / H3 ---
+    var h1 = model.StepHeightH1;
+    var h2 = model.StepHeightH2;
+
+    // --- 0. Section Title (above column stub) ---
+    var sectionTitle = new TextNote2D(_canvas, _scale, "SwallowFoundation.View.Section".GetString(),
+      5, new Point(originX + lx / 2, originY + 6 * _scale), Brushes.Black,
+      margin: 1, textAlignment: EnumTextAlignment.TopMiddle);
+    var titleHeight = sectionTitle.Height;
+    var pedestalColumnExtend = 100;
+
+    // --- 1. Concrete Pad (Rectangle, dashed gray) ---
+    var yPosition = originY + 6 * _scale + titleHeight + 15 * _scale + pedestalColumnExtend;
+    var foundationHeight = Math.Abs(floorLevel1 - foundationBottomLevel);
+    var padRect = CreateRectPoints(originX - pad, yPosition + foundationHeight, totalW, padThick);
+    _ = new Polygon2D(_canvas, padRect, LineThickness, Brushes.Gray, Brushes.LightGray, zIndex: 0);
+
+    // --- 2. Footing polygon (single Polygon2D for all footing parts) ---
+    var colStubCenter = originX + colPositionX;
+    var footingCenter = originX + lx / 2;
+    var topLeft = new Point(colStubCenter - colW / 2, yPosition - pedestalColumnExtend);
+    var topRight = new Point(colStubCenter + colW / 2, yPosition - pedestalColumnExtend);
+    var pedestalBottomRight = topRight with { Y = topRight.Y + pedestalColumnExtend + ( foundationHeight - h1 < 0 ? 0 : foundationHeight - h1 ) };
+    var pedestalBottomRightExtend = pedestalBottomRight with {
+      X = pedestalBottomRight.X + 50 > originX + lx ? originX + lx : pedestalBottomRight.X + 50
+    };
+    var foundationRightSlope = new Point(footingCenter + lx / 2, pedestalBottomRightExtend.Y + ( h1 - h2 ));
+
+    var foundationBottomRight = foundationRightSlope with { Y = foundationRightSlope.Y + h2 };
+    var foundationBottomLeft = foundationBottomRight with { X = footingCenter - lx / 2 };
+
+    var foundationLeftSlope = new Point(footingCenter - lx / 2, foundationBottomLeft.Y - h2);
+    var pedestalBottomLeftExtend = pedestalBottomRight with {
+      X = colStubCenter - colW / 2 - 50 < foundationBottomLeft.X
+        ? foundationBottomLeft.X
+        : colStubCenter - colW / 2 - 50
+    };
+    var pedestalBottomLeft = pedestalBottomLeftExtend with {
+      X = pedestalBottomLeftExtend.X + 50 > colStubCenter - colW / 2
+        ? colStubCenter - colW / 2
+        : pedestalBottomLeftExtend.X + 50
+    };
+
+    var footingPolygon = new PointCollection {
+      topLeft,
+      topRight,
+      pedestalBottomRight,
+      pedestalBottomRightExtend,
+      foundationRightSlope,
+      foundationBottomRight,
+      foundationBottomLeft,
+      foundationLeftSlope,
+      pedestalBottomLeftExtend,
+      pedestalBottomLeft
+    };
+    _ = new Polygon2D(_canvas, footingPolygon, LineThickness, Brushes.Blue, Brushes.White, zIndex: 1);
+
+    // --- 3. Axis Line ---
+    var vAxisStartPoint = new Point(originX + vAxisPositionX, yPosition);
+    var vAxisEndPoint = new Point(originX + vAxisPositionX, yPosition + foundationHeight + padThick);
+    _ = new Grid2D(_canvas, _scale, "*", vAxisStartPoint, vAxisEndPoint, EnumGridSymbolStyle.None,
+      EnumGridSymbolStyle.Circle, 5, 35, zIndex: 2);
+
+    // ---4.  Dimension: Lx (horizontal, below footing) ---
+    var dimLxStartPoint = foundationBottomLeft;
+    var dimLxEndPoint = foundationBottomRight;
+    var dimAxisX = dimLxStartPoint with { X = originX + vAxisPositionX };
+    var dimLxDirection = UtilsVector.CreateVector(dimLxStartPoint, dimLxEndPoint);
+    var dimLxPlacePoint = new Point(0, dimLxEndPoint.Y + pad) + dimLxDirection.Rotate(90) * 20 * _scale;
+    _ = new Dimension2D(_canvas, _scale, dimAxisX, dimLxStartPoint, dimLxPlacePoint, dimLxDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+    _ = new Dimension2D(_canvas, _scale, dimAxisX, dimLxEndPoint, dimLxPlacePoint, dimLxDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+    _ = new Dimension2D(_canvas, _scale, dimLxStartPoint, dimLxEndPoint, dimLxPlacePoint, dimLxDirection,
+      EnumDimensionLevel.Level2, assignTextValue: "Lx", dimSetting: dimSetting);
+
+    // ---5.  Dimension: elevation ---
+    var dimBottomFoundationStartPoint = foundationBottomRight;
+    var dimH2 = dimBottomFoundationStartPoint with { Y = dimBottomFoundationStartPoint.Y - h2 };
+    var dimH1 = dimBottomFoundationStartPoint with { Y = dimBottomFoundationStartPoint.Y - h1 };
+    var dimFloorLevel1 = dimBottomFoundationStartPoint with { Y = dimBottomFoundationStartPoint.Y - foundationHeight };
+    var dimDirection = UtilsVector.CreateVector(dimFloorLevel1, dimBottomFoundationStartPoint);
+    var dimPlacePoint = new Point(dimBottomFoundationStartPoint.X + pad, 0) +
+                        dimDirection.Rotate(-90) * 20 * _scale;
+    _ = new Dimension2D(_canvas, _scale, dimBottomFoundationStartPoint, dimH2, dimPlacePoint, dimDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+    _ = new Dimension2D(_canvas, _scale, dimH2, dimH1, dimPlacePoint, dimDirection,
+      EnumDimensionLevel.Level1, isNonStandardRight: false);
+    _ = new Dimension2D(_canvas, _scale, dimH1, dimFloorLevel1, dimPlacePoint, dimDirection,
+      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+    _ = new Dimension2D(_canvas, _scale, dimBottomFoundationStartPoint, dimFloorLevel1, dimPlacePoint, dimDirection,
+      EnumDimensionLevel.Level2, dimSetting: dimSetting, isNonStandardRight: false);
   }
 
   private static PointCollection CreateRectPoints(double originX, double originY, double totalW, double totalH)
@@ -157,222 +275,11 @@ public class SwallowFoundationPreviewDrawer
     return [p1, p2, p3, p4];
   }
 
-  /*public void DrawSection(SwallowFoundationModel model, double originX, double originY)
-  {
-    var Lx = model.LengthX;
-    var Ly = model.LengthY;
-    var pad = model.ConcretePadExtension;
-    var colPosX = model.ColumnPositionX;
-    var colPosY = model.ColumnPositionY;
-    var colW = model.ColumnWidthX;
-    var colH = model.ColumnWidthY;
-    var axisPositionX = model.AxisPositionX;
-    var axisPositionY = model.AxisPositionY;
-
-    var totalW = Lx + 2 * pad;
-    var totalH = Ly + 2 * pad;
-    var stepHeightH1 = model.StepHeightH1;
-    var stepHeightH2 = model.StepHeightH2;
-
-    var groundLevel = model.GroundLevel;
-    var floorLevel1 = model.FloorLevel1;
-    var foundationBottomLevel = model.FoundationBottomLevel;
-
-    // --- Concrete Pad (bottom, widest) ---
-    var padRectPoints = CreateRectPoints(originX - pad, originY - foundationBottomLevel, totalW, totalH);
-    _ = new Polygon2D(_canvas, padRectPoints, LineThickness, Brushes.Gray, Brushes.Gray, zIndex: 0);
-
-    // --- Step H2 (footing lower step) ---
-    var p1 = new Point(originX, originY - foundationBottomLevel);
-    var p2 = new Point(originX + Lx, originY);
-    var footingPoints = CreateRectPoints(originX - pad, originY - foundationBottomLevel, totalW, totalH);
-    _ = new Polygon2D(_canvas, padRectPoints, LineThickness, Brushes.Gray, Brushes.Gray, zIndex: 0);
-    var step2Top = padTop - H2;
-    if (H2 > 0) {
-      ctx.DrawRect(
-        ctx.ptAbs(footingLeft, step2Top),
-        Lx, H2,
-        ctx.Black,
-        fill: null,
-        thickness: ctx.LineThickness,
-        zIndex: 1);
-    }
-
-    // --- Step H1 (upper step / vat area) ---
-    var step1Top = step2Top - H1;
-    var step1H = H1;
-
-    var colStubLeft = originX + totalW / 2 - colW / 2;
-    var colStubTop = originY;
-
-    if (Math.Abs(H1 - H2) < 1e-6 || H1 < 1e-6) {
-      // Rectangular step H1 (no vat)
-      if (step1H > 0) {
-        ctx.DrawRect(
-          ctx.ptAbs(footingLeft, step1Top),
-          Lx, step1H,
-          ctx.Black,
-          fill: null,
-          thickness: ctx.LineThickness,
-          zIndex: 1);
-      }
-    }
-    else {
-      // Trapezoid vat: narrower at top (column stub width)
-      var vatPoints = new PointCollection {
-        new Point(footingLeft, step1Top + step1H), // bottom-left
-        new Point(footingLeft + Lx, step1Top + step1H), // bottom-right
-        new Point(colStubLeft + colW, step1Top), // top-right
-        new Point(colStubLeft, step1Top) // top-left
-      };
-      ctx.DrawPolygon(
-        vatPoints,
-        ctx.Black,
-        fill: null,
-        thickness: ctx.LineThickness,
-        zIndex: 1);
-    }
-
-    // --- Column stub (rectangular, top center) ---
-    var colStubHeight = totalH - padThick - H2 - H1;
-    if (colStubHeight < 0) colStubHeight = 0;
-
-    if (colStubHeight > 0) {
-      ctx.DrawRect(
-        ctx.ptAbs(colStubLeft, colStubTop),
-        colW, colStubHeight,
-        ctx.Black,
-        fill: ctx.White,
-        thickness: ctx.LineThickness,
-        zIndex: 2);
-    }
-
-    // --- Column Rebars ---
-    if (model.DrawColumnRebar) {
-      var rebarDia = model.ColumnRebar * s;
-      if (rebarDia > 0) {
-        DrawSectionColumnRebars(ctx, model, colStubLeft, colStubTop, colW, colStubHeight, rebarDia);
-      }
-    }
-
-    // --- Elevation labels ---
-    var dimFontSize = Math.Max(9, 11 * scalePreview / model.Scale);
-
-    ctx.DrawText(
-      "SwallowFoundation.Label.Elevation".GetString() + " " +
-      model.GroundLevel.ToString("F0", CultureInfo.InvariantCulture),
-      dimFontSize,
-      ctx.ptAbs(originX, originY - dimFontSize - 4),
-      ctx.Gray,
-      EnumTextAlignment.BottomLeft,
-      zIndex: 4);
-
-    ctx.DrawText(
-      "SwallowFoundation.Label.Elevation".GetString() + " " +
-      model.FoundationBottomLevel.ToString("F0", CultureInfo.InvariantCulture),
-      dimFontSize,
-      ctx.ptAbs(originX, originY + totalH + 4),
-      ctx.Gray,
-      EnumTextAlignment.TopLeft,
-      zIndex: 4);
-
-    // --- Vertical dimension H2 (lower step) ---
-    var labelX = originX + totalW + padW * 0.15;
-
-    if (H2 > 0) {
-      ctx.DrawDimension(
-        ctx.ptAbs(footingLeft, padTop - H2),
-        ctx.ptAbs(footingLeft, padTop),
-        ctx.ptAbs(labelX, padTop - H2 / 2),
-        EnumDimensionLevel.Level1,
-        assignTextValue: "H2=" + model.StepHeightH2.ToString("F0", CultureInfo.InvariantCulture),
-        zIndex: 4);
-    }
-
-    // --- Vertical dimension H1 (upper step / vat) ---
-    if (H1 > 0) {
-      ctx.DrawDimension(
-        ctx.ptAbs(footingLeft, step2Top),
-        ctx.ptAbs(footingLeft, step2Top + H1),
-        ctx.ptAbs(labelX, step2Top + H1 / 2),
-        EnumDimensionLevel.Level1,
-        assignTextValue: "H1=" + model.StepHeightH1.ToString("F0", CultureInfo.InvariantCulture),
-        zIndex: 4);
-    }
-
-    // --- Section title ---
-    ctx.DrawText(
-      "SwallowFoundation.View.Section".GetString(),
-      dimFontSize + 2,
-      ctx.ptAbs(originX, originY - dimFontSize - 6),
-      ctx.Black,
-      EnumTextAlignment.BottomLeft,
-      zIndex: 4);
-  }*/
-
-  /*private void DrawSectionColumnRebars(
-    SwallowFoundationDrawingContext ctx,
-    SwallowFoundationModel model,
-    double colLeft,
-    double colTop,
-    double colWidth,
-    double colHeight,
-    double rebarDia)
-  {
-    var countX = Math.Max(2, model.ColumnRebarCountX);
-    var countY = Math.Max(2, model.ColumnRebarCountY);
-    var cover = model.Cover * model.Scale;
-
-    var innerW = colWidth - 2 * cover;
-    var innerH = colHeight - 2 * cover;
-    if (innerW < rebarDia || innerH < rebarDia || cover < 0) return;
-
-    if (model.IsRectangularColumn) {
-      var stepY = innerH / Math.Max(countY - 1, 1);
-      for (var i = 0 ; i < countY ; i++) {
-        var cy = colTop + cover + i * stepY;
-        AddRebarCircle(ctx, colLeft + cover + rebarDia / 2, cy, rebarDia);
-        AddRebarCircle(ctx, colLeft + colWidth - cover - rebarDia / 2, cy, rebarDia);
-      }
-
-      var stepX = innerW / Math.Max(countX - 1, 1);
-      for (var i = 0 ; i < countX ; i++) {
-        var cx = colLeft + cover + i * stepX;
-        AddRebarCircle(ctx, cx, colTop + cover + rebarDia / 2, rebarDia);
-        AddRebarCircle(ctx, cx, colTop + colHeight - cover - rebarDia / 2, rebarDia);
-      }
-    }
-    else if (model.IsCircularColumn) {
-      var totalCount = Math.Max(countX, countY) * 4;
-      var r = ( Math.Min(colWidth, colHeight) / 2 ) - cover - rebarDia / 2;
-      var cx = colLeft + colWidth / 2;
-      var cy = colTop + colHeight / 2;
-      if (r < rebarDia / 2) return;
-
-      for (var i = 0 ; i < totalCount ; i++) {
-        var angle = 2 * Math.PI * i / totalCount;
-        var rx = cx + r * Math.Cos(angle);
-        var ry = cy + r * Math.Sin(angle);
-        AddRebarCircle(ctx, rx, ry, rebarDia);
-      }
-    }
-  }*/
-
-  /*private void AddRebarCircle(SwallowFoundationDrawingContext ctx, double cx, double cy, double dia)
-  {
-    ctx.DrawEllipse(
-      ctx.ptAbs(cx, cy),
-      dia, dia,
-      ctx.Red,
-      fill: ctx.Red,
-      thickness: ctx.LineThickness,
-      zIndex: 3);
-  }*/
-
   /// <summary>
-  /// Computes the bounding box of all canvas primitives (Polygon2D, Line2D, Grid2D,
-  /// TextNote2D, Dimension2D, Ellipse2D) added to the canvas.
-  /// Returns Rect.Empty if the canvas is null or has no children.
+  /// Computes the bounding box of all WPF shapes added to the canvas.
+  /// Reads geometry directly from shape properties (Polygon.Points, Line.X1/Y1/X2/Y2,
+  /// Ellipse Canvas.Left/Top/Width/Height) since Canvas.GetLeft/Top returns NaN
+  /// and VisualTreeHelper.GetDescendantBounds returns Empty for WPF shapes.
   /// </summary>
   private static Rect GetCanvasBoundingBox(System.Windows.Controls.Canvas? canvas)
   {
@@ -382,82 +289,57 @@ public class SwallowFoundationPreviewDrawer
     double minX = double.MaxValue, minY = double.MaxValue;
     double maxX = double.MinValue, maxY = double.MinValue;
 
-    foreach (DependencyObject child in canvas.Children) {
-      switch (child.GetType().Name) {
-        // Polygon2D stores points in _points field (PointCollection)
-        case "Polygon2D": {
-          if (child.GetType().GetField("_points",
-                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.GetValue(child) is not PointCollection pts) continue;
-          foreach (var pt in pts)
-            UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pt);
+    foreach (UIElement child in canvas.Children)
+    {
+      switch (child)
+      {
+        case System.Windows.Shapes.Polygon poly: {
+          foreach (var pt in poly.Points) {
+            if (pt.X < minX) minX = pt.X;
+            if (pt.Y < minY) minY = pt.Y;
+            if (pt.X > maxX) maxX = pt.X;
+            if (pt.Y > maxY) maxY = pt.Y;
+          }
           break;
         }
-        // Line2D stores StartPoint/EndPoint in _startPoint / _endPoint fields
-        case "Line2D": {
-          var sp = child.GetType().GetField("_startPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          var ep = child.GetType().GetField("_endPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
-          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
+        case System.Windows.Shapes.Line line: {
+          if (line.X1 < minX) minX = line.X1;
+          if (line.Y1 < minY) minY = line.Y1;
+          if (line.X1 > maxX) maxX = line.X1;
+          if (line.Y1 > maxY) maxY = line.Y1;
+          if (line.X2 < minX) minX = line.X2;
+          if (line.Y2 < minY) minY = line.Y2;
+          if (line.X2 > maxX) maxX = line.X2;
+          if (line.Y2 > maxY) maxY = line.Y2;
           break;
         }
-        // Ellipse2D stores center in _center field
-        case "Ellipse2D": {
-          if (child.GetType().GetField("_center",
-                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.GetValue(child) is Point c) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, c);
+        case System.Windows.Shapes.Ellipse ellipse: {
+          var el = System.Windows.Controls.Canvas.GetLeft(ellipse);
+          var et = System.Windows.Controls.Canvas.GetTop(ellipse);
+          if (double.IsNaN(el)) el = 0;
+          if (double.IsNaN(et)) et = 0;
+          var ew = ellipse.Width;
+          var eh = ellipse.Height;
+          if (el < minX) minX = el;
+          if (et < minY) minY = et;
+          if (el + ew > maxX) maxX = el + ew;
+          if (et + eh > maxY) maxY = et + eh;
           break;
         }
-        // Grid2D stores _startPoint / _endPoint fields
-        case "Grid2D": {
-          var sp = child.GetType().GetField("_startPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          var ep = child.GetType().GetField("_endPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
-          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
-          break;
-        }
-        // TextNote2D stores _position field
-        case "TextNote2D": {
-          if (child.GetType().GetField("_position",
-                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.GetValue(child) is Point pos) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pos);
-          break;
-        }
-        // Dimension2D stores _startPoint / _endPoint / _placePoint fields
-        case "Dimension2D": {
-          var sp = child.GetType().GetField("_startPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          var ep = child.GetType().GetField("_endPoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          var pp = child.GetType().GetField("_placePoint",
-              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(child) as Point?;
-          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
-          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
-          if (pp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pp.Value);
+        case System.Windows.Shapes.Polyline pl: {
+          foreach (var pt in pl.Points) {
+            if (pt.X < minX) minX = pt.X;
+            if (pt.Y < minY) minY = pt.Y;
+            if (pt.X > maxX) maxX = pt.X;
+            if (pt.Y > maxY) maxY = pt.Y;
+          }
           break;
         }
       }
     }
 
-    return Math.Abs(minX - double.MaxValue) < 1e-9 ? Rect.Empty : new Rect(minX, minY, maxX - minX, maxY - minY);
-  }
-
-  private static void UpdateBounds(ref double minX, ref double minY, ref double maxX, ref double maxY, Point p)
-  {
-    if (p.X < minX) minX = p.X;
-    if (p.Y < minY) minY = p.Y;
-    if (p.X > maxX) maxX = p.X;
-    if (p.Y > maxY) maxY = p.Y;
+    return Math.Abs(minX - double.MaxValue) < 1e-9
+      ? Rect.Empty
+      : new Rect(minX, minY, maxX - minX, maxY - minY);
   }
 }

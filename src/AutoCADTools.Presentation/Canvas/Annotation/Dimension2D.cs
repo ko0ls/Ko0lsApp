@@ -307,6 +307,7 @@ public class Dimension2D
     _textField = textField;
     _isNonStandardRight = isNonStandardRight;
     _zIndex = zIndex;
+    if (dimSetting != null) _dimSetting = dimSetting;
 
     InitSetting(_scale, _dimSetting);
     if (!InitGeometry()) return;

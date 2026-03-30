@@ -7,6 +7,8 @@ namespace AutoCADTools.Presentation.Canvas.Annotation;
 
 public class TextNote2D
 {
+  public double Height => _textBlock?.Height ?? 0;
+  private readonly TextBlock2D? _textBlock;
   public TextNote2D(
     System.Windows.Controls.Canvas? canvas,
     double scale,
@@ -22,6 +24,6 @@ public class TextNote2D
     if (canvas == null || scale < 1e-9 || string.IsNullOrEmpty(text) || textFontSize < 1e-9 || !position.IsValid() || textColor == null)
       return;
 
-    _ = new TextBlock2D(canvas, text, textFontSize * scale, position, textColor, angle, margin * scale, textAlignment, zIndex);
+    _textBlock = new TextBlock2D(canvas, text, textFontSize * scale, position, textColor, angle, margin * scale, textAlignment, zIndex);
   }
 }

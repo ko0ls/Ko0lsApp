@@ -7,6 +7,7 @@ namespace AutoCADTools.Presentation.Canvas.Shapes;
 
 public class TextBlock2D
 {
+  private readonly TextBlock? _textBlock;
   public TextBlock2D(
     System.Windows.Controls.Canvas? canvas,
     string text,
@@ -43,14 +44,15 @@ public class TextBlock2D
       return;
     }
 
-    var tb = new TextBlock();
-    tb.Text = text;
-    tb.FontSize = textFontSize;
-    tb.LineHeight = textFontSize;
-    tb.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-    tb.Foreground = textColor;
-    tb.Margin = new Thickness(margin);
-    tb.FontFamily = new FontFamily("Arial");
+    var tb = new TextBlock {
+      Text = text,
+      FontSize = textFontSize,
+      LineHeight = textFontSize,
+      LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
+      Foreground = textColor,
+      Margin = new Thickness(margin),
+      FontFamily = new FontFamily("Arial")
+    };
     tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
     var textSize = tb.DesiredSize;
 
@@ -122,5 +124,8 @@ public class TextBlock2D
     System.Windows.Controls.Canvas.SetTop(tb, position.Y);
     System.Windows.Controls.Canvas.SetZIndex(tb, zIndex);
     canvas.Children.Add(tb);
+    _textBlock = tb;
   }
+
+  public double Height => _textBlock?.ActualHeight ?? 0;
 }
