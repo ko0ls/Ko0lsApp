@@ -25,7 +25,7 @@ public class CanvasViewModel : BindableObject
   public ICommand MouseMoveCommand { get; }
   public ICommand MouseDownCommand { get; }
   public ICommand MouseUpCommand { get; }
-  public ICommand WindowLoadedCommand { get; }
+  public ICommand WindowLoadedCommand { get; protected set; }
   public ICommand WindowClosedCommand { get; }
 
   public CanvasViewModel()
@@ -37,7 +37,7 @@ public class CanvasViewModel : BindableObject
     WindowClosedCommand = new RelayCommand(() => OnWindowClosed(null));
   }
 
-  private void OnWindowLoaded(object? parameter)
+  protected virtual void OnWindowLoaded(object? parameter)
   {
     if (parameter is not object[] values || values.Length < 3)
       return;

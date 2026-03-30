@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:AutoCADTools.Presentation.ViewModels"
         xmlns:utils="clr-namespace:AutoCADTools.Presentation.Utils"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:canvas="clr-namespace:AutoCADTools.Presentation.Canvas"
         mc:Ignorable="d"
         Title="{utils:Loc SwallowFoundation.Window.Title}"
         WindowStartupLocation="CenterOwner"
@@ -550,14 +551,14 @@
                 Fill="{StaticResource Container.Static.Border.Default}"
                 Margin="0 9"/>
 
-      <!-- ── Right: 2D Preview Canvas ── -->
+      <!-- ── Right: 2D Preview Canvas (CanvasView with pan/zoom) ── -->
       <Border Grid.Column="2"
               BorderBrush="{StaticResource Container.Static.Border.Default}"
               BorderThickness="1 0 0 0"
               Margin="9">
-        <Canvas x:Name="PreviewCanvas"
-                ClipToBounds="True"
-                Background="White"/>
+        <canvas:CanvasView x:Name="PreviewCanvas"
+                           ShowDimCheckBox="True"
+                           DataContext="{Binding PreviewCanvasViewModel}"/>
       </Border>
     </Grid>
   </DockPanel>

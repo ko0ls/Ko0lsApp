@@ -13,7 +13,7 @@ public partial class SwallowFoundationWindow : System.Windows.Window
   {
     InitializeComponent();
 
-    _drawer = new SwallowFoundationPreviewDrawer(PreviewCanvas);
+    _drawer = new SwallowFoundationPreviewDrawer(PreviewCanvas.Canvas, 100);
     _viewModel = new SwallowFoundationViewModel(_drawer);
     DataContext = _viewModel;
 

@@ -15,6 +15,11 @@ public partial class CanvasView : UserControl
     MyZoomBorder.MouseUp += ZoomBorder_MouseUp;
   }
 
+  /// <summary>
+  /// Exposes the inner canvas for use by SwallowFoundationPreviewDrawer.
+  /// </summary>
+  public System.Windows.Controls.Canvas Canvas => MyCanvas;
+
   public bool ShowDimCheckBox
   {
     get => (bool)GetValue(ShowDimCheckBoxProperty);

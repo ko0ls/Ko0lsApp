@@ -10,7 +10,8 @@ namespace AutoCADTools.Presentation.ViewModels;
 
 public class SwallowFoundationViewModel : BindableObject
 {
-  private readonly SwallowFoundationPreviewDrawer? _previewDrawer;
+  private readonly SwallowFoundationPreviewDrawer _previewDrawer;
+  private readonly System.Action _onRefresh;
 
   // Drawing scale (e.g. 1:3)
   private double _scale = 3;
@@ -57,13 +58,16 @@ public class SwallowFoundationViewModel : BindableObject
   private int _columnRebarCountY = 2;
   private double _lapSpliceLength = 40;
 
+  public SwallowFoundationPreviewViewModel PreviewCanvasViewModel { get; }
+
   public SwallowFoundationViewModel(SwallowFoundationPreviewDrawer previewDrawer)
   {
     _previewDrawer = previewDrawer;
+    _onRefresh = RefreshPreview;
+    PreviewCanvasViewModel = new SwallowFoundationPreviewViewModel(_onRefresh);
     OKCommand = new RelayCommand(OnOK, () => !HasErrors);
     CancelCommand = new RelayCommand(OnCancel);
     PropertyChanged += OnPropertyChangedForPreview;
-    RefreshPreview();
   }
 
   private void OnPropertyChangedForPreview(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -302,7 +306,6 @@ public class SwallowFoundationViewModel : BindableObject
 
   public void RefreshPreview()
   {
-    if (_previewDrawer == null) return;
     var model = ToModel();
     _previewDrawer.RefreshDrawing(model);
   }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -15,8 +13,8 @@ namespace AutoCADTools.Presentation.Drawing;
 public class SwallowFoundationPreviewDrawer
 {
   private readonly global::System.Windows.Controls.Canvas _canvas;
-  private double LineThickness { get ; set ; }
-  private double _scale = 100;
+  private double LineThickness { get; set; }
+  private double _scale;
 
   public SwallowFoundationPreviewDrawer(global::System.Windows.Controls.Canvas canvas, double scale)
   {
@@ -33,10 +31,21 @@ public class SwallowFoundationPreviewDrawer
     double originY = 0;
 
     DrawPlan(model, originX, originY);
-    // DrawSection(model, margin, margin + planHeight, sectionScale);
+
+    // Position section BELOW plan without overlap
+    var planBounds = GetCanvasBoundingBox(_canvas);
+    if (!planBounds.IsEmpty) {
+      var sectionGap = 50.0;
+      var sectionOriginX = planBounds.Left; // align left with plan
+      var sectionOriginY = planBounds.Bottom + sectionGap; // below plan
+      DrawSection(model, sectionOriginX, sectionOriginY);
+    }
+    else {
+      DrawSection(model, 0, 0);
+    }
   }
 
-  public void DrawPlan(SwallowFoundationModel model, double originX, double originY)
+  private void DrawPlan(SwallowFoundationModel model, double originX, double originY)
   {
     var Lx = model.LengthX;
     var Ly = model.LengthY;
@@ -71,8 +80,10 @@ public class SwallowFoundationPreviewDrawer
     var hAxisStartPoint = new Point(originX, axCy);
     var hAxisEndPoint = new Point(originX + totalW, axCy);
 
-    _ = new Grid2D( _canvas, _scale, "*", vAxisStartPoint, vAxisEndPoint, EnumGridSymbolStyle.Circle, EnumGridSymbolStyle.Circle, 10, 10 ) ;
-    _ = new Grid2D( _canvas, _scale, "*", hAxisStartPoint, hAxisEndPoint, EnumGridSymbolStyle.Circle, EnumGridSymbolStyle.Circle, 10, 10 ) ;
+    _ = new Grid2D(_canvas, _scale, "*", vAxisStartPoint, vAxisEndPoint, EnumGridSymbolStyle.Circle,
+      EnumGridSymbolStyle.Circle, 10, 10);
+    _ = new Grid2D(_canvas, _scale, "*", hAxisStartPoint, hAxisEndPoint, EnumGridSymbolStyle.Circle,
+      EnumGridSymbolStyle.Circle, 10, 10);
 
     // --- Column ---
     var colLeftExtend = footingLeft + colPosX - colW / 2 - 50;
@@ -83,8 +94,7 @@ public class SwallowFoundationPreviewDrawer
       footingRectPoints.Max(p => p.X) - footingRectPoints.Min(p => p.X),
       footingRectPoints.Max(p => p.Y) - footingRectPoints.Min(p => p.Y));
 
-    for (var i = 0; i < columnExtendRectPoints.Count; i++)
-    {
+    for (var i = 0 ; i < columnExtendRectPoints.Count ; i++) {
       var p = columnExtendRectPoints[i];
       var cx = Math.Min(Math.Max(p.X, footingRect.Left), footingRect.Right);
       var cy = Math.Min(Math.Max(p.Y, footingRect.Top), footingRect.Bottom);
@@ -92,8 +102,7 @@ public class SwallowFoundationPreviewDrawer
     }
 
     _ = new Polygon2D(_canvas, columnExtendRectPoints, LineThickness, Brushes.Blue, Brushes.Green, zIndex: 2);
-    for (var i = 0; i < footingRectPoints.Count; i++)
-    {
+    for (var i = 0 ; i < footingRectPoints.Count ; i++) {
       _ = new Line2D(_canvas, footingRectPoints[i], columnExtendRectPoints[i], EnumLineType.Solid, LineThickness,
         Brushes.Blue, zIndex: 3);
     }
@@ -114,7 +123,7 @@ public class SwallowFoundationPreviewDrawer
     // --- Dimension: Lx (horizontal, below footing) ---
     var dimLxStartPoint = new Point(footingLeft, footingTop + Ly + pad);
     var dimLxEndPoint = new Point(footingLeft + Lx, footingTop + Ly + pad);
-    var dimLxDirection = UtilsVector.CreateVector( dimLxStartPoint, dimLxEndPoint ) ;
+    var dimLxDirection = UtilsVector.CreateVector(dimLxStartPoint, dimLxEndPoint);
     var dimLxPlacePoint = new Point(0, footingTop + Ly + pad) + dimLxDirection.Rotate(90) * 20 * _scale;
     _ = new Dimension2D(_canvas, _scale, dimLxStartPoint, dimLxEndPoint, dimLxPlacePoint, dimLxDirection,
       EnumDimensionLevel.Level1, assignTextValue: "Lx");
@@ -122,7 +131,7 @@ public class SwallowFoundationPreviewDrawer
     // --- Dimension: Ly (vertical, right of footing) ---
     var dimLyStartPoint = new Point(footingLeft + Lx + pad, footingTop);
     var dimLyEndPoint = new Point(footingLeft + Lx + pad, footingTop + Ly);
-    var dimLyDirection = UtilsVector.CreateVector( dimLyStartPoint, dimLyEndPoint ) ;
+    var dimLyDirection = UtilsVector.CreateVector(dimLyStartPoint, dimLyEndPoint);
     var dimLyPlacePoint = new Point(footingLeft + Lx + pad, 0) +
                           dimLyDirection.Rotate(-90) * 20 * _scale;
     _ = new Dimension2D(_canvas, _scale, dimLyStartPoint, dimLyEndPoint, dimLyPlacePoint, dimLyDirection,
@@ -132,6 +141,11 @@ public class SwallowFoundationPreviewDrawer
     _ = new TextNote2D(_canvas, _scale, "SwallowFoundation.View.Plan".GetString(), 5,
       new Point(originX + totalW / 2, originY - 6 * _scale), Brushes.Black, margin: 1,
       textAlignment: EnumTextAlignment.BottomMiddle);
+  }
+
+  private void DrawSection(SwallowFoundationModel model, double originX, double originY)
+  {
+    // TODO: implement section drawing (step H1/H2, column stub, rebars, dimensions)
   }
 
   private static PointCollection CreateRectPoints(double originX, double originY, double totalW, double totalH)
@@ -354,4 +368,96 @@ public class SwallowFoundationPreviewDrawer
       thickness: ctx.LineThickness,
       zIndex: 3);
   }*/
+
+  /// <summary>
+  /// Computes the bounding box of all canvas primitives (Polygon2D, Line2D, Grid2D,
+  /// TextNote2D, Dimension2D, Ellipse2D) added to the canvas.
+  /// Returns Rect.Empty if the canvas is null or has no children.
+  /// </summary>
+  private static Rect GetCanvasBoundingBox(System.Windows.Controls.Canvas? canvas)
+  {
+    if (canvas == null || canvas.Children.Count == 0)
+      return Rect.Empty;
+
+    double minX = double.MaxValue, minY = double.MaxValue;
+    double maxX = double.MinValue, maxY = double.MinValue;
+
+    foreach (DependencyObject child in canvas.Children) {
+      switch (child.GetType().Name) {
+        // Polygon2D stores points in _points field (PointCollection)
+        case "Polygon2D": {
+          if (child.GetType().GetField("_points",
+                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(child) is not PointCollection pts) continue;
+          foreach (var pt in pts)
+            UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pt);
+          break;
+        }
+        // Line2D stores StartPoint/EndPoint in _startPoint / _endPoint fields
+        case "Line2D": {
+          var sp = child.GetType().GetField("_startPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          var ep = child.GetType().GetField("_endPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
+          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
+          break;
+        }
+        // Ellipse2D stores center in _center field
+        case "Ellipse2D": {
+          if (child.GetType().GetField("_center",
+                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(child) is Point c) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, c);
+          break;
+        }
+        // Grid2D stores _startPoint / _endPoint fields
+        case "Grid2D": {
+          var sp = child.GetType().GetField("_startPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          var ep = child.GetType().GetField("_endPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
+          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
+          break;
+        }
+        // TextNote2D stores _position field
+        case "TextNote2D": {
+          if (child.GetType().GetField("_position",
+                  System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(child) is Point pos) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pos);
+          break;
+        }
+        // Dimension2D stores _startPoint / _endPoint / _placePoint fields
+        case "Dimension2D": {
+          var sp = child.GetType().GetField("_startPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          var ep = child.GetType().GetField("_endPoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          var pp = child.GetType().GetField("_placePoint",
+              System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(child) as Point?;
+          if (sp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, sp.Value);
+          if (ep.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, ep.Value);
+          if (pp.HasValue) UpdateBounds(ref minX, ref minY, ref maxX, ref maxY, pp.Value);
+          break;
+        }
+      }
+    }
+
+    return Math.Abs(minX - double.MaxValue) < 1e-9 ? Rect.Empty : new Rect(minX, minY, maxX - minX, maxY - minY);
+  }
+
+  private static void UpdateBounds(ref double minX, ref double minY, ref double maxX, ref double maxY, Point p)
+  {
+    if (p.X < minX) minX = p.X;
+    if (p.Y < minY) minY = p.Y;
+    if (p.X > maxX) maxX = p.X;
+    if (p.Y > maxY) maxY = p.Y;
+  }
 }
