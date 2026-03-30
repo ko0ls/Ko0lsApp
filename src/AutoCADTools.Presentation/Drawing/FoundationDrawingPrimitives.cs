@@ -61,7 +61,7 @@ public static class FoundationDrawingPrimitives
     EnumGridSymbolStyle endSymbol,
     int zIndex = 0)
     => _ = new Grid2D(ctx.Canvas, ctx.Scale, name, start, end, startSymbol, endSymbol,
-        startOffset: 5, endOffset: 35, zIndex: zIndex);
+        startOffset: 5, endOffset: 25, zIndex: zIndex);
 
   // ── Horizontal Lx dimension (3-segment: left + right + combined) ───────────
 
@@ -71,7 +71,7 @@ public static class FoundationDrawingPrimitives
     Vector direction,
     Dimension2DSetting? dimSetting = null)
   {
-    var place = new Point(0, left.Y) + direction * 20 * ctx.Scale;
+    var place = left with { X = 0 } + direction.Rotate(90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, left, axis, place, direction,
       EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, axis, right, place, direction,
@@ -88,7 +88,7 @@ public static class FoundationDrawingPrimitives
     Vector direction,
     Dimension2DSetting? dimSetting = null)
   {
-    var place = new Point(bottom.X, 0) + direction * 20 * ctx.Scale;
+    var place = bottom with { Y = 0 } + direction.Rotate(-90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, axis, place, direction,
       EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, axis, top, place, direction,
@@ -106,7 +106,7 @@ public static class FoundationDrawingPrimitives
     double pad,
     Dimension2DSetting? dimSetting = null)
   {
-    var place = new Point(bottom.X + pad, 0) + direction * 20 * ctx.Scale;
+    var place = new Point(bottom.X + pad, 0) + direction.Rotate(-90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, h2, place, direction,
       EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, h2, h1, place, direction,

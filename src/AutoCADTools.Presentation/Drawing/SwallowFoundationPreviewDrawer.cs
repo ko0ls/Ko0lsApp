@@ -22,6 +22,7 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
   {
     Canvas.Children.Clear();
     if (model == null) return;
+    Scale = canvasScale;
 
     var lineThickness = UtilsCanvas.GetLineThickness(canvasScale, 2);
     var ctx = new FoundationDrawingContext(Canvas, canvasScale, lineThickness);
@@ -42,7 +43,7 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
 
   private global::System.Windows.Controls.Canvas Canvas { get; }
 
-  private double Scale { get; }
+  private double Scale { get; set; }
 
   private const double SectionGap = 50.0;
 

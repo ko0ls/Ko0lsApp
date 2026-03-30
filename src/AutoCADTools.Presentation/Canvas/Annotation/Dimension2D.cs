@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Canvas.Shapes;
 using AutoCADTools.Presentation.Canvas.Settings;
 using AutoCADTools.Presentation.Canvas.Utils;

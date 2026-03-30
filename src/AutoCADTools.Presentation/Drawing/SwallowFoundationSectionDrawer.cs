@@ -35,11 +35,10 @@ internal sealed class SwallowFoundationSectionDrawer
     var dimSetting = new Dimension2DSetting { TextPlacement = EnumTextPlacement.BesideDim };
 
     // Compute all geometry points
-    var geom = ComputeSectionGeometry(
-      model, originX, sectionOriginY, lx, pad, colW, colPosX, h1, h2, foundationHeight);
+    var geom = ComputeSectionGeometry(originX, sectionOriginY, lx, colW, colPosX, h1, h2, foundationHeight);
 
     DrawTitle(lx, originX, sectionOriginY);
-    DrawConcretePad(originX, pad, geom.PadY, geom.FoundationBottom, totalW, padThick);
+    DrawConcretePad(originX, pad, geom.FoundationBottom, totalW, padThick);
     DrawFootingPolygon(geom.FootingPolygon);
     DrawAxisLine(originX, axisX, geom.PadY, foundationHeight, padThick);
     DrawLxDimension(geom, originX, axisX, dimSetting);
@@ -48,10 +47,8 @@ internal sealed class SwallowFoundationSectionDrawer
 
   // ── Geometry ─────────────────────────────────────────────────────────────
 
-  private SectionGeometry ComputeSectionGeometry(
-    SwallowFoundationModel model,
-    double originX, double sectionOriginY,
-    double lx, double pad, double colW, double colPosX,
+  private SectionGeometry ComputeSectionGeometry(double originX, double sectionOriginY,
+    double lx, double colW, double colPosX,
     double h1, double h2,
     double foundationHeight)
   {
@@ -132,7 +129,7 @@ internal sealed class SwallowFoundationSectionDrawer
   }
 
   private void DrawConcretePad(
-    double originX, double pad, double padY,
+    double originX, double pad,
     double foundationBottom, double totalW, double padThick)
   {
     var padPoints = FoundationDrawingPrimitives.CreateRectPoints(
@@ -161,18 +158,19 @@ internal sealed class SwallowFoundationSectionDrawer
     SectionGeometry geom, double originX, double axisX,
     Dimension2DSetting dimSetting)
   {
-    var dimLxStart = geom.DimBottom with { X = originX + axisX };
+    var dimLxStart = geom.DimBottom with { X = originX };
     var dimLxEnd = geom.DimBottom;
     var dimLxDir = UtilsVector.CreateVector(dimLxStart, dimLxEnd);
+    var dimPlacePoint = dimLxStart + dimLxDir.Rotate(90) * 15 * _ctx.Scale;
 
-    _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart, dimLxEnd,
-      new Point(dimLxStart.X, dimLxEnd.Y + 20), dimLxDir, EnumDimensionLevel.Level1,
+    _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart, dimLxStart with { X = originX + axisX },
+      dimPlacePoint, dimLxDir, EnumDimensionLevel.Level1,
       dimSetting: dimSetting, isNonStandardRight: false);
     _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart with { X = originX + axisX }, dimLxEnd,
-      new Point(dimLxStart.X, dimLxEnd.Y + 20), dimLxDir, EnumDimensionLevel.Level1,
+      dimPlacePoint, dimLxDir, EnumDimensionLevel.Level1,
       dimSetting: dimSetting);
     _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart, dimLxEnd,
-      new Point(dimLxStart.X, dimLxEnd.Y + 20), dimLxDir, EnumDimensionLevel.Level2,
+      dimPlacePoint, dimLxDir, EnumDimensionLevel.Level2,
       assignTextValue: "Lx", dimSetting: dimSetting);
   }
 
