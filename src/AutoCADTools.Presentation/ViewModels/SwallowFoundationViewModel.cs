@@ -11,7 +11,7 @@ namespace AutoCADTools.Presentation.ViewModels;
 public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer _previewDrawer;
-  private readonly System.Action _onRefresh;
+  private readonly Action _onRefresh;
 
   // Drawing scale (e.g. 1:3)
   private double _scale = 3;

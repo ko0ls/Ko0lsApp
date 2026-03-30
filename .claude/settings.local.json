@@ -116,7 +116,14 @@
       "Bash(findstr /i \"passed\\\\|failed\\\\|skipped\\\\|error\\\\|total\")",
       "Bash(findstr \"passed\")",
       "Bash(cp -r \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/.claude/worktrees/agent-a4c017a0/tests/AutoCADTools.CanvasTest/Canvas2D\" \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/tests/AutoCADTools.CanvasTest/\")",
-      "Bash(cp -r \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/.claude/worktrees/agent-a4c017a0/tests/AutoCADTools.CanvasTest/Canvas3D\" \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/tests/AutoCADTools.CanvasTest/\")"
+      "Bash(cp -r \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/.claude/worktrees/agent-a4c017a0/tests/AutoCADTools.CanvasTest/Canvas3D\" \"D:/2. Ko0ls/1. Project Code/1. Tool AutoCAD 2026/tests/AutoCADTools.CanvasTest/\")",
+      "Bash(Get-ChildItem -Path \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\2. Tool AutoCAD 2018\\\\BEAM_2018\" -Recurse -Force)",
+      "Bash(Select-Object FullName, Length, LastWriteTime)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(Get-ChildItem -Path \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\" -Force -Recurse -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(dir \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.Presentation\\\\bin\\\\Debug\\\\2024\\\\net48\" \")",
+      "Bash(grep -v \"^//\")"
     ]
   }
 }
