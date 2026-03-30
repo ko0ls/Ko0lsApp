@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using AutoCADTools.Core;
 using AutoCADTools.Presentation.Canvas.Utils;
 
@@ -10,17 +9,22 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
 {
   public SwallowFoundationPreviewDrawer(global::System.Windows.Controls.Canvas canvas, double scale)
   {
-    _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
-    _scale = scale;
-    LineThickness = UtilsCanvas.GetLineThickness(_scale, 2);
+    Canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
+    Scale = scale;
   }
 
   public void RefreshDrawing(SwallowFoundationModel? model)
   {
+    RefreshDrawing(model, (int)Scale);
+  }
+
+  public void RefreshDrawing(SwallowFoundationModel? model, int canvasScale)
+  {
     Canvas.Children.Clear();
     if (model == null) return;
 
-    var ctx = new FoundationDrawingContext(Canvas, Scale, LineThickness);
+    var lineThickness = UtilsCanvas.GetLineThickness(canvasScale, 2);
+    var ctx = new FoundationDrawingContext(Canvas, canvasScale, lineThickness);
 
     var planDrawer = new SwallowFoundationPlanDrawer(ctx);
     planDrawer.Draw(model, originX: 0, originY: 0);
@@ -36,13 +40,9 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
 
   // ── Private state ────────────────────────────────────────────────────────
 
-  private global::System.Windows.Controls.Canvas Canvas => _canvas;
-  private readonly global::System.Windows.Controls.Canvas _canvas;
+  private global::System.Windows.Controls.Canvas Canvas { get; }
 
-  private double Scale => _scale;
-  private readonly double _scale;
-
-  private double LineThickness { get; }
+  private double Scale { get; }
 
   private const double SectionGap = 50.0;
 
@@ -87,8 +87,8 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
           break;
         }
         case System.Windows.Shapes.Ellipse ellipse: {
-          var el = global::System.Windows.Controls.Canvas.GetLeft(ellipse);
-          var et = global::System.Windows.Controls.Canvas.GetTop(ellipse);
+          var el = System.Windows.Controls.Canvas.GetLeft(ellipse);
+          var et = System.Windows.Controls.Canvas.GetTop(ellipse);
           if (double.IsNaN(el)) el = 0;
           if (double.IsNaN(et)) et = 0;
           var ew = ellipse.Width;

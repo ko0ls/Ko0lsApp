@@ -12,6 +12,13 @@ public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer _previewDrawer;
   private readonly Action _onRefresh;
+  private int _scaleCanvas = 100;
+
+  public int ScaleCanvas
+  {
+    get => _scaleCanvas;
+    set => SetProperty(ref _scaleCanvas, value);
+  }
 
   // Drawing scale (e.g. 1:3)
   private double _scale = 3;
@@ -48,6 +55,9 @@ public class SwallowFoundationViewModel : BindableObject
     6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 30, 32, 36, 40
   };
 
+  // Available drawing scale options (denominator: 1:N)
+  public IEnumerable<int> ScaleOptions { get; } = new[] { 10, 20, 50, 100, 200, 500 };
+
   private bool _drawColumnRebar;
   private bool _isStaggeredLayout;
   private int _columnRebar = 16;
@@ -72,7 +82,10 @@ public class SwallowFoundationViewModel : BindableObject
 
   private void OnPropertyChangedForPreview(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
   {
-    RefreshPreview();
+    if (e.PropertyName == nameof(ScaleCanvas))
+      _previewDrawer.RefreshDrawing(ToModel(), ScaleCanvas);
+    else
+      RefreshPreview();
   }
 
   [NotEmpty]

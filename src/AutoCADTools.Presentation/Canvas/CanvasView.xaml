@@ -11,6 +11,7 @@
   <UserControl.Resources>
     <converters:ConverterMultiParameter x:Key="ConverterMultiParameter" />
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:ScaleConverter x:Key="ScaleConverter" />
   </UserControl.Resources>
 
   <Grid>
@@ -39,5 +40,20 @@
               Panel.ZIndex="1000"
               IsChecked="{Binding IsShowDim}"
               Visibility="{Binding ShowDimCheckBox, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+    <ComboBox
+        ItemsSource="{Binding DataContext.ScaleOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+        SelectedItem="{Binding DataContext.ScaleCanvas, RelativeSource={RelativeSource AncestorType=Window}}"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Bottom"
+        Margin="9"
+        Panel.ZIndex="1000"
+        Width="90">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Converter={StaticResource ScaleConverter}}"/>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
   </Grid>
 </UserControl>
