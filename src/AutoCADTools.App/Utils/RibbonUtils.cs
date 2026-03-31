@@ -245,7 +245,7 @@ public static class RibbonUtils
         ToolTip = tooltip,
         CommandHandler = new AutoCADCommandHandler(commandName),
         IsEnabled = true,
-        ShowImage = icon != null,
+        ShowImage = true,
         ShowText = true,
         Image = icon,
         LargeImage = largeIcon ? icon : null,
@@ -276,17 +276,8 @@ public static class RibbonUtils
 
       try
       {
-        var resourceName = $"AutoCADTools.App.Resources.Icons.{iconKey}.png";
-        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null)
-          return null;
-
-        var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(
-          stream,
-          System.Windows.Media.Imaging.BitmapCreateOptions.PreservePixelFormat,
-          System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
-        var bitmap = decoder.Frames[0];
+        var uri = new Uri($"pack://application:,,,/AutoCADTools.App.Resources.Icons.{iconKey}.png");
+        var bitmap = new BitmapImage(uri);
         bitmap.Freeze();
         return bitmap;
       }
