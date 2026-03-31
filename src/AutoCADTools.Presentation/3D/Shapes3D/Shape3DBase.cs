@@ -168,7 +168,17 @@ namespace AutoCADTools.Presentation._3D.Shapes3D
       if (!_isVisible) return;
 
       var model = BuildCoreModel();
-      ApplyHighlightToModel(model as GeometryModel3D, GetCurrentHighlight());
+
+      if (model is GeometryModel3D geometryModel)
+      {
+        if (geometryModel.IsFrozen)
+          geometryModel = geometryModel.Clone();
+
+        ApplyHighlightToModel(geometryModel, GetCurrentHighlight());
+        _cachedModel.Children.Add(geometryModel);
+        return;
+      }
+
       _cachedModel.Children.Add(model);
     }
 
@@ -190,13 +200,38 @@ namespace AutoCADTools.Presentation._3D.Shapes3D
       if (_currentHighlight == mode) return;
       _currentHighlight = mode;
 
-      if (_cachedModel != null && _cachedModel.Children.Count > 0)
-        ApplyHighlightToModel(_cachedModel.Children[0] as GeometryModel3D, mode);
+      if (_cachedModel == null || _cachedModel.Children.Count == 0)
+        return;
+
+      if (_cachedModel.Children[0] is GeometryModel3D geometryModel)
+      {
+        if (geometryModel.IsFrozen)
+        {
+          geometryModel = geometryModel.Clone();
+          _cachedModel.Children[0] = geometryModel;
+        }
+
+        ApplyHighlightToModel(geometryModel, mode);
+      } else if (_cachedModel.Children[0] is Model3DGroup modelGroup)
+      {
+        for (int i = 0; i < modelGroup.Children.Count; i++)
+        {
+          if (modelGroup.Children[i] is not GeometryModel3D childGeometry) continue;
+
+          if (childGeometry.IsFrozen)
+          {
+            childGeometry = childGeometry.Clone();
+            modelGroup.Children[i] = childGeometry;
+          }
+
+          ApplyHighlightToModel(childGeometry, mode);
+        }
+      }
     }
 
     private void ApplyHighlightToModel(GeometryModel3D? model, EnumHighlightMode mode)
     {
-      if (model == null) return;
+      if (model == null || model.IsFrozen) return;
 
       var mat = _material as Models.Material3D;
       if (mat == null) return;

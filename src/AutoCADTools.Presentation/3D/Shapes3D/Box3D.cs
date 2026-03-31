@@ -43,7 +43,6 @@ namespace AutoCADTools.Presentation._3D.Shapes3D
           Transform.Position.Z)
       };
 
-      model.Freeze();
       return model;
     }
 

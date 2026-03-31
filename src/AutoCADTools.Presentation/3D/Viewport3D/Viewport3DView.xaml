@@ -16,6 +16,7 @@
                  MouseUp="Viewport_MouseUp"
                  MouseWheel="Viewport_MouseWheel"
                  KeyDown="Viewport_KeyDown"
+                 KeyUp="Viewport_KeyUp"
                  Focusable="True">
 
       <!-- Ambient + Directional lights -->

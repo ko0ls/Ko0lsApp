@@ -30,17 +30,14 @@ namespace AutoCADTools.Presentation._3D.Shapes3D
 
       // X axis — red
       var xMesh = CreateAxisLine(new Point3D(0, 0, 0), new Point3D(Length, 0, 0), Thickness, Colors.Red);
-      xMesh.Freeze();
       group.Children.Add(xMesh);
 
       // Y axis — green
       var yMesh = CreateAxisLine(new Point3D(0, 0, 0), new Point3D(0, Length, 0), Thickness, Colors.Green);
-      yMesh.Freeze();
       group.Children.Add(yMesh);
 
       // Z axis — blue
       var zMesh = CreateAxisLine(new Point3D(0, 0, 0), new Point3D(0, 0, Length), Thickness, Colors.Blue);
-      zMesh.Freeze();
       group.Children.Add(zMesh);
 
       return group;
