@@ -131,7 +131,7 @@ namespace AutoCADTools.App
         .Build();
 
       RibbonUtils.CreatePanel("Panel.Draw.Title".GetString(), "Ko0ls Tab")
-        .AddButton("SwallowFoundation.Button.Draw".GetString(), "KOOLS_CMD_VMD", "Swallow Foundation Window", iconKey: "")
+        .AddButton("SwallowFoundation.Button.Draw".GetString(), "KOOLS_CMD_VMD", "Swallow Foundation Window", iconKey: "swallow_foundation")
         .AddButton("3D View", "KOOLS_CMD_3DVIEW", "Open 3D Viewport", iconKey: "")
         .Build();
     }

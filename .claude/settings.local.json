@@ -123,7 +123,16 @@
       "Bash(Get-ChildItem -Path \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\" -Force -Recurse -ErrorAction SilentlyContinue)",
       "Bash(Select-Object FullName, PSIsContainer)",
       "Bash(dir \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.Presentation\\\\bin\\\\Debug\\\\2024\\\\net48\" \")",
-      "Bash(grep -v \"^//\")"
+      "Bash(grep -v \"^//\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\Users\\\\admin' -Filter 'Microsoft.Xaml.Behaviors.dll' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 -ExpandProperty FullName\")",
+      "Bash(dir \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.Presentation\\\\bin\\\\Debug\\\\2023\\\\net48\")",
+      "Bash(findstr /I \"behavior\")",
+      "Bash(dir \"C:\\\\ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents' | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-FileHash 'C:\\\\ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents\\\\Microsoft.Xaml.Behaviors.dll'\")",
+      "Bash(dir:*)",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Users\\\\admin\\\\.nuget\\\\packages\\\\microsoft.xaml.behaviors.wpf' | Select-Object Name\")",
+      "Bash(findstr /i \"error warning succeeded\")"
     ]
   }
 }
