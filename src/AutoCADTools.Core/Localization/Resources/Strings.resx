@@ -11,6 +11,7 @@
   <data name="Command.Settings" xml:space="preserve"><value>Settings</value></data>
   <data name="View.Settings.Title" xml:space="preserve"><value>Settings</value></data>
   <data name="Panel.Settings.Title" xml:space="preserve"><value>Settings</value></data>
+  <data name="Panel.Draw.Title" xml:space="preserve"><value>Draw</value></data>
   <data name="Message.Title.Notification" xml:space="preserve"><value>Notification</value></data>
   <data name="Message.Title.Warning" xml:space="preserve"><value>Warning</value></data>
   <data name="Message.Title.Error" xml:space="preserve"><value>Error</value></data>
@@ -24,7 +25,6 @@
   <data name="View.Settings.Language" xml:space="preserve"><value>Language:</value></data>
   <data name="View.Settings.Button.Save" xml:space="preserve"><value>Save</value></data>
   <data name="View.Settings.Button.Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve">
-    <value />
-  </data>
+  <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve"><value /></data>
+  <data name="SwallowFoundation.Button.Draw" xml:space="preserve"><value>Swallow Foundation</value></data>
 </root>

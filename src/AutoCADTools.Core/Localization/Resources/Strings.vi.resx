@@ -90,6 +90,9 @@
   <data name="Panel.Settings.Title" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
+  <data name="Panel.Draw.Title" xml:space="preserve">
+    <value>Vẽ</value>
+  </data>
   <data name="View.Settings.Language" xml:space="preserve">
     <value>Ngôn ngữ:</value>
   </data>
@@ -269,5 +272,8 @@
   </data>
   <data name="SwallowFoundation.Button.Cancel" xml:space="preserve">
     <value>Hủy</value>
+  </data>
+  <data name="SwallowFoundation.Button.Draw" xml:space="preserve">
+    <value>Móng đơn</value>
   </data>
 </root>

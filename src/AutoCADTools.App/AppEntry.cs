@@ -128,6 +128,10 @@ namespace AutoCADTools.App
     {
       RibbonUtils.CreatePanel("Panel.Settings.Title".GetString(), "Ko0ls Tab")
         .AddButton("Command.Settings".GetString(), "KOOLS_CMD_SETTINGS", "Command.Settings".GetString(), iconKey: "settings")
+        .Build();
+
+      RibbonUtils.CreatePanel("Panel.Draw.Title".GetString(), "Ko0ls Tab")
+        .AddButton("SwallowFoundation.Button.Draw".GetString(), "KOOLS_CMD_VMD", "Swallow Foundation Window", iconKey: "")
         .AddButton("3D View", "KOOLS_CMD_3DVIEW", "Open 3D Viewport", iconKey: "")
         .Build();
     }
@@ -159,7 +163,7 @@ namespace AutoCADTools.App
       }
     }
 
-    [CommandMethod("vmd1")]
+    [CommandMethod("KOOLS_CMD_VMD")]
     public void CmdSwallowFoundation()
     {
       try {
