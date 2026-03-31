@@ -66,8 +66,7 @@
     <Content Include="PackageContents.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Resources\Icons\swallow_foundation.png"
-      LogicalName="AutoCADTools.App.Resources.Icons.swallow_foundation.png"/>
+    <EmbeddedResource Include="Resources\Icons\swallow_foundation.png" />
   </ItemGroup>
 
   <!-- Deploy plugin bundle to %ProgramData%\Autodesk\ApplicationPlugins\ -->

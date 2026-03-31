@@ -282,11 +282,11 @@ public static class RibbonUtils
         if (stream == null)
           return null;
 
-        var bitmap = new BitmapImage();
-        bitmap.BeginInit();
-        bitmap.StreamSource = stream;
-        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        bitmap.EndInit();
+        var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(
+          stream,
+          System.Windows.Media.Imaging.BitmapCreateOptions.PreservePixelFormat,
+          System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+        var bitmap = decoder.Frames[0];
         bitmap.Freeze();
         return bitmap;
       }
