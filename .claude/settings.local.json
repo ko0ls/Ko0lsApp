@@ -132,7 +132,15 @@
       "Bash(powershell -Command \"Get-FileHash 'C:\\\\ProgramData\\\\Autodesk\\\\ApplicationPlugins\\\\AutoCADTools.bundle\\\\Contents\\\\Microsoft.Xaml.Behaviors.dll'\")",
       "Bash(dir:*)",
       "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Users\\\\admin\\\\.nuget\\\\packages\\\\microsoft.xaml.behaviors.wpf' | Select-Object Name\")",
-      "Bash(findstr /i \"error warning succeeded\")"
+      "Bash(findstr /i \"error warning succeeded\")",
+      "Bash(findstr /i \"swallow embedded\")",
+      "Bash(findstr /i \"swallow Resources Icons\")",
+      "Bash(findstr /i \"swallow resource\")",
+      "Bash(powershell -Command \"[System.Reflection.Assembly]::LoadFile\\(''''D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48\\\\AutoCADTools.dll''''\\).GetManifestResourceNames\\(\\)\")",
+      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48' -Filter '*.dll' | ForEach-Object { Write-Host DLL: $_.Name; try { [System.Reflection.Assembly]::LoadFile\\($_.FullName\\).GetManifestResourceNames\\(\\) | ForEach-Object { Write-Host '  RES:' $_ } } catch { Write-Host '  ERROR:' $_.Exception.Message } }\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\admin\\\\check_resources.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\admin\\\\check_image.ps1\")",
+      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48' -Directory | ForEach-Object { Write-Host $_.Name }\")"
     ]
   }
 }
