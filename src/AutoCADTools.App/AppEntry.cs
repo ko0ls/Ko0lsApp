@@ -27,7 +27,7 @@ namespace AutoCADTools.App
     // <i:Interaction.Behaviors> is used in Presentation class library.
     // Ref: https://github.com/microsoft/XamlBehaviorsWpf/issues/86
 #pragma warning disable IDE0051, CS0414
-    private static readonly object _xamlBehaviorsWarmup =
+    private static readonly object XamlBehaviorsWarmup =
       new Microsoft.Xaml.Behaviors.EventTrigger();
 #pragma warning restore IDE0051, CS0414
 
@@ -132,7 +132,6 @@ namespace AutoCADTools.App
 
       RibbonUtils.CreatePanel("Panel.Draw.Title".GetString(), "Ko0ls Tab")
         .AddButton("SwallowFoundation.Button.Draw".GetString(), "KOOLS_CMD_VMD", "Swallow Foundation Window", iconKey: "swallow_foundation")
-        .AddButton("3D View", "KOOLS_CMD_3DVIEW", "Open 3D Viewport", iconKey: "")
         .Build();
     }
 

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using AutoCADTools.Core.Localization;
@@ -166,7 +167,7 @@ public static class RibbonUtils
       string? commandName,
       string? tooltip = null,
       string? iconKey = null,
-      bool largeIcon = false)
+      bool largeIcon = true)
     {
       var button = CreateRibbonButton(text, commandName, tooltip, iconKey, largeIcon);
       _buttons.Add(button);
@@ -236,28 +237,30 @@ public static class RibbonUtils
       string? commandName,
       string? tooltip,
       string? iconKey,
-      bool largeIcon)
+      bool largeIcon = true)
     {
       var icon = TryLoadIcon(iconKey);
 
-      var button = new RibbonButton
-      {
-        Text = text ?? string.Empty,
-        ToolTip = tooltip,
-        CommandHandler = new AutoCADCommandHandler(commandName),
-        IsEnabled = true,
-        ShowImage = true,
-        ShowText = true,
-        Image = icon,
-        LargeImage = largeIcon ? icon : null,
-      };
+      var rButton = new RibbonButton { Name = commandName, Text = text ?? string.Empty, ShowText = true } ;
+      var toolTip = new RibbonToolTip { Title = text, Content = tooltip, Command = commandName } ;
 
-      if (largeIcon)
-      {
-        button.Size = RibbonItemSize.Large;
-      }
+      rButton.ToolTip = toolTip ;
+      rButton.ShowImage = true ;
+      rButton.Orientation = Orientation.Vertical ;
+      rButton.Size = largeIcon ? RibbonItemSize.Large : RibbonItemSize.Standard;
 
-      return button;
+      rButton.Image = icon;
+      rButton.LargeImage = icon;
+
+      rButton.CommandHandler = new AutoCADCommandHandler(commandName) ;
+
+      return rButton;
+    }
+
+    public static string GetFileResource( string name )
+    {
+      var location = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().Location ).DirectoryName ;
+      return Path.Combine(location!,@"Resources\",name) ;
     }
 
     /// <summary>
@@ -271,20 +274,12 @@ public static class RibbonUtils
       if (string.IsNullOrEmpty(iconKey))
         return null;
 
-      try
-      {
-        var iconPath = Path.Combine(
-          AppDomain.CurrentDomain.BaseDirectory,
-          "Resources", "Icons", $"{iconKey}.png");
+      try {
+        var iconPath = GetFileResource($@"Icons\{iconKey}.png");
         if (!File.Exists(iconPath))
           return null;
 
-        var bitmap = new BitmapImage();
-        bitmap.BeginInit();
-        bitmap.UriSource = new Uri(iconPath, UriKind.Absolute);
-        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        bitmap.EndInit();
-        bitmap.Freeze();
+        var bitmap = new BitmapImage(new Uri(iconPath, UriKind.Absolute));
         return bitmap;
       }
       catch
