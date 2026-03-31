@@ -73,11 +73,11 @@ public static class FoundationDrawingPrimitives
   {
     var place = left with { X = 0 } + direction.Rotate(90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, left, axis, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false, assignTextValue: ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, axis, right, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, assignTextValue: ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, left, right, place, direction,
-      EnumDimensionLevel.Level2, assignTextValue: "Lx");
+      EnumDimensionLevel.Level2, assignTextValue: ctx.IsShowDim ? "" : "Lx");
   }
 
   // ── Vertical Ly dimension (3-segment: bottom + top + combined) ───────────────
@@ -90,11 +90,11 @@ public static class FoundationDrawingPrimitives
   {
     var place = bottom with { Y = 0 } + direction.Rotate(-90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, axis, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false, assignTextValue: ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, axis, top, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, assignTextValue: ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, top, place, direction,
-      EnumDimensionLevel.Level2, assignTextValue: "Ly", dimSetting: dimSetting);
+      EnumDimensionLevel.Level2, assignTextValue: ctx.IsShowDim ? "" : "Ly", dimSetting: dimSetting);
   }
 
   // ── Elevation dimension (bottom + H2 + H1 + top: 3× Level1 + 1× Level2) ─────
@@ -108,13 +108,14 @@ public static class FoundationDrawingPrimitives
   {
     var place = new Point(bottom.X + pad, 0) + direction.Rotate(-90) * 10 * ctx.Scale;
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, h2, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, isNonStandardRight: false, assignTextValue: ctx.IsShowDim ? "" : "H2");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, h2, h1, place, direction,
-      EnumDimensionLevel.Level1, isNonStandardRight: false);
+      EnumDimensionLevel.Level1, isNonStandardRight: false, assignTextValue: ctx.IsShowDim ? "" : "H1-H2");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, h1, top, place, direction,
-      EnumDimensionLevel.Level1, dimSetting: dimSetting);
+      EnumDimensionLevel.Level1, dimSetting: dimSetting, assignTextValue: ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(ctx.Canvas, ctx.Scale, bottom, top, place, direction,
-      EnumDimensionLevel.Level2, dimSetting: dimSetting, isNonStandardRight: false);
+      EnumDimensionLevel.Level2, assignTextValue: ctx.IsShowDim ? "" : " ",
+      dimSetting: dimSetting, isNonStandardRight: false);
   }
 
   // ── Text note ─────────────────────────────────────────────────────────────

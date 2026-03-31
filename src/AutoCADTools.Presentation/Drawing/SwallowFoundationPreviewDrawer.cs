@@ -15,17 +15,17 @@ public class SwallowFoundationPreviewDrawer : IFoundationDrawer
 
   public void RefreshDrawing(SwallowFoundationModel? model)
   {
-    RefreshDrawing(model, (int)Scale);
+    RefreshDrawing(model, (int)Scale, isShowDim: true);
   }
 
-  public void RefreshDrawing(SwallowFoundationModel? model, int canvasScale)
+  public void RefreshDrawing(SwallowFoundationModel? model, int canvasScale, bool isShowDim = true)
   {
     Canvas.Children.Clear();
     if (model == null) return;
     Scale = canvasScale;
 
     var lineThickness = UtilsCanvas.GetLineThickness(canvasScale, 2);
-    var ctx = new FoundationDrawingContext(Canvas, canvasScale, lineThickness);
+    var ctx = new FoundationDrawingContext(Canvas, canvasScale, lineThickness) { IsShowDim = isShowDim };
 
     var planDrawer = new SwallowFoundationPlanDrawer(ctx);
     planDrawer.Draw(model, originX: 0, originY: 0);

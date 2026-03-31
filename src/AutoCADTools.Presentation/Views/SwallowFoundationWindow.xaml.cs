@@ -5,7 +5,6 @@ namespace AutoCADTools.Presentation.Views;
 
 public partial class SwallowFoundationWindow : System.Windows.Window
 {
-  private readonly SwallowFoundationPreviewDrawer _drawer;
   private readonly SwallowFoundationViewModel _viewModel;
   private bool _closeRequestedHandler;
 
@@ -13,8 +12,8 @@ public partial class SwallowFoundationWindow : System.Windows.Window
   {
     InitializeComponent();
 
-    _drawer = new SwallowFoundationPreviewDrawer(PreviewCanvas.Canvas, 100);
-    _viewModel = new SwallowFoundationViewModel(_drawer);
+    var drawer = new SwallowFoundationPreviewDrawer(PreviewCanvas.Canvas, 100);
+    _viewModel = new SwallowFoundationViewModel(drawer);
     DataContext = _viewModel;
 
     _viewModel.CloseRequested += OnCloseRequested;
@@ -40,11 +39,5 @@ public partial class SwallowFoundationWindow : System.Windows.Window
       vm.CancelCommand.Execute(null);
     }
     base.OnClosing(e);
-  }
-
-  protected override void OnRenderSizeChanged(System.Windows.SizeChangedInfo sizeInfo)
-  {
-    base.OnRenderSizeChanged(sizeInfo);
-    _viewModel.RefreshPreview();
   }
 }

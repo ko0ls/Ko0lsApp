@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using AutoCADTools.Core;
+using AutoCADTools.Presentation.Canvas.Utils;
 using AutoCADTools.Presentation.Drawing;
 using AutoCADTools.Presentation.Utils;
 using AutoCADTools.Presentation.Validation;
@@ -12,7 +13,7 @@ public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer _previewDrawer;
   private readonly Action _onRefresh;
-  private int _scaleCanvas = 100;
+  private int _scaleCanvas = 20;
 
   public int ScaleCanvas
   {
@@ -78,12 +79,18 @@ public class SwallowFoundationViewModel : BindableObject
     OKCommand = new RelayCommand(OnOK, () => !HasErrors);
     CancelCommand = new RelayCommand(OnCancel);
     PropertyChanged += OnPropertyChangedForPreview;
+    PreviewCanvasViewModel.PropertyChanged += OnPropertyChangedForPreview;
   }
 
   private void OnPropertyChangedForPreview(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
   {
-    if (e.PropertyName == nameof(ScaleCanvas))
-      _previewDrawer.RefreshDrawing(ToModel(), ScaleCanvas);
+    if (e.PropertyName is nameof(PreviewCanvasViewModel.IsShowDim))
+      _previewDrawer.RefreshDrawing(ToModel(), ScaleCanvas, PreviewCanvasViewModel.IsShowDim);
+    else if (e.PropertyName is nameof(ScaleCanvas))
+    {
+      _previewDrawer.RefreshDrawing(ToModel(), ScaleCanvas, PreviewCanvasViewModel.IsShowDim);
+      UtilsCanvas.ZoomToFit(PreviewCanvasViewModel.Canvas, PreviewCanvasViewModel.ZoomBorder);
+    }
     else
       RefreshPreview();
   }
@@ -320,7 +327,7 @@ public class SwallowFoundationViewModel : BindableObject
   public void RefreshPreview()
   {
     var model = ToModel();
-    _previewDrawer.RefreshDrawing(model);
+    _previewDrawer.RefreshDrawing(model, ScaleCanvas, PreviewCanvasViewModel.IsShowDim);
   }
 
   public SwallowFoundationModel ToModel()

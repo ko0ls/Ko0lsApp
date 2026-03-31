@@ -7,6 +7,7 @@
         xmlns:utils="clr-namespace:AutoCADTools.Presentation.Utils"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:canvas="clr-namespace:AutoCADTools.Presentation.Canvas"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{utils:Loc SwallowFoundation.Window.Title}"
         WindowStartupLocation="CenterOwner"
@@ -16,6 +17,11 @@
         MinHeight="500"
         ShowInTaskbar="False"
         d:DataContext="{d:DesignInstance vm:SwallowFoundationViewModel, IsDesignTimeCreatable=True}">
+  <i:Interaction.Triggers>
+    <i:EventTrigger EventName="SizeChanged">
+      <i:InvokeCommandAction Command="{Binding PreviewCanvasViewModel.WindowSizeChangedCommand}" />
+    </i:EventTrigger>
+  </i:Interaction.Triggers>
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -51,9 +57,7 @@
     <Grid>
       <Grid.ColumnDefinitions>
         <!-- Form: minimum fixed width -->
-        <ColumnDefinition Width="400" MinWidth="00"/>
-        <!-- Vertical separator -->
-        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="400" MinWidth="400"/>
         <!-- Canvas: fills all available horizontal space -->
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
@@ -62,7 +66,7 @@
       <ScrollViewer Grid.Column="0"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
-                    Margin="9">
+                    Margin="9 9 0 9">
         <StackPanel>
 
           <!-- Foundation Identification -->
@@ -545,16 +549,10 @@
         </StackPanel>
       </ScrollViewer>
 
-      <!-- Vertical separator -->
-      <Rectangle Grid.Column="1"
-                Width="1"
-                Fill="{StaticResource Container.Static.Border.Default}"
-                Margin="0 9"/>
-
       <!-- ── Right: 2D Preview Canvas (CanvasView with pan/zoom) ── -->
-      <Border Grid.Column="2"
+      <Border Grid.Column="1"
               BorderBrush="{StaticResource Container.Static.Border.Default}"
-              BorderThickness="1 0 0 0"
+              BorderThickness="1"
               Margin="9">
         <canvas:CanvasView x:Name="PreviewCanvas"
                            ShowDimCheckBox="True"

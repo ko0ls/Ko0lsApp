@@ -150,7 +150,7 @@ internal sealed class SwallowFoundationSectionDrawer
   {
     var vAxisStart = new Point(originX + axisX, padY);
     var vAxisEnd = new Point(originX + axisX, padY + foundationHeight + padThick);
-    FoundationDrawingPrimitives.DrawAxis(_ctx, "*", vAxisStart, vAxisEnd,
+    FoundationDrawingPrimitives.DrawAxis(_ctx, "X", vAxisStart, vAxisEnd,
       EnumGridSymbolStyle.None, EnumGridSymbolStyle.Circle, zIndex: 2);
   }
 
@@ -165,13 +165,13 @@ internal sealed class SwallowFoundationSectionDrawer
 
     _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart, dimLxStart with { X = originX + axisX },
       dimPlacePoint, dimLxDir, EnumDimensionLevel.Level1,
-      dimSetting: dimSetting, isNonStandardRight: false);
+      dimSetting: dimSetting, isNonStandardRight: false, assignTextValue: _ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart with { X = originX + axisX }, dimLxEnd,
       dimPlacePoint, dimLxDir, EnumDimensionLevel.Level1,
-      dimSetting: dimSetting);
+      dimSetting: dimSetting, assignTextValue: _ctx.IsShowDim ? "" : " ");
     _ = new Dimension2D(_ctx.Canvas, _ctx.Scale, dimLxStart, dimLxEnd,
       dimPlacePoint, dimLxDir, EnumDimensionLevel.Level2,
-      assignTextValue: "Lx", dimSetting: dimSetting);
+      assignTextValue: _ctx.IsShowDim ? "" : "Lx", dimSetting: dimSetting);
   }
 
   private void DrawElevationDimension(

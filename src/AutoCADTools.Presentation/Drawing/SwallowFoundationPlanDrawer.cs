@@ -78,9 +78,9 @@ internal sealed class SwallowFoundationPlanDrawer
     var hAxisStart = new Point(originX, axCy);
     var hAxisEnd = new Point(originX + totalW, axCy);
 
-    FoundationDrawingPrimitives.DrawAxis(_ctx, "-", vAxisStart, vAxisEnd,
+    FoundationDrawingPrimitives.DrawAxis(_ctx, "X", vAxisStart, vAxisEnd,
       EnumGridSymbolStyle.None, EnumGridSymbolStyle.Circle, zIndex: 4);
-    FoundationDrawingPrimitives.DrawAxis(_ctx, "-", hAxisStart, hAxisEnd,
+    FoundationDrawingPrimitives.DrawAxis(_ctx, "Y", hAxisStart, hAxisEnd,
       EnumGridSymbolStyle.None, EnumGridSymbolStyle.Circle, zIndex: 4);
   }
 

@@ -23,7 +23,7 @@ Get-ChildItem $out -Directory | Where-Object { $_.Name -match '^[a-z]{2}(-[A-Z]{
 # explicitly pulled into the bundle so XAML can resolve them at runtime.
 $nugetRoot = Join-Path $env:USERPROFILE '.nuget\packages'
 $extra = @(
-    'microsoft.xaml.behaviors.wpf\1.1.122\lib\net48\Microsoft.Xaml.Behaviors.dll',
+    'microsoft.xaml.behaviors.wpf\1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll',
     'wpf.controls.panandzoom\2.0.0\lib\netcoreapp3\Wpf.Controls.PanAndZoom.dll',
     'wpf.controls.panandzoom\2.0.0\lib\netcoreapp3\Wpf.Controls.PanAndZoom.pdb'
 )
