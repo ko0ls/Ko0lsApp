@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AutoCADTools.Presentation.Canvas.Utils;
 
 namespace AutoCADTools.Presentation.Canvas;
 
@@ -10,14 +11,8 @@ public partial class CanvasView : UserControl
   {
     InitializeComponent();
     Loaded += CanvasView_Loaded;
-    MyZoomBorder.MouseMove += ZoomBorder_MouseMove;
-    MyZoomBorder.MouseDown += ZoomBorder_MouseDown;
-    MyZoomBorder.MouseUp += ZoomBorder_MouseUp;
   }
 
-  /// <summary>
-  /// Exposes the inner canvas for use by SwallowFoundationPreviewDrawer.
-  /// </summary>
   public System.Windows.Controls.Canvas Canvas => MyCanvas;
 
   public bool ShowDimCheckBox
@@ -33,9 +28,16 @@ public partial class CanvasView : UserControl
       typeof(CanvasView),
       new PropertyMetadata(false));
 
+  private void CanvasView_Loaded(object sender, RoutedEventArgs e)
+  {
+    var win = Window.GetWindow(this);
+    (DataContext as CanvasViewModel)?.WindowLoadedCommand.Execute(
+      new object[] { win, MyCanvas, MyZoomBorder });
+  }
+
   private void ZoomBorder_MouseMove(object sender, MouseEventArgs e)
   {
-    // MouseMoveCommand is a no-op stub; nothing to do here
+    (DataContext as CanvasViewModel)?.MouseMoveCommand.Execute(e);
   }
 
   private void ZoomBorder_MouseDown(object sender, MouseButtonEventArgs e)
@@ -46,12 +48,8 @@ public partial class CanvasView : UserControl
   private void ZoomBorder_MouseUp(object sender, MouseButtonEventArgs e)
   {
     (DataContext as CanvasViewModel)?.MouseUpCommand.Execute(e);
-  }
 
-  private void CanvasView_Loaded(object sender, RoutedEventArgs e)
-  {
-    var win = Window.GetWindow(this);
-    (DataContext as CanvasViewModel)?.WindowLoadedCommand.Execute(
-      new object[] { win, MyCanvas, MyZoomBorder });
+    if (e is { MiddleButton: MouseButtonState.Pressed, ClickCount: 2 })
+      UtilsCanvas.ZoomToFit(MyCanvas, MyZoomBorder);
   }
 }

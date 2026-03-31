@@ -16,9 +16,9 @@ public class SwallowFoundationPreviewViewModel : CanvasViewModel
   {
     _onRefresh = onRefresh;
     // Replace the default WindowLoadedCommand so we can refresh after base setup
-    WindowLoadedCommand = new RelayCommand(() => {
-      base.OnWindowLoaded(null);
+    WindowLoadedCommand = new RelayCommand<object[]>(null, vals => {
       _onRefresh?.Invoke();
+      base.OnWindowLoaded(vals);
     });
   }
 }

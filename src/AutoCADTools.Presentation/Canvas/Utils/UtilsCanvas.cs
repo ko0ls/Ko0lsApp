@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using AutoCADTools.Core.Localization;
@@ -14,28 +15,15 @@ namespace AutoCADTools.Presentation.Canvas.Utils;
 public static class UtilsCanvas
 {
   /// <summary>
-  /// Returns the minimum and maximum points of a UIElement based on its position and render transform.
+  /// Returns the minimum and maximum points of a UIElement based on its raw shape coordinates.
+  /// Does NOT use VisualTreeHelper.GetDescendantBounds (which requires a layout pass and returns
+  /// Empty/Infinity for elements that have not been measured yet).
   /// </summary>
-  public static (Point minPoint, Point maxPoint) GetMinMaxPoints(this UIElement element)
+  private static (Point minPoint, Point maxPoint) GetMinMaxPoints(this UIElement element)
   {
-    var left = System.Windows.Controls.Canvas.GetLeft(element);
-    var top = System.Windows.Controls.Canvas.GetTop(element);
-    if (double.IsNaN(left)) left = 0;
-    if (double.IsNaN(top)) top = 0;
-
-    var bounds = VisualTreeHelper.GetDescendantBounds(element);
-    var transformedBounds = element.RenderTransform.TransformBounds(bounds);
-
-    if (element is not FrameworkElement fe)
-      return (
-        new Point(left + transformedBounds.Left, top + transformedBounds.Top),
-        new Point(left + transformedBounds.Right, top + transformedBounds.Bottom) );
-    var margin = fe.Margin;
-    return (
-      new Point(left + transformedBounds.Left - margin.Left,
-        top + transformedBounds.Top - margin.Top),
-      new Point(left + transformedBounds.Right + margin.Right,
-        top + transformedBounds.Bottom + margin.Bottom) );
+    var min = element.GetMinPoint();
+    var max = element.GetMaxPoint();
+    return (min, max);
   }
 
   /// <summary>
@@ -68,13 +56,11 @@ public static class UtilsCanvas
         return new Point(maxX, maxY);
       }
       case TextBlock textBlock: {
-        var bounds = VisualTreeHelper.GetDescendantBounds(textBlock);
-        var transformedBounds = textBlock.RenderTransform.TransformBounds(bounds);
         var left = System.Windows.Controls.Canvas.GetLeft(textBlock);
         var top = System.Windows.Controls.Canvas.GetTop(textBlock);
         if (double.IsNaN(left)) left = 0;
         if (double.IsNaN(top)) top = 0;
-        return new Point(left + transformedBounds.Right, top + transformedBounds.Bottom);
+        return new Point(left + textBlock.ActualWidth, top + textBlock.ActualHeight);
       }
       default:
         return new Point();
@@ -111,13 +97,11 @@ public static class UtilsCanvas
         return new Point(minX, minY);
       }
       case TextBlock textBlock: {
-        var bounds = VisualTreeHelper.GetDescendantBounds(textBlock);
-        var transformedBounds = textBlock.RenderTransform.TransformBounds(bounds);
         var left = System.Windows.Controls.Canvas.GetLeft(textBlock);
         var top = System.Windows.Controls.Canvas.GetTop(textBlock);
         if (double.IsNaN(left)) left = 0;
         if (double.IsNaN(top)) top = 0;
-        return new Point(left + transformedBounds.Left, top + transformedBounds.Top);
+        return new Point(left, top);
       }
       default:
         return new Point();
@@ -219,72 +203,59 @@ public static class UtilsCanvas
   /// <summary>
   /// Zooms and pans the ZoomBorder to fit all Canvas children with a 10% margin.
   /// </summary>
-  public static void ZoomToFit(System.Windows.Controls.Canvas? canvas, object? zoomBorderObj)
+  public static void ZoomToFit( MouseButtonEventArgs e, System.Windows.Controls.Canvas? canvas, ZoomBorder? zoomBorder )
   {
-    if (canvas == null || zoomBorderObj == null)
-      return;
+    if ( canvas == null || zoomBorder == null ) {
+      return ;
+    }
 
-    if (canvas.Children.Count == 0)
-      return;
+    if ( canvas.Children.Count == 0 ) {
+      return ;
+    }
 
-    if (zoomBorderObj is not ZoomBorder zoomBorder)
-      return;
+    canvas.UpdateLayout() ;
 
-    canvas.UpdateLayout();
+    GenerateGeometryFromCanvas( canvas, out double minX, out double minY, out _, out double _, out double width, out double height ) ;
 
-    GenerateGeometryFromCanvas(canvas, out var minX, out var minY, out _, out _, out var width,
-      out var height);
-
-    zoomBorder.Reset();
-    var margin = 0.1 * Math.Min(width, height);
-    width += 2 * margin;
-    height += 2 * margin;
-
-    if (width < 1e-9 || height < 1e-9)
-      return;
-
-    var zoom = Math.Min(zoomBorder.ActualWidth / width, zoomBorder.ActualHeight / height);
-    zoomBorder.ZoomTo(zoom, 0, 0);
-    zoomBorder.StartPan(minX, minY);
-
-    var panX = 0.5 * zoomBorder.ActualWidth / zoom - 0.5 * width + margin;
-    var panY = 0.5 * zoomBorder.ActualHeight / zoom - 0.5 * height + margin;
-    zoomBorder.PanTo(panX, panY);
+    zoomBorder.Reset() ;
+    var margin = 0.1 * Math.Min( width, height ) ;
+    width += 2 * margin ;
+    height += 2 * margin ;
+    double zoom = Math.Min( zoomBorder.ActualWidth / width, zoomBorder.ActualHeight / height ) ;
+    var pointOnZoomBorder = e.GetPosition( zoomBorder ) ;
+    zoomBorder.ZoomTo( zoom, zoomBorder.ActualWidth / zoom, zoomBorder.ActualHeight / zoom ) ;
+    zoomBorder.StartPan( minX + 0.5 * width + pointOnZoomBorder.X / zoom - 0.5 * zoomBorder.ActualWidth / zoom - margin, minY + 0.5 * height + pointOnZoomBorder.Y / zoom - 0.5 * zoomBorder.ActualHeight / zoom - margin ) ;
   }
 
   /// <summary>
-  /// Zooms and pans the ZoomBorder to fit all Canvas children, with the zoom centered on the mouse position.
+  /// Adjusts the zoom level of the zoomborder to fit within the canvas
   /// </summary>
-  public static void ZoomToFit(System.Windows.Input.MouseButtonEventArgs e, System.Windows.Controls.Canvas? canvas,
-    object? zoomBorderObj)
+  /// <param name="canvas"></param>
+  /// <param name="zoomBorder"></param>
+  public static void ZoomToFit(System.Windows.Controls.Canvas? canvas, ZoomBorder? zoomBorder)
   {
-    if (canvas == null || zoomBorderObj == null)
+    if (canvas == null || zoomBorder == null) {
       return;
+    }
 
-    if (canvas.Children.Count == 0)
+    if (canvas.Children.Count == 0) {
       return;
-
-    if (zoomBorderObj is not ZoomBorder zoomBorder)
-      return;
+    }
 
     canvas.UpdateLayout();
 
-    GenerateGeometryFromCanvas(canvas, out var minX, out var minY, out _, out _, out var width,
-      out var height);
+    GenerateGeometryFromCanvas(canvas, out double minX, out double minY, out _, out double _, out double width,
+      out double height);
 
     zoomBorder.Reset();
     var margin = 0.1 * Math.Min(width, height);
     width += 2 * margin;
     height += 2 * margin;
-
-    if (width < 1e-9 || height < 1e-9)
-      return;
-
     var zoom = Math.Min(zoomBorder.ActualWidth / width, zoomBorder.ActualHeight / height);
-    var pointOnZoomBorder = e.GetPosition(zoomBorder);
-    zoomBorder.ZoomTo(zoom, zoomBorder.ActualWidth / zoom, zoomBorder.ActualHeight / zoom);
-    zoomBorder.StartPan(
-      minX + 0.5 * width + pointOnZoomBorder.X / zoom - 0.5 * zoomBorder.ActualWidth / zoom - margin,
-      minY + 0.5 * height + pointOnZoomBorder.Y / zoom - 0.5 * zoomBorder.ActualHeight / zoom - margin);
+    zoomBorder.ZoomTo(zoom, 0, 0);
+    zoomBorder.StartPan(minX, minY);
+    var panX = 0.5 * zoomBorder.ActualWidth / zoom - 0.5 * width + margin;
+    var panY = 0.5 * zoomBorder.ActualHeight / zoom - 0.5 * height + margin;
+    zoomBorder.PanTo(panX, panY);
   }
 }

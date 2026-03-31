@@ -22,6 +22,15 @@ namespace AutoCADTools.App
     private static ISettingsRepository? _settingsRepository;
     private static Presentation.Canvas.CanvasViewModel? _instanceVm;
 
+    // HACK: Force Microsoft.Xaml.Behaviors.Wpf to be loaded before any XAML is parsed.
+    // Without this, the WPF XAML parser fails to locate the assembly when
+    // <i:Interaction.Behaviors> is used in Presentation class library.
+    // Ref: https://github.com/microsoft/XamlBehaviorsWpf/issues/86
+#pragma warning disable IDE0051, CS0414
+    private static readonly object _xamlBehaviorsWarmup =
+      new Microsoft.Xaml.Behaviors.EventTrigger();
+#pragma warning restore IDE0051, CS0414
+
     public static void RegisterViewModel(Presentation.Canvas.CanvasViewModel vm)
     {
       _instanceVm = vm;
