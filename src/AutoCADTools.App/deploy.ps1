@@ -18,6 +18,14 @@ Get-ChildItem $out -Directory | Where-Object { $_.Name -match '^[a-z]{2}(-[A-Z]{
     Copy-Item "$($_.FullName)\*.dll" $cultDest -Force
 }
 
+# Resources (Icons, etc.) for ribbon button images
+$resDest = Join-Path $bundle 'Resources'
+if (-not (Test-Path $resDest)) { New-Item -ItemType Directory -Path $resDest -Force | Out-Null }
+$srcRes = Join-Path $PSScriptRoot 'Resources'
+if (Test-Path $srcRes) {
+    Copy-Item "$srcRes\Icons" $resDest -Recurse -Force
+}
+
 # Copy Presentation-layer NuGet dependencies that are PrivateAssets=All and therefore
 # not embedded in any DLL — they live in the user's NuGet cache and must be
 # explicitly pulled into the bundle so XAML can resolve them at runtime.
