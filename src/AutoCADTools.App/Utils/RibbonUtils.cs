@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using AutoCADTools.Core.Localization;
@@ -237,7 +238,7 @@ public static class RibbonUtils
       string? iconKey,
       bool largeIcon)
     {
-      BitmapSource? icon = TryLoadIcon(iconKey);
+      var icon = TryLoadIcon(iconKey);
 
       var button = new RibbonButton
       {
@@ -260,24 +261,29 @@ public static class RibbonUtils
     }
 
     /// <summary>
-    ///   Attempts to load a <c>BitmapSource</c> icon for the given key from
-    ///   the executing assembly's embedded resources.
+    ///   Attempts to load a <c>BitmapImage</c> icon for the given key from
+    ///   the bundle's <c>Resources\Icons</c> folder.
     /// </summary>
-    /// <remarks>
-    ///   Expected resource format: <c>AutoCADTools.App.Resources.Icons.{iconKey}.png</c>.
-    ///   Returns <c>null</c> if the resource is not found or cannot be decoded.
-    /// </remarks>
-    /// <param name="iconKey">An application-defined key (e.g. <c>"line"</c>).</param>
+    /// <param name="iconKey">An application-defined key (e.g. <c>"swallow_foundation"</c>).</param>
     /// <returns>The loaded icon, or <c>null</c> if not found.</returns>
-    private static BitmapSource? TryLoadIcon(string? iconKey)
+    private static BitmapImage? TryLoadIcon(string? iconKey)
     {
       if (string.IsNullOrEmpty(iconKey))
         return null;
 
       try
       {
-        var uri = new Uri($"pack://application:,,,/AutoCADTools.App.Resources.Icons.{iconKey}.png");
-        var bitmap = new BitmapImage(uri);
+        var iconPath = Path.Combine(
+          AppDomain.CurrentDomain.BaseDirectory,
+          "Resources", "Icons", $"{iconKey}.png");
+        if (!File.Exists(iconPath))
+          return null;
+
+        var bitmap = new BitmapImage();
+        bitmap.BeginInit();
+        bitmap.UriSource = new Uri(iconPath, UriKind.Absolute);
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        bitmap.EndInit();
         bitmap.Freeze();
         return bitmap;
       }
