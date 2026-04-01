@@ -33,15 +33,15 @@ public static class WindowDialogBehavior
   {
     if (d is Window window && (bool)e.NewValue)
     {
-      window.Loaded += OnWindowLoaded;
+      window.ContentRendered += OnWindowReady;
     }
   }
 
-  private static void OnWindowLoaded( object sender, RoutedEventArgs e )
+  private static void OnWindowReady( object sender, EventArgs e )
   {
     if (sender is Window window)
     {
-      window.Loaded -= OnWindowLoaded;
+      window.ContentRendered -= OnWindowReady;
 
       if (window.DataContext is IHasCloseRequest vm)
       {
