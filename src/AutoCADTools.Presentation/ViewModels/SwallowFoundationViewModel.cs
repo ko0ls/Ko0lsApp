@@ -9,11 +9,18 @@ using AutoCADTools.Presentation.Validation;
 
 namespace AutoCADTools.Presentation.ViewModels;
 
-public class SwallowFoundationViewModel : BindableObject, IHasCloseRequest
+public class SwallowFoundationViewModel : BindableObject
 {
   private readonly SwallowFoundationPreviewDrawer _previewDrawer;
   private readonly Action _onRefresh;
   private int _scaleCanvas = 20;
+  private bool? _dialogResult;
+
+  public bool? DialogResult
+  {
+    get => _dialogResult;
+    set => SetProperty(ref _dialogResult, value);
+  }
 
   public int ScaleCanvas
   {
@@ -301,8 +308,6 @@ public class SwallowFoundationViewModel : BindableObject, IHasCloseRequest
   public ICommand OKCommand { get; }
   public ICommand CancelCommand { get; }
 
-  public event Action? CloseRequested;
-
   public void RefreshPreview()
   {
     var model = ToModel();
@@ -328,15 +333,13 @@ public class SwallowFoundationViewModel : BindableObject, IHasCloseRequest
       LapSpliceLength);
   }
 
-  public SwallowFoundationModel? Result => HasErrors ? null : ToModel();
-
   private void OnOK()
   {
-    CloseRequested?.Invoke();
+    DialogResult = true;
   }
 
   private void OnCancel()
   {
-    CloseRequested?.Invoke();
+    DialogResult = false;
   }
 }

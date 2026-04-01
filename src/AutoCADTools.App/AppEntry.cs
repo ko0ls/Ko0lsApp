@@ -168,17 +168,14 @@ namespace AutoCADTools.App
       if (Application.DocumentManager.MdiActiveDocument == null) return;
       try {
         var window = new Presentation.Views.SwallowFoundationWindow();
-        Application.ShowModalWindow(window);
+        var result = window.ShowDialog();
 
-        if (window.DialogResult == true)
+        if (result != true) return;
+        var vm = (Presentation.ViewModels.SwallowFoundationViewModel) window.DataContext!;
+        var model = vm.ToModel();
         {
-          var vm = (Presentation.ViewModels.SwallowFoundationViewModel)window.DataContext!;
-          var model = vm.Result;
-          if (model != null)
-          {
-            var drawer = new Foundation.SwallowFoundationDrawer();
-            drawer.Draw(model);
-          }
+          var drawer = new Foundation.SwallowFoundationDrawer();
+          drawer.Draw(model);
         }
       }
       catch (System.Exception ex) {
