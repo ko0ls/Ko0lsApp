@@ -9,7 +9,7 @@ using AutoCADTools.Presentation.Validation;
 
 namespace AutoCADTools.Presentation.ViewModels;
 
-public class SwallowFoundationViewModel : BindableObject
+public class SwallowFoundationViewModel : BindableObject, IHasCloseRequest
 {
   private readonly SwallowFoundationPreviewDrawer _previewDrawer;
   private readonly Action _onRefresh;
@@ -328,9 +328,10 @@ public class SwallowFoundationViewModel : BindableObject
       LapSpliceLength);
   }
 
+  public SwallowFoundationModel? Result => HasErrors ? null : ToModel();
+
   private void OnOK()
   {
-    // TODO: call AutoCAD drawer service (step 5)
     CloseRequested?.Invoke();
   }
 

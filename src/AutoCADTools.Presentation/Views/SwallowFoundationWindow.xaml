@@ -13,6 +13,7 @@
         WindowStartupLocation="CenterOwner"
         Width="900"
         Height="650"
+        utils:WindowDialogBehavior.IsAttached="True"
         MinWidth="700"
         MinHeight="500"
         ShowInTaskbar="False"

@@ -165,9 +165,21 @@ namespace AutoCADTools.App
     [CommandMethod("KOOLS_CMD_VMD")]
     public void CmdSwallowFoundation()
     {
+      if (Application.DocumentManager.MdiActiveDocument == null) return;
       try {
         var window = new Presentation.Views.SwallowFoundationWindow();
         Application.ShowModalWindow(window);
+
+        if (window.DialogResult == true)
+        {
+          var vm = (Presentation.ViewModels.SwallowFoundationViewModel)window.DataContext!;
+          var model = vm.Result;
+          if (model != null)
+          {
+            var drawer = new Foundation.SwallowFoundationDrawer();
+            drawer.Draw(model);
+          }
+        }
       }
       catch (System.Exception ex) {
         Application.DocumentManager.MdiActiveDocument?.Editor
