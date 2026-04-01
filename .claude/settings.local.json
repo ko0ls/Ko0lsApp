@@ -140,7 +140,25 @@
       "Bash(powershell -Command \"Get-ChildItem 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48' -Filter '*.dll' | ForEach-Object { Write-Host DLL: $_.Name; try { [System.Reflection.Assembly]::LoadFile\\($_.FullName\\).GetManifestResourceNames\\(\\) | ForEach-Object { Write-Host '  RES:' $_ } } catch { Write-Host '  ERROR:' $_.Exception.Message } }\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\admin\\\\check_resources.ps1\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\admin\\\\check_image.ps1\")",
-      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48' -Directory | ForEach-Object { Write-Host $_.Name }\")"
+      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\bin\\\\Debug 2023\\\\net48' -Directory | ForEach-Object { Write-Host $_.Name }\")",
+      "Bash(powershell -Command \"gh pr diff\")",
+      "Bash(powershell -Command \"gh pr view --json commits --jq '.commits[] | \\\\\"\\\\\\(.oid[:7]\\) \\\\\\(.messageHeadline\\)\\\\\"'\")",
+      "Bash(powershell -Command \"gh pr view --json reviews --jq '.reviews[] | \\\\\"\\\\\\(.author.login\\): \\\\\\(.state\\) - \\\\\\(.body[:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"gh api repos/ko0ls/Ko0lsApp/pulls/comments --jq '.[] | \\\\\"\\\\\\(.user.login\\): \\\\\\(.path\\):\\\\\\(.line // .original_line\\) - \\\\\\(.body[:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"Get-Command gh -ErrorAction SilentlyContinue | Select-Object Source; Get-ChildItem 'C:\\\\Users\\\\admin\\\\AppData\\\\Local\\\\Programs\\\\GitHub CLI' -ErrorAction SilentlyContinue; where.exe gh 2>$null\")",
+      "Bash(powershell -Command \"where.exe gh\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' auth status\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr view --json title,body,headRefName,baseRefName,url,author,state,additions,deletions,changedFiles,files\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr diff\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr view --json commits --jq '.commits[] | \\\\\"\\\\\\(.oid[:7]\\) \\\\\\(.messageHeadline\\)\\\\\"'\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr view --json reviews --jq '.reviews[] | \\\\\"\\\\\\(.author.login\\): \\\\\\(.state\\) - \\\\\\(.body[:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' api repos/ko0ls/Ko0lsApp/pulls/comments --jq '.[] | \\\\\"\\\\\\(.user.login\\): \\\\\\(.path\\):\\\\\\(.line // .original_line\\) - \\\\\\(.body[:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr view 9 --json commits --jq '.commits[] | \\\\\"\\\\\\(.oid[0:7]\\) \\\\\\(.messageHeadline\\)\\\\\"'\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr view 9 --json reviews --jq '.reviews[] | \\\\\"\\\\\\(.author.login\\): \\\\\\(.state\\) - \\\\\\(.body[0:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' api repos/ko0ls/Ko0lsApp/pulls/9/comments --jq '.[] | \\\\\"\\\\\\(.user.login\\): \\\\\\(.path\\):\\\\\\(.line // .original_line\\) - \\\\\\(.body[0:100]\\)\\\\\"'\")",
+      "Bash(powershell -Command \"Get-Content 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\pr_review_body.md' | & 'C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe' pr review 9 --body-file - --comment\")",
+      "Bash(del:*)",
+      "Bash(powershell -Command \"Remove-Item 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\pr_review_body.md'\")"
     ]
   }
 }

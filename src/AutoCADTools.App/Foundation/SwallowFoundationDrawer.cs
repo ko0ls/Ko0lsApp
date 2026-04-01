@@ -62,7 +62,7 @@ public class SwallowFoundationDrawer
       var btr = (BlockTableRecord)tr.GetObject(
         SymbolUtilityServices.GetBlockModelSpaceId(_db), OpenMode.ForWrite);
 
-      EnsureLayers();
+      EnsureLayers(tr);
 
       DrawPlanAtPoint(basePoint, btr, tr);
       DrawPlanDimensionsAtPoint(basePoint, btr, tr);
@@ -79,10 +79,9 @@ public class SwallowFoundationDrawer
   // ║                     PRIVATE  HELPERS                          ║
   // ╚══════════════════════════════════════════════════════════════╝
 
-  private void EnsureLayers()
+  private void EnsureLayers(Transaction tr)
   {
     if (_db == null) return;
-    using var tr = _db.TransactionManager.StartTransaction();
     var lt = (LayerTable)tr.GetObject(_db.LayerTableId, OpenMode.ForRead);
 
     foreach (var entry in new[]
@@ -105,7 +104,6 @@ public class SwallowFoundationDrawer
         tr.AddNewlyCreatedDBObject(ltr, true);
       }
     }
-    tr.Commit();
   }
 
   // ── Geometry primitives ─────────────────────────────────────────
