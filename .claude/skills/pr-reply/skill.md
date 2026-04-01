@@ -1,6 +1,6 @@
 ---
-description: Trả lời các review comment trên PR GitHub — đọc, đánh giá từng comment, tạo fix (mỗi comment 1 commit), và đăng reply lên PR.
-allowed-tools: Bash, Glob, Grep, Agent, Read, AskUserQuestion
+description: Trả lời các review comment trên PR GitHub — đọc, đánh giá từng comment, tạo fix (mỗi comment 1 commit trên cùng branch), và đăng reply lên PR.
+allowed-tools: Bash, Glob, Grep, Agent, Read, Edit, Write, AskUserQuestion
 argument-hint: <Số PR>
 ---
 
@@ -214,9 +214,13 @@ Dùng `AskUserQuestion` (multiSelect: false) cho **từng comment**:
 
 #### 5.4. Tạo commit cho comment đồng ý fix (FIX_AGREE / FIX_MODIFIED)
 
-Sau khi ghi nhận quyết định của user cho comment hiện tại, **tạo commit ngay** trước khi chuyển sang comment tiếp theo:
+Sau khi ghi nhận quyết định của user cho comment hiện tại, **tạo commit ngay** trước khi chuyển sang comment tiếp theo.
 
-**Kiểm tra branch:**
+**Luôn làm việc trực tiếp trên PR head branch (KHÔNG tạo branch riêng).**
+
+> **Quy tắc:** Mỗi comment đồng ý fix = **1 commit riêng** trên cùng branch. KHÔNG tạo branch mới cho từng fix.
+
+**Kiểm tra đã ở đúng PR head branch:**
 ```bash
 # Lấy tên head branch của PR
 gh pr view $ARGUMENTS --json headRefName --jq '.headRefName'
@@ -225,15 +229,10 @@ gh pr view $ARGUMENTS --json headRefName --jq '.headRefName'
 git rev-parse --abbrev-ref HEAD
 ```
 
-**Nếu chưa đúng PR head branch:**
+**Nếu chưa ở PR head branch:** checkout sang head branch của PR:
 ```bash
 git fetch origin
-git checkout -b fix/pr{$ARGUMENTS}-comment-{n} origin/{head-ref-name}
-```
-
-**Nếu đã ở đúng PR head branch:**
-```bash
-git checkout -b fix/pr{$ARGUMENTS}-comment-{n}
+git checkout origin/{head-ref-name}
 ```
 
 **Áp dụng fix:**
@@ -276,9 +275,8 @@ Sau khi duyệt xong **tất cả** comment, xuất bảng tổng hợp:
 | 5 | @long | 🔴 [Must] | ✏️ Fix (custom) | `ghi9012` |
 
 ### Commit cần push:
-- `abc1234` — `fix/pr{$ARGUMENTS}-comment-1`
-- `def5678` — `fix/pr{$ARGUMENTS}-comment-3`
-- `ghi9012` — `fix/pr{$ARGUMENTS}-comment-5`
+- Tất cả commits nằm trên **cùng 1 branch** (`{head-ref-name}`)
+- Push branch đó: `git push origin {head-ref-name}`
 
 ### Reply cần đăng:
 - **Comment #2 (@nam):** "Cảm ơn @nam, hiện tại dữ liệu nhỏ nên vòng for vẫn phù hợp về mặt perf..."
@@ -297,8 +295,8 @@ Sau khi duyệt xong **tất cả** comment, xuất bảng tổng hợp:
 | 3 | @copilot | 🟡 [Want] | ✅ Fix | `def5678` |
 
 ### Commits to push:
-- `abc1234` — `fix/pr{$ARGUMENTS}-comment-1`
-- `def5678` — `fix/pr{$ARGUMENTS}-comment-3`
+- Tất cả commits nằm trên **cùng 1 branch** (`{head-ref-name}`)
+- Push branch đó: `git push origin {head-ref-name}`
 
 ### Replies to post:
 - **Comment #2 (@nam):** "Thanks @nam, the for-loop is more performant for small datasets..."
@@ -320,27 +318,14 @@ Dùng `AskUserQuestion`:
 
 #### Chọn 1 — Push + đăng reply:
 
-**7.1. Push các branch fix:**
+**7.1. Push branch chứa các fix:**
 
 ```bash
-# Push tất cả branch fix
-git push origin \
-  fix/pr{$ARGUMENTS}-comment-1 \
-  fix/pr{$ARGUMENTS}-comment-3 \
-  fix/pr{$ARGUMENTS}-comment-5
+# Push PR head branch (chứa tất cả fix commits)
+git push origin {head-ref-name}
 ```
 
-**7.2. Tạo PR cho từng fix branch (nếu muốn squash vào PR chính):**
-
-Với mỗi fix branch, tạo PR riêng rồi squash merge:
-```bash
-gh pr create \
-  --base {base-branch} \
-  --title "fix: resolve comment #{n} on #{$ARGUMENTS}" \
-  --body "Fixes comment #{n} from @{reviewer} on PR #{$ARGUMENTS}"
-```
-
-**7.3. Đăng reply lên PR chính:**
+**7.2. Đăng reply lên PR chính:**
 
 Với **comment có reply** (REPLY_ONLY, DISAGREE, FIX_AGREE sau khi đã squash), đăng reply bằng `gh`:
 
@@ -364,12 +349,12 @@ gh api repos/{owner}/{repo}/pulls/comments/{id}/replies \
   --field body="{nội dung reply}"
 ```
 
-**7.4. Báo cáo kết quả:**
+**7.3. Báo cáo kết quả:**
 
 Hiển thị tóm tắt sau khi push và đăng reply xong:
-- Danh sách commit đã push (với hash)
+- Danh sách commit đã push (với hash) trên branch `{head-ref-name}`
 - Danh sách reply đã đăng
-- Link PR (nếu tạo PR mới cho fix)
+- Link PR
 
 ---
 
