@@ -102,7 +102,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _foundationName, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(1)]
   public int Quantity
   {
@@ -110,7 +109,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _quantity, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double Scale
   {
@@ -118,7 +116,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _scale, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double LengthX
   {
@@ -126,7 +123,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _lengthX, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double LengthY
   {
@@ -134,21 +130,18 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _lengthY, value);
   }
 
-  [CannotNull]
   public double AxisPositionX
   {
     get => _axisPositionX;
     set => SetProperty(ref _axisPositionX, value);
   }
 
-  [CannotNull]
   public double AxisPositionY
   {
     get => _axisPositionY;
     set => SetProperty(ref _axisPositionY, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double StepHeightH1
   {
@@ -156,7 +149,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _stepHeightH1, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double StepHeightH2
   {
@@ -164,28 +156,24 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _stepHeightH2, value);
   }
 
-  [CannotNull]
   public double FoundationBottomLevel
   {
     get => _foundationBottomLevel;
     set => SetProperty(ref _foundationBottomLevel, value);
   }
 
-  [CannotNull]
   public double GroundLevel
   {
     get => _groundLevel;
     set => SetProperty(ref _groundLevel, value);
   }
 
-  [CannotNull]
   public double FloorLevel1
   {
     get => _floorLevel1;
     set => SetProperty(ref _floorLevel1, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double ConcretePadExtension
   {
@@ -193,7 +181,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _concretePadExtension, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double ConcretePadThickness
   {
@@ -207,7 +194,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _isRectangularColumn, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double ColumnWidthX
   {
@@ -215,7 +201,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _columnWidthX, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double ColumnWidthY
   {
@@ -223,7 +208,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _columnWidthY, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double ColumnPositionX
   {
@@ -231,7 +215,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _columnPositionX, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(0)]
   public double ColumnPositionY
   {
@@ -287,7 +270,6 @@ public class SwallowFoundationViewModel : BindableObject
   // Computed: true if primary direction is X, false if Y
   public bool IsPrimaryDirection => _primaryDirection == "X";
 
-  [CannotNull]
   [GreaterThan(0)]
   public double Cover
   {
@@ -295,7 +277,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _cover, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(2)]
   public int ColumnRebarCountX
   {
@@ -303,7 +284,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _columnRebarCountX, value);
   }
 
-  [CannotNull]
   [GreaterThanOrEqual(2)]
   public int ColumnRebarCountY
   {
@@ -311,7 +291,6 @@ public class SwallowFoundationViewModel : BindableObject
     set => SetProperty(ref _columnRebarCountY, value);
   }
 
-  [CannotNull]
   [GreaterThan(0)]
   public double LapSpliceLength
   {
