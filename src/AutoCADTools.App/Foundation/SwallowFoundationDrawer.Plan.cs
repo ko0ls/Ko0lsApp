@@ -44,12 +44,12 @@ public partial class SwallowFoundationDrawer
     HatchPolyline(padPL, "AR-CONC", 20 * S, LayerConcreteHatch, tr, btr);
 
     // ── Axis lines (TIM, dashed) ──────────────────────────────────
-    var lnAxisX = AddLine(
+    AddLine(
       new Point3d(bp.X - Lx, bp.Y + cpY, bp.Z),
       new Point3d(bp.X + Lx, bp.Y + cpY, bp.Z),
       LayerAxis, "DASHED", tr, btr);
 
-    var lnAxisY = AddLine(
+    AddLine(
       new Point3d(bp.X + cpX, bp.Y - Ly, bp.Z),
       new Point3d(bp.X + cpX, bp.Y + Ly, bp.Z),
       LayerAxis, "DASHED", tr, btr);
