@@ -108,9 +108,11 @@ public class SwallowFoundationDrawer
 
   // ── Geometry primitives ─────────────────────────────────────────
 
-  private Line AddLine(Point3d pt1, Point3d pt2, string layer, Transaction tr, BlockTableRecord btr)
+  private Line AddLine(Point3d pt1, Point3d pt2, string layer, string? linetypeName, Transaction tr, BlockTableRecord btr)
   {
     var ln = new Line(pt1, pt2) { Layer = layer };
+    if (!string.IsNullOrEmpty(linetypeName))
+      ln.Linetype = linetypeName;
     btr.AppendEntity(ln);
     tr.AddNewlyCreatedDBObject(ln, true);
     return ln;
@@ -335,10 +337,10 @@ public class SwallowFoundationDrawer
       var rw = 2.5 * S;
 
       // Rectangle body
-      AddLine(new Point3d(0, 0, 0), new Point3d(rw, 0, 0), LayerRebar, tr, btrDef);
-      AddLine(new Point3d(rw, 0, 0), new Point3d(rw, rh, 0), LayerRebar, tr, btrDef);
-      AddLine(new Point3d(rw, rh, 0), new Point3d(0, rh, 0), LayerRebar, tr, btrDef);
-      AddLine(new Point3d(0, rh, 0), new Point3d(0, 0, 0), LayerRebar, tr, btrDef);
+      AddLine(new Point3d(0, 0, 0), new Point3d(rw, 0, 0), LayerRebar, null, tr, btrDef);
+      AddLine(new Point3d(rw, 0, 0), new Point3d(rw, rh, 0), LayerRebar, null, tr, btrDef);
+      AddLine(new Point3d(rw, rh, 0), new Point3d(0, rh, 0), LayerRebar, null, tr, btrDef);
+      AddLine(new Point3d(0, rh, 0), new Point3d(0, 0, 0), LayerRebar, null, tr, btrDef);
 
       // Circle at top
       var circCenter = new Point3d(rw / 2, rh + rh * 0.5, 0);
@@ -418,20 +420,6 @@ public class SwallowFoundationDrawer
     return (0, 0, 0);
   }
 
-  // ── Line style helper ─────────────────────────────────────────────
-
-  private void SetLinetype(Entity entity, string linetypeName)
-  {
-    if (_db == null) return;
-    using var tr = _db.TransactionManager.StartTransaction();
-    var lt = (LinetypeTable)tr.GetObject(_db.LinetypeTableId, OpenMode.ForRead);
-    if (lt.Has(linetypeName))
-    {
-      entity.Linetype = linetypeName;
-    }
-    tr.Commit();
-  }
-
   // ╔══════════════════════════════════════════════════════════════╗
   // ║                    A.  MẶT BẰNG (PLAN)                        ║
   // ╚══════════════════════════════════════════════════════════════╝
@@ -453,10 +441,10 @@ public class SwallowFoundationDrawer
     var p4 = new Point3d(bp.X - Lx / 2, bp.Y + Ly / 2, bp.Z);
 
     // ── Footing outline (THAY) ────────────────────────────────────
-    AddLine(p1, p2, LayerOutline, tr, btr);
-    AddLine(p2, p3, LayerOutline, tr, btr);
-    AddLine(p3, p4, LayerOutline, tr, btr);
-    AddLine(p4, p1, LayerOutline, tr, btr);
+    AddLine(p1, p2, LayerOutline, null, tr, btr);
+    AddLine(p2, p3, LayerOutline, null, tr, btr);
+    AddLine(p3, p4, LayerOutline, null, tr, btr);
+    AddLine(p4, p1, LayerOutline, null, tr, btr);
 
     // ── Concrete pad (HATCH + AR-CONC) ─────────────────────────────
     var pp1 = new Point3d(p1.X - padW, p1.Y - padW, bp.Z);
@@ -471,14 +459,12 @@ public class SwallowFoundationDrawer
     var lnAxisX = AddLine(
       new Point3d(bp.X - Lx, bp.Y + cpY, bp.Z),
       new Point3d(bp.X + Lx, bp.Y + cpY, bp.Z),
-      LayerAxis, tr, btr);
-    SetLinetype(lnAxisX, "DASHED");
+      LayerAxis, "DASHED", tr, btr);
 
     var lnAxisY = AddLine(
       new Point3d(bp.X + cpX, bp.Y - Ly, bp.Z),
       new Point3d(bp.X + cpX, bp.Y + Ly, bp.Z),
-      LayerAxis, tr, btr);
-    SetLinetype(lnAxisY, "DASHED");
+      LayerAxis, "DASHED", tr, btr);
 
     // ── Column ─────────────────────────────────────────────────────
     var cpBase = new Point3d(bp.X + cpX, bp.Y + cpY, bp.Z);
@@ -523,10 +509,10 @@ public class SwallowFoundationDrawer
       var sp3 = new Point3d(bp.X + Lx / 2 - margin, bp.Y + Ly / 2 - margin, bp.Z);
       var sp4 = new Point3d(bp.X - Lx / 2 + margin, bp.Y + Ly / 2 - margin, bp.Z);
 
-      AddLine(sp1, sp2, LayerOutline, tr, btr);
-      AddLine(sp2, sp3, LayerOutline, tr, btr);
-      AddLine(sp3, sp4, LayerOutline, tr, btr);
-      AddLine(sp4, sp1, LayerOutline, tr, btr);
+      AddLine(sp1, sp2, LayerOutline, null, tr, btr);
+      AddLine(sp2, sp3, LayerOutline, null, tr, btr);
+      AddLine(sp3, sp4, LayerOutline, null, tr, btr);
+      AddLine(sp4, sp1, LayerOutline, null, tr, btr);
     }
 
     // ── Foundation name label ──────────────────────────────────────
@@ -677,7 +663,7 @@ public class SwallowFoundationDrawer
         var ln = AddLine(
           new Point3d(bp.X - Lx / 2 + cover, y, bp.Z),
           new Point3d(bp.X + Lx / 2 - cover, y, bp.Z),
-          LayerRebar, tr, btr);
+          LayerRebar, null, tr, btr);
         ln.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
 
         var tagPt = new Point3d(bp.X + 0.5 * S, y + 0.5 * S, bp.Z);
@@ -697,7 +683,7 @@ public class SwallowFoundationDrawer
         var ln = AddLine(
           new Point3d(x, bp.Y - Ly / 2 + cover, bp.Z),
           new Point3d(x, bp.Y + Ly / 2 - cover, bp.Z),
-          LayerRebar, tr, btr);
+          LayerRebar, null, tr, btr);
         ln.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
 
         var tagPt = new Point3d(x + 0.5 * S, bp.Y + 0.5 * S, bp.Z);
@@ -750,23 +736,23 @@ public class SwallowFoundationDrawer
     if (Math.Abs(h1 - h2) > 0.001)
     {
       // Trapezoid chamfer
-      AddLine(new Point3d(sec.X - Lx / 2, step1Top, sec.Z), new Point3d(sec.X + Lx / 2, step1Top, sec.Z), LayerOutline, tr, btr);
-      AddLine(new Point3d(sec.X + Lx / 2, step1Top, sec.Z), new Point3d(sec.X + cwX / 2, step1Top + 0.3 * S, sec.Z), LayerOutline, tr, btr);
-      AddLine(new Point3d(sec.X + cwX / 2, step1Top + 0.3 * S, sec.Z), new Point3d(sec.X - cwX / 2, step1Top + 0.3 * S, sec.Z), LayerOutline, tr, btr);
-      AddLine(new Point3d(sec.X - cwX / 2, step1Top + 0.3 * S, sec.Z), new Point3d(sec.X - Lx / 2, step1Top, sec.Z), LayerOutline, tr, btr);
+      AddLine(new Point3d(sec.X - Lx / 2, step1Top, sec.Z), new Point3d(sec.X + Lx / 2, step1Top, sec.Z), LayerOutline, null, tr, btr);
+      AddLine(new Point3d(sec.X + Lx / 2, step1Top, sec.Z), new Point3d(sec.X + cwX / 2, step1Top + 0.3 * S, sec.Z), LayerOutline, null, tr, btr);
+      AddLine(new Point3d(sec.X + cwX / 2, step1Top + 0.3 * S, sec.Z), new Point3d(sec.X - cwX / 2, step1Top + 0.3 * S, sec.Z), LayerOutline, null, tr, btr);
+      AddLine(new Point3d(sec.X - cwX / 2, step1Top + 0.3 * S, sec.Z), new Point3d(sec.X - Lx / 2, step1Top, sec.Z), LayerOutline, null, tr, btr);
     }
     else
     {
-      AddLine(new Point3d(sec.X - Lx / 2, step1Top, sec.Z), new Point3d(sec.X + Lx / 2, step1Top, sec.Z), LayerOutline, tr, btr);
+      AddLine(new Point3d(sec.X - Lx / 2, step1Top, sec.Z), new Point3d(sec.X + Lx / 2, step1Top, sec.Z), LayerOutline, null, tr, btr);
     }
 
     // ── Column stub ─────────────────────────────────────────────────
     double colStubH = 0.5 * S;
     double colTopZ = colBaseZ + colStubH;
-    AddLine(new Point3d(sec.X - cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X + cwX / 2, colBaseZ, sec.Z), LayerColumn, tr, btr);
-    AddLine(new Point3d(sec.X - cwX / 2, colTopZ, sec.Z), new Point3d(sec.X + cwX / 2, colTopZ, sec.Z), LayerColumn, tr, btr);
-    AddLine(new Point3d(sec.X - cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X - cwX / 2, colTopZ, sec.Z), LayerColumn, tr, btr);
-    AddLine(new Point3d(sec.X + cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X + cwX / 2, colTopZ, sec.Z), LayerColumn, tr, btr);
+    AddLine(new Point3d(sec.X - cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X + cwX / 2, colBaseZ, sec.Z), LayerColumn, null, tr, btr);
+    AddLine(new Point3d(sec.X - cwX / 2, colTopZ, sec.Z), new Point3d(sec.X + cwX / 2, colTopZ, sec.Z), LayerColumn, null, tr, btr);
+    AddLine(new Point3d(sec.X - cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X - cwX / 2, colTopZ, sec.Z), LayerColumn, null, tr, btr);
+    AddLine(new Point3d(sec.X + cwX / 2, colBaseZ, sec.Z), new Point3d(sec.X + cwX / 2, colTopZ, sec.Z), LayerColumn, null, tr, btr);
 
     // ── Elevation labels ───────────────────────────────────────────
     double lblX = sec.X - Lx / 2 - 1.5;
@@ -857,7 +843,7 @@ public class SwallowFoundationDrawer
       for (int i = 1; i <= rxCount; i++)
       {
         double x = sec.X - Lx / 2 + cover + i * spacing;
-        var ln = AddLine(new Point3d(x, rebarY, sec.Z), new Point3d(x, rebarY + 0.1, sec.Z), LayerRebar, tr, btr);
+        var ln = AddLine(new Point3d(x, rebarY, sec.Z), new Point3d(x, rebarY + 0.1, sec.Z), LayerRebar, null, tr, btr);
         ln.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
 
         var tagPt = new Point3d(x + 0.4 * S, rebarY + 0.4 * S, sec.Z);
@@ -873,7 +859,7 @@ public class SwallowFoundationDrawer
       var lnY = AddLine(
         new Point3d(sec.X - Lx / 2 + cover, rebarY, sec.Z),
         new Point3d(sec.X + Lx / 2 - cover, rebarY, sec.Z),
-        LayerRebar, tr, btr);
+        LayerRebar, null, tr, btr);
       lnY.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
     }
 
@@ -896,7 +882,7 @@ public class SwallowFoundationDrawer
           var lnCr = AddLine(
             new Point3d(sec.X - cwX / 2 + cover, y, sec.Z),
             new Point3d(sec.X + cwX / 2 - cover, y, sec.Z),
-            LayerRebar, tr, btr);
+            LayerRebar, null, tr, btr);
           lnCr.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
         }
 
@@ -915,10 +901,10 @@ public class SwallowFoundationDrawer
         double sX1 = sec.X - cwX / 2;
         double sX2 = sec.X + cwX / 2;
 
-        AddLine(new Point3d(sX1, sY1, sec.Z), new Point3d(sX2, sY1, sec.Z), LayerRebar, tr, btr);
-        AddLine(new Point3d(sX2, sY1, sec.Z), new Point3d(sX2, sY2, sec.Z), LayerRebar, tr, btr);
-        AddLine(new Point3d(sX2, sY2, sec.Z), new Point3d(sX1, sY2, sec.Z), LayerRebar, tr, btr);
-        AddLine(new Point3d(sX1, sY2, sec.Z), new Point3d(sX1, sY1, sec.Z), LayerRebar, tr, btr);
+        AddLine(new Point3d(sX1, sY1, sec.Z), new Point3d(sX2, sY1, sec.Z), LayerRebar, null, tr, btr);
+        AddLine(new Point3d(sX2, sY1, sec.Z), new Point3d(sX2, sY2, sec.Z), LayerRebar, null, tr, btr);
+        AddLine(new Point3d(sX2, sY2, sec.Z), new Point3d(sX1, sY2, sec.Z), LayerRebar, null, tr, btr);
+        AddLine(new Point3d(sX1, sY2, sec.Z), new Point3d(sX1, sY1, sec.Z), LayerRebar, null, tr, btr);
 
         AddMText(new Point3d(sec.X + cwX / 2 + 0.2 * S, sY1 + 0.2 * S, sec.Z),
           $"phi{(int)stDia}@{(int)stSpacing}", tagH * 0.7, LayerLabel, tr, btr);
@@ -930,7 +916,7 @@ public class SwallowFoundationDrawer
     double mcY = colBaseZ + 0.3 * S;
     AddCircle(new Point3d(mcX, mcY, sec.Z), 0.2 * S, LayerColumn, tr, btr);
     AddCircle(new Point3d(mcX, mcY - 0.4 * S, sec.Z), 0.2 * S, LayerColumn, tr, btr);
-    AddLine(new Point3d(mcX, mcY - 0.2 * S, sec.Z), new Point3d(mcX, mcY - 0.2 * S, sec.Z), LayerColumn, tr, btr);
+    AddLine(new Point3d(mcX, mcY - 0.2 * S, sec.Z), new Point3d(mcX, mcY - 0.2 * S, sec.Z), LayerColumn, null, tr, btr);
     AddMText(new Point3d(mcX + 0.3 * S, mcY - 0.2 * S, sec.Z), "MC", tagH, LayerLabel, tr, btr);
   }
 }
