@@ -35,8 +35,8 @@
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsCanvas.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsPoint.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Utils\UtilsVector.cs" />
-    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Converters\ConverterMultiParameter.cs" />
-    <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Converters\ConverterMultiParameter.cs" />
+    <Compile Include="..\..\src\AutoCADTools.Presentation\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\ShapeBase.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Line2D.cs" />
     <Compile Include="..\..\src\AutoCADTools.Presentation\Canvas\Shapes\Polygon2D.cs" />

@@ -90,6 +90,9 @@
   <data name="Panel.Settings.Title" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
+  <data name="Panel.Draw.Title" xml:space="preserve">
+    <value>Vẽ</value>
+  </data>
   <data name="View.Settings.Language" xml:space="preserve">
     <value>Ngôn ngữ:</value>
   </data>
@@ -98,5 +101,179 @@
   </data>
   <data name="View.Settings.Button.Cancel" xml:space="preserve">
     <value>Hủy</value>
+  </data>
+  <data name="SwallowFoundation.View.Plan" xml:space="preserve">
+    <value>Mặt bằng</value>
+  </data>
+  <data name="SwallowFoundation.View.Section" xml:space="preserve">
+    <value>Mặt cắt</value>
+  </data>
+  <data name="SwallowFoundation.Label.Elevation" xml:space="preserve">
+    <value>Cao độ</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepH1" xml:space="preserve">
+    <value>H1</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepH2" xml:space="preserve">
+    <value>H2</value>
+  </data>
+  <data name="Label.LengthX" xml:space="preserve">
+    <value>Lx</value>
+  </data>
+  <data name="Label.LengthY" xml:space="preserve">
+    <value>Ly</value>
+  </data>
+  <data name="Validation.GreaterThan" xml:space="preserve">
+    <value>Giá trị phải lớn hơn {0}.</value>
+  </data>
+  <data name="Validation.GreaterThanOrEqual" xml:space="preserve">
+    <value>Giá trị phải lớn hơn hoặc bằng {0}.</value>
+  </data>
+  <data name="Validation.SmallerThan" xml:space="preserve">
+    <value>Giá trị phải nhỏ hơn {0}.</value>
+  </data>
+  <data name="Validation.SmallerThanOrEqual" xml:space="preserve">
+    <value>Giá trị phải nhỏ hơn hoặc bằng {0}.</value>
+  </data>
+  <data name="Validation.NotEmpty" xml:space="preserve">
+    <value>Trường này không được để trống.</value>
+  </data>
+  <data name="Validation.CannotNull" xml:space="preserve">
+    <value>Giá trị không được null.</value>
+  </data>
+  <data name="SwallowFoundation.Window.Title" xml:space="preserve">
+    <value>Vẽ Móng Đơn</value>
+  </data>
+  <data name="SwallowFoundation.Group.Foundation" xml:space="preserve">
+    <value>Móng</value>
+  </data>
+  <data name="SwallowFoundation.Group.FootingDimensions" xml:space="preserve">
+    <value>Kích thước đáy móng</value>
+  </data>
+  <data name="SwallowFoundation.Group.StepHeights" xml:space="preserve">
+    <value>Chiều cao bậc</value>
+  </data>
+  <data name="SwallowFoundation.Group.FoundationLevels" xml:space="preserve">
+    <value>Cao độ móng</value>
+  </data>
+  <data name="SwallowFoundation.Group.ConcretePad" xml:space="preserve">
+    <value>Bê tông lót</value>
+  </data>
+  <data name="SwallowFoundation.Group.Column" xml:space="preserve">
+    <value>Cột</value>
+  </data>
+  <data name="SwallowFoundation.Group.Rebar" xml:space="preserve">
+    <value>Thép móng</value>
+  </data>
+  <data name="SwallowFoundation.Group.ColumnRebarDetails" xml:space="preserve">
+    <value>Chi tiết thép cột</value>
+  </data>
+  <data name="SwallowFoundation.Label.FoundationName" xml:space="preserve">
+    <value>Tên móng</value>
+  </data>
+  <data name="SwallowFoundation.Label.Quantity" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="SwallowFoundation.Label.Scale" xml:space="preserve">
+    <value>Tỷ lệ</value>
+  </data>
+  <data name="SwallowFoundation.Label.LengthX" xml:space="preserve">
+    <value>Chiều dài X (Lx) (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.LengthY" xml:space="preserve">
+    <value>Chiều dài Y (Ly) (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.AxisPositionX" xml:space="preserve">
+    <value>Vị trí trục phương X (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.AxisPositionY" xml:space="preserve">
+    <value>Vị trí trục phương Y (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepHeightH1" xml:space="preserve">
+    <value>Chiều cao bậc H1 (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.StepHeightH2" xml:space="preserve">
+    <value>Chiều cao bậc H2 (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.FoundationBottomLevel" xml:space="preserve">
+    <value>Cao độ đáy móng (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.FloorLevel" xml:space="preserve">
+    <value>Cao độ sân (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve">
+    <value>Cao độ sàn tầng 1 (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ConcretePadExtension" xml:space="preserve">
+    <value>Phần mở rộng bê tông lót (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ConcretePadThickness" xml:space="preserve">
+    <value>Bề dày BT lót (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnWidthX" xml:space="preserve">
+    <value>Bề rộng cột X (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnWidthY" xml:space="preserve">
+    <value>Bề rộng cột Y (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnPositionX" xml:space="preserve">
+    <value>Vị trí cột phương X (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnPositionY" xml:space="preserve">
+    <value>Vị trí cột phương Y (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnShape" xml:space="preserve">
+    <value>Hình dạng cột</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnShape.Rectangular" xml:space="preserve">
+    <value>Chữ nhật</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnShape.Circular" xml:space="preserve">
+    <value>Tròn</value>
+  </data>
+  <data name="SwallowFoundation.Label.RebarX" xml:space="preserve">
+    <value>Thép X</value>
+  </data>
+  <data name="SwallowFoundation.Label.RebarY" xml:space="preserve">
+    <value>Thép Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.DrawColumnRebar" xml:space="preserve">
+    <value>Vẽ thép cột</value>
+  </data>
+  <data name="SwallowFoundation.Label.IsAlternateRebarSpacing" xml:space="preserve">
+    <value>Bố trí so le</value>
+  </data>
+  <data name="SwallowFoundation.Label.AlternateRebarSpacing" xml:space="preserve">
+    <value>Bố trí so le</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebar" xml:space="preserve">
+    <value>Thép cột</value>
+  </data>
+  <data name="SwallowFoundation.Label.StirrupRebar" xml:space="preserve">
+    <value>Thép đai</value>
+  </data>
+  <data name="SwallowFoundation.Label.PrimaryDirection" xml:space="preserve">
+    <value>Phương làm việc chính</value>
+  </data>
+  <data name="SwallowFoundation.Label.Cover" xml:space="preserve">
+    <value>Lớp bảo vệ (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebarCountX" xml:space="preserve">
+    <value>Số thanh X</value>
+  </data>
+  <data name="SwallowFoundation.Label.ColumnRebarCountY" xml:space="preserve">
+    <value>Số thanh Y</value>
+  </data>
+  <data name="SwallowFoundation.Label.LapSpliceLength" xml:space="preserve">
+    <value>Chiều dài nối chồng (mm)</value>
+  </data>
+  <data name="SwallowFoundation.Button.OK" xml:space="preserve">
+    <value>Đồng ý</value>
+  </data>
+  <data name="SwallowFoundation.Button.Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="SwallowFoundation.Button.Draw" xml:space="preserve">
+    <value>Móng đơn</value>
   </data>
 </root>

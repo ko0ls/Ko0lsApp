@@ -22,6 +22,15 @@ namespace AutoCADTools.App
     private static ISettingsRepository? _settingsRepository;
     private static Presentation.Canvas.CanvasViewModel? _instanceVm;
 
+    // HACK: Force Microsoft.Xaml.Behaviors.Wpf to be loaded before any XAML is parsed.
+    // Without this, the WPF XAML parser fails to locate the assembly when
+    // <i:Interaction.Behaviors> is used in Presentation class library.
+    // Ref: https://github.com/microsoft/XamlBehaviorsWpf/issues/86
+#pragma warning disable IDE0051, CS0414
+    private static readonly object XamlBehaviorsWarmup =
+      new Microsoft.Xaml.Behaviors.EventTrigger();
+#pragma warning restore IDE0051, CS0414
+
     public static void RegisterViewModel(Presentation.Canvas.CanvasViewModel vm)
     {
       _instanceVm = vm;
@@ -119,7 +128,10 @@ namespace AutoCADTools.App
     {
       RibbonUtils.CreatePanel("Panel.Settings.Title".GetString(), "Ko0ls Tab")
         .AddButton("Command.Settings".GetString(), "KOOLS_CMD_SETTINGS", "Command.Settings".GetString(), iconKey: "settings")
-        .AddButton("3D View", "KOOLS_CMD_3DVIEW", "Open 3D Viewport", iconKey: "")
+        .Build();
+
+      RibbonUtils.CreatePanel("Panel.Draw.Title".GetString(), "Ko0ls Tab")
+        .AddButton("SwallowFoundation.Button.Draw".GetString(), "KOOLS_CMD_VMD", "Swallow Foundation Window", iconKey: "swallow_foundation")
         .Build();
     }
 
@@ -147,6 +159,19 @@ namespace AutoCADTools.App
       catch (System.Exception ex) {
         Application.DocumentManager.MdiActiveDocument?.Editor
           .WriteMessage($"\nMain View error: {ex.Message}");
+      }
+    }
+
+    [CommandMethod("KOOLS_CMD_VMD")]
+    public void CmdSwallowFoundation()
+    {
+      try {
+        var window = new Presentation.Views.SwallowFoundationWindow();
+        Application.ShowModalWindow(window);
+      }
+      catch (System.Exception ex) {
+        Application.DocumentManager.MdiActiveDocument?.Editor
+          .WriteMessage($"\nSwallow foundation error: {ex.Message}");
       }
     }
   }

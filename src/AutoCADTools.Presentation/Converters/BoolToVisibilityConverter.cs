@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace AutoCADTools.Presentation.Canvas.Converters;
+namespace AutoCADTools.Presentation.Converters;
 
 public class BoolToVisibilityConverter : IValueConverter
 {

@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Canvas.Shapes;
 using AutoCADTools.Presentation.Canvas.Settings;
 using AutoCADTools.Presentation.Canvas.Utils;
@@ -307,10 +306,10 @@ public class Dimension2D
     _textField = textField;
     _isNonStandardRight = isNonStandardRight;
     _zIndex = zIndex;
+    if (dimSetting != null) _dimSetting = dimSetting;
 
     InitSetting(_scale, _dimSetting);
-    if (!InitGeometry())
-      throw new ArgumentException("Error.InvalidDimensionGeometry".GetString());
+    if (!InitGeometry()) return;
 
     DrawDimLine();
 

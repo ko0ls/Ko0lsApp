@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using AutoCADTools.Core.Localization;
@@ -165,7 +167,7 @@ public static class RibbonUtils
       string? commandName,
       string? tooltip = null,
       string? iconKey = null,
-      bool largeIcon = false)
+      bool largeIcon = true)
     {
       var button = CreateRibbonButton(text, commandName, tooltip, iconKey, largeIcon);
       _buttons.Add(button);
@@ -235,59 +237,49 @@ public static class RibbonUtils
       string? commandName,
       string? tooltip,
       string? iconKey,
-      bool largeIcon)
+      bool largeIcon = true)
     {
-      BitmapSource? icon = TryLoadIcon(iconKey);
+      var icon = TryLoadIcon(iconKey);
 
-      var button = new RibbonButton
-      {
-        Text = text ?? string.Empty,
-        ToolTip = tooltip,
-        CommandHandler = new AutoCADCommandHandler(commandName),
-        IsEnabled = true,
-        ShowImage = icon != null,
-        ShowText = true,
-        Image = icon,
-        LargeImage = largeIcon ? icon : null,
-      };
+      var rButton = new RibbonButton { Name = commandName, Text = text ?? string.Empty, ShowText = true } ;
+      var toolTip = new RibbonToolTip { Title = text, Content = tooltip, Command = commandName } ;
 
-      if (largeIcon)
-      {
-        button.Size = RibbonItemSize.Large;
-      }
+      rButton.ToolTip = toolTip ;
+      rButton.ShowImage = true ;
+      rButton.Orientation = Orientation.Vertical ;
+      rButton.Size = largeIcon ? RibbonItemSize.Large : RibbonItemSize.Standard;
 
-      return button;
+      rButton.Image = icon;
+      rButton.LargeImage = icon;
+
+      rButton.CommandHandler = new AutoCADCommandHandler(commandName) ;
+
+      return rButton;
+    }
+
+    public static string GetFileResource( string name )
+    {
+      var location = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().Location ).DirectoryName ;
+      return Path.Combine(location!,@"Resources\",name) ;
     }
 
     /// <summary>
-    ///   Attempts to load a <c>BitmapSource</c> icon for the given key from
-    ///   the executing assembly's embedded resources.
+    ///   Attempts to load a <c>BitmapImage</c> icon for the given key from
+    ///   the bundle's <c>Resources\Icons</c> folder.
     /// </summary>
-    /// <remarks>
-    ///   Expected resource format: <c>AutoCADTools.App.Resources.Icons.{iconKey}.png</c>.
-    ///   Returns <c>null</c> if the resource is not found or cannot be decoded.
-    /// </remarks>
-    /// <param name="iconKey">An application-defined key (e.g. <c>"line"</c>).</param>
+    /// <param name="iconKey">An application-defined key (e.g. <c>"swallow_foundation"</c>).</param>
     /// <returns>The loaded icon, or <c>null</c> if not found.</returns>
-    private static BitmapSource? TryLoadIcon(string? iconKey)
+    private static BitmapImage? TryLoadIcon(string? iconKey)
     {
       if (string.IsNullOrEmpty(iconKey))
         return null;
 
-      try
-      {
-        var resourceName = $"AutoCADTools.App.Resources.Icons.{iconKey}.png";
-        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null)
+      try {
+        var iconPath = GetFileResource($@"Icons\{iconKey}.png");
+        if (!File.Exists(iconPath))
           return null;
 
-        var bitmap = new BitmapImage();
-        bitmap.BeginInit();
-        bitmap.StreamSource = stream;
-        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        bitmap.EndInit();
-        bitmap.Freeze();
+        var bitmap = new BitmapImage(new Uri(iconPath, UriKind.Absolute));
         return bitmap;
       }
       catch
