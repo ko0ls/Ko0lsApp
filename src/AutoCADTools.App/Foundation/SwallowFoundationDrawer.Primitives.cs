@@ -261,7 +261,6 @@ public partial class SwallowFoundationDrawer
     }
 
     var br = InsertBlock(blockName, pt, angle, tr, btr);
-    br.TransformBy(Matrix3d.Rotation(angle, Vector3d.ZAxis, pt));
   }
 
   // ── Donut (solid ring circle) ────────────────────────────────────

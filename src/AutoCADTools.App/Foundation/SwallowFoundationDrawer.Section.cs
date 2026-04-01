@@ -232,7 +232,7 @@ public partial class SwallowFoundationDrawer
     double mcY = colBaseZ + 0.3 * S;
     AddCircle(new Point3d(mcX, mcY, sec.Z), 0.2 * S, LayerColumn, tr, btr);
     AddCircle(new Point3d(mcX, mcY - 0.4 * S, sec.Z), 0.2 * S, LayerColumn, tr, btr);
-    AddLine(new Point3d(mcX, mcY - 0.2 * S, sec.Z), new Point3d(mcX, mcY - 0.2 * S, sec.Z), LayerColumn, null, tr, btr);
+    AddLine(new Point3d(mcX, mcY, sec.Z), new Point3d(mcX, mcY - 0.4 * S, sec.Z), LayerColumn, null, tr, btr);
     AddMText(new Point3d(mcX + 0.3 * S, mcY - 0.2 * S, sec.Z), "MC", tagH, LayerLabel, tr, btr);
   }
 }
