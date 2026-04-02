@@ -30,6 +30,7 @@ public class SwallowFoundationViewModel : BindableObject
 
   // Drawing scale (e.g. 1:3)
   private double _scale = 3;
+  private double _titleBlockScale = 100;
   // Foundation dimensions (mm)
   private double _lengthX = 1500;                     // Footing width (X direction)
   private double _lengthY = 1800;                      // Footing length (Y direction)
@@ -121,6 +122,13 @@ public class SwallowFoundationViewModel : BindableObject
   {
     get => _scale;
     set => SetProperty(ref _scale, value);
+  }
+
+  [GreaterThan(0)]
+  public double TitleBlockScale
+  {
+    get => _titleBlockScale;
+    set => SetProperty(ref _titleBlockScale, value);
   }
 
   [GreaterThan(0)]
@@ -330,7 +338,7 @@ public class SwallowFoundationViewModel : BindableObject
       ColumnRebar, StirrupRebar,
       IsPrimaryDirection, Cover,
       ColumnRebarCountX, ColumnRebarCountY,
-      LapSpliceLength);
+      LapSpliceLength, TitleBlockScale);
   }
 
   private void OnOK()

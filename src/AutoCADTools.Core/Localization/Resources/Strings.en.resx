@@ -270,4 +270,7 @@
   <data name="SwallowFoundation.Button.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="SwallowFoundation.Label.TitleBlockScale" xml:space="preserve">
+    <value>Title Block Scale</value>
+  </data>
 </root>
