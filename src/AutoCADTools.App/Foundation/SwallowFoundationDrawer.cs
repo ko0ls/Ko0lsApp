@@ -29,6 +29,26 @@ public partial class SwallowFoundationDrawer
   private SwallowFoundationModel Model { get; set; } = new SwallowFoundationModel();
 
   // ╔══════════════════════════════════════════════════════════════╗
+  // ║                XDATA APP NAME REGISTRATION                 ║
+  // ╚══════════════════════════════════════════════════════════════╝
+
+  private void EnsureAppNames(Transaction tr)
+  {
+    if (_db == null) return;
+    var rat = (RegAppTable)tr.GetObject(_db.RegAppTableId, OpenMode.ForRead);
+    foreach (var name in new[] { "Length", "ColWidth", "AxisOffset", "StepHeight", "Elevation" })
+    {
+      if (!rat.Has(name))
+      {
+        using var record = new RegAppTableRecord { Name = name };
+        rat.UpgradeOpen();
+        rat.Add(record);
+        tr.AddNewlyCreatedDBObject(record, true);
+      }
+    }
+  }
+
+  // ╔══════════════════════════════════════════════════════════════╗
   // ║                     PUBLIC  ENTRY  POINTS                     ║
   // ╚══════════════════════════════════════════════════════════════╝
 
@@ -58,6 +78,7 @@ public partial class SwallowFoundationDrawer
         SymbolUtilityServices.GetBlockModelSpaceId(_db), OpenMode.ForWrite);
 
       EnsureLayers(tr);
+      EnsureAppNames(tr);
 
       DrawPlanAtPoint(basePoint, btr, tr);
       DrawPlanDimensionsAtPoint(basePoint, btr, tr);
