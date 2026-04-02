@@ -33,14 +33,8 @@ public partial class SwallowFoundationDrawer
   {
     var ht = new Hatch { Layer = layer, PatternScale = patScale, HatchStyle = HatchStyle.Normal };
 
-    if (string.IsNullOrEmpty(patName))
-    {
-      ht.SetHatchPattern(HatchPatternType.PreDefined, "");
-    }
-    else
-    {
+    if (!string.IsNullOrEmpty(patName))
       ht.SetHatchPattern(HatchPatternType.PreDefined, patName);
-    }
 
     ht.AppendLoop(HatchLoopTypes.External, boundaryIds);
     ht.EvaluateHatch(false);
@@ -53,7 +47,6 @@ public partial class SwallowFoundationDrawer
   private Hatch AddSolidHatch(ObjectIdCollection boundaryIds, string layer, Transaction tr, BlockTableRecord btr)
   {
     var ht = new Hatch { Layer = layer, HatchStyle = HatchStyle.Normal };
-    ht.SetHatchPattern(HatchPatternType.PreDefined, "");
     ht.AppendLoop(HatchLoopTypes.External, boundaryIds);
     ht.EvaluateHatch(false);
     btr.AppendEntity(ht);
@@ -146,6 +139,7 @@ public partial class SwallowFoundationDrawer
     };
     btr.AppendEntity(pl);
     tr.AddNewlyCreatedDBObject(pl, true);
+    if (string.IsNullOrEmpty(patName)) return null!;
     var plId = pl.ObjectId;
     var ids = new ObjectIdCollection { plId };
     return AddHatch(ids, patName, patScale, layer, tr, btr);

@@ -5,6 +5,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using AutoCADTools.Core;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 namespace AutoCADTools.App.Foundation;
 
@@ -24,7 +25,7 @@ public partial class SwallowFoundationDrawer
   private Database? _db;
 
   // Model scale: model values are in mm; S = 1/unit_scale so drawing is in metres
-  private double S => 1.0 / Model.Scale;
+  private double S => Model.Scale;
 
   private SwallowFoundationModel Model { get; set; } = new SwallowFoundationModel();
 
@@ -36,15 +37,13 @@ public partial class SwallowFoundationDrawer
   {
     if (_db == null) return;
     var rat = (RegAppTable)tr.GetObject(_db.RegAppTableId, OpenMode.ForRead);
-    foreach (var name in new[] { "Length", "ColWidth", "AxisOffset", "StepHeight", "Elevation" })
-    {
-      if (!rat.Has(name))
-      {
-        using var record = new RegAppTableRecord { Name = name };
-        rat.UpgradeOpen();
-        rat.Add(record);
-        tr.AddNewlyCreatedDBObject(record, true);
-      }
+    foreach (var name in new[] { "Length", "ColWidth", "AxisOffset", "StepHeight", "Elevation" }) {
+      if (rat.Has(name)) continue;
+      using var record = new RegAppTableRecord();
+      record.Name = name;
+      rat.UpgradeOpen();
+      rat.Add(record);
+      tr.AddNewlyCreatedDBObject(record, true);
     }
   }
 
