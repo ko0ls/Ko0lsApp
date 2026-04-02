@@ -1,6 +1,6 @@
 ﻿namespace AutoCADTools.App.Const;
 
-public class DimStyle
+public static class DimStyle
 {
-  
+  public const string Dim100 = "K_Dim_100";
 }
