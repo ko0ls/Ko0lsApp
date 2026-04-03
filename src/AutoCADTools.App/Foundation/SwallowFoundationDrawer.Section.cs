@@ -2,6 +2,7 @@
 
 using System;
 using AutoCADTools.App.Const;
+using AutoCADTools.App.Enums;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Hatch = AutoCADTools.App.Const.Hatch;
@@ -188,22 +189,11 @@ public partial class SwallowFoundationDrawer
   // ║    Trục Y (phương đứng)  = cao độ (elevation)                              ║
   // ║                                                                                ║
   // ║  4 kích thước được vẽ:                                                       ║
-  // ║    1. Horizontal Lx (nằm ngang, angle=0):                                    ║
-  // ║         • Vị trí đường dim: y = fBot - 2.5×S (phía dưới đáy móng)          ║
-  // ║         • Đo từ mép trái đến mép phải đài móng                            ║
-  // ║         • Gắn XData "Length"/"Lx"                                           ║
-  // ║    2. Vertical H2 (thẳng đứng, angle=PI/2):                                 ║
-  // ║         • Vị trí: x = sec.X + Lx/2 + dimOff (phía phải mặt cắt)           ║
-  // ║         • Đo từ fBot (đáy móng) → fBot + h2 (đỉnh bậc H2)                 ║
-  // ║         • Gắn XData "StepHeight"/"H2"                                        ║
-  // ║    3. Vertical H1 (thẳng đứng, angle=PI/2):                                 ║
-  // ║         • Đo từ fBot + h2 → fBot + h1 + h2 (đỉnh bậc H1 = đáy cột)         ║
-  // ║         • Gắn XData "StepHeight"/"H1"                                        ║
-  // ║    4. Elevation dim (thẳng đứng, layer CDA):                                ║
-  // ║         • Vị trí: x = sec.X - Lx/2 - 2.5×S (phía trái mặt cắt)             ║
-  // ║         • Đo từ fBot (đáy móng) → cao độ mặt đất (GroundLevel)             ║
-  // ║         • Chỉ vẽ khi |GroundLevel - FoundationBottomLevel| > 1mm           ║
-  // ║         • Gắn XData "Elevation"/"Floor"                                     ║
+  // ║    1. Horizontal Lx (nằm ngang): đo mép trái → mép phải đài móng         ║
+  // ║    2. Vertical H2 (thẳng đứng): đo chiều cao bậc dưới                      ║
+  // ║    3. Vertical H1 (thẳng đứng): đo chiều cao bậc trên                     ║
+  // ║    4. Elevation dim (thẳng đứng, layer Elevation): đo cao độ mặt đất       ║
+  // ║         Chỉ vẽ khi |GroundLevel - FoundationBottomLevel| > 1mm               ║
   // ╚══════════════════════════════════════════════════════════════════════════════╝
   private void DrawSectionDimensionsAtPoint(Point3d bp, BlockTableRecord btr, Transaction tr)
   {
@@ -216,49 +206,40 @@ public partial class SwallowFoundationDrawer
 
     // ── Kích thước ngang Lx (đo chiều dài đài móng) ───────────────────────────
     // Vị trí đường dim: y = fBot - 2.5×S → phía dưới đáy móng.
-    // dimPoint = (bp.X, dimElev + 0.5) → điểm đặt đường dim, cách đường đo 0.5 đơn vị.
     // Đo từ mép trái đài (sec.X - Lx/2) đến mép phải đài (sec.X + Lx/2).
-    // Gắn XData "Length"/"Lx" để truy vấn chiều dài móng.
     double dimElev = fBot - 2.5 * S;
-    AddRotatedDimensionEntity(0,
-      new Point3d(bp.X, dimElev + 0.5, sec.Z),
+    AddRotatedDimensionEntity(DimLevel.Level2,
       new Point3d(sec.X - Lx / 2, dimElev, sec.Z),
       new Point3d(sec.X + Lx / 2, dimElev, sec.Z),
-      Layer.Dimension, "Length", "Lx", tr, btr);
+      Layer.Dimension, tr, btr);
 
     // ── Kích thước đứng H2 (chiều cao bậc dưới) ───────────────────────────────
     // Vị trí đường dim: x = sec.X + Lx/2 + dimOff → phía phải mặt cắt.
     // Đo từ fBot (đáy móng / đỉnh bản đế) đến fBot + h2 (đỉnh bậc H2).
-    // dimPoint = (dimX + 0.5, sec.Y) → điểm đặt dim cách 0.5 về phải.
-    // Gắn XData "StepHeight"/"H2".
     double dimX = sec.X + Lx / 2 + dimOff;
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(dimX + 0.5, sec.Y, sec.Z),
+    AddRotatedDimensionEntity(DimLevel.Level1,
       new Point3d(dimX, fBot, sec.Z),
       new Point3d(dimX, fBot + h2, sec.Z),
-      Layer.Dimension, "StepHeight", "H2", tr, btr);
+      Layer.Dimension, tr, btr);
 
     // ── Kích thước đứng H1 (chiều cao bậc trên) ───────────────────────────────
     // Đo từ fBot + h2 (đỉnh bậc H2) đến fBot + h1 + h2 (đỉnh bậc H1 / đáy cột).
-    // Gắn XData "StepHeight"/"H1".
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(dimX + 0.5, sec.Y, sec.Z),
+    AddRotatedDimensionEntity(DimLevel.Level2,
       new Point3d(dimX, fBot + h2, sec.Z),
       new Point3d(dimX, fBot + h1 + h2, sec.Z),
-      Layer.Dimension, "StepHeight", "H1", tr, btr);
+      Layer.Dimension, tr, btr);
 
     // ── Kích thước cao độ (Elevation) ─────────────────────────────────────────
     // Vị trí: phía trái mặt cắt tại x = sec.X - Lx/2 - 2.5×S.
     // Đo khoảng cách từ fBot (đáy móng) đến cao độ mặt đất (GroundLevel).
-    // Dùng layer CDA (màu xanh lá) để phân biệt với kích thước thông thường.
-    // Chỉ vẽ khi |GroundLevel - FoundationBottomLevel| > 1 mm (tránh dim 0 khi gần bằng nhau).
+    // Dùng layer Elevation để phân biệt với kích thước thông thường.
+    // Chỉ vẽ khi |GroundLevel - FoundationBottomLevel| > 1 mm (tránh dim 0).
     double elevX = sec.X - Lx / 2 - 2.5 * S;
     if (Math.Abs(Model.GroundLevel - Model.FoundationBottomLevel) > 1) {
-      AddRotatedDimensionEntity(Math.PI / 2,
-        new Point3d(elevX - 0.5, sec.Y, sec.Z),
+      AddRotatedDimensionEntity(DimLevel.Level1,
         new Point3d(elevX, fBot, sec.Z),
         new Point3d(elevX, sec.Y + Model.GroundLevel * S, sec.Z),
-        Layer.Elevation, "Elevation", "Floor", tr, btr);
+        Layer.Elevation, tr, btr);
     }
   }
 

@@ -119,8 +119,7 @@ public partial class SwallowFoundationDrawer
       Dimscale = dimScale,
       DimLinePoint = mid,
       Layer = layer,
-      Dimtmove = 0,
-      TextRotation = isReverse ? angle + Math.PI : angle
+      Dimtmove = 0
     };
 
     btr.AppendEntity(rd);

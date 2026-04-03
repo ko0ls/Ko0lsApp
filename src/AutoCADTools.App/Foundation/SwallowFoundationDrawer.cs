@@ -5,8 +5,10 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
+using AutoCADTools.App.Const;
 using AutoCADTools.Core;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
+using DimStyleTable = Autodesk.AutoCAD.DatabaseServices.DimStyleTable;
 
 namespace AutoCADTools.App.Foundation;
 
@@ -14,6 +16,7 @@ public partial class SwallowFoundationDrawer
 {
   private Document? _doc;
   private Database? _db;
+  private ObjectId _dimStyleId;
 
   // Model scale: model values are in mm; S = 1/unit_scale so drawing is in metres
   private double S => Model.Scale;
@@ -69,13 +72,14 @@ public partial class SwallowFoundationDrawer
         SymbolUtilityServices.GetBlockModelSpaceId(_db), OpenMode.ForWrite);
 
       if (!EnsureDimensionStyle(tr)) throw new FileNotFoundException("Dimension style not found in temp.dwt", "temp.dwt");
+      var dst = (DimStyleTable)tr.GetObject(_db.DimStyleTableId, OpenMode.ForRead);
+      _dimStyleId = dst[DimStyle.Dim100];
       EnsureLayers(tr);
       EnsureAppNames(tr);
 
-
       DrawPlanAtPoint(basePoint, btr, tr);
-      /*DrawPlanDimensionsAtPoint(basePoint, btr, tr);
-      DrawPlanRebarAtPoint(basePoint, btr, tr);
+      DrawPlanDimensionsAtPoint(basePoint, btr, tr);
+      /*DrawPlanRebarAtPoint(basePoint, btr, tr);
       DrawSectionAtPoint(basePoint, btr, tr);
       DrawSectionDimensionsAtPoint(basePoint, btr, tr);
       DrawSectionRebarAtPoint(basePoint, btr, tr);*/
