@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using AutoCADTools.App.Const;
+using AutoCADTools.App.Enums;
 using Hatch = AutoCADTools.App.Const.Hatch;
 
 namespace AutoCADTools.App.Foundation;
@@ -87,48 +88,40 @@ public partial class SwallowFoundationDrawer
     return ht;
   }
 
-  // AddRotatedDimensionEntity: Tạo dimension (kích thước) xoay theo góc angle.
+  // AddRotatedDimensionEntity: Tạo RotatedDimension từ 2 điểm xLine1-xLine2.
   //
-  // Logic tọa độ:
-  //   - angle: góc xoay của đường kích thước (0 = ngang, PI/2 = đứng)
-  //   - xLine1, xLine2: 2 điểm đầu mút cần đo khoảng cách (projection lên đường góc angle)
-  //   - dimPoint: điểm đặt đường dimension (line song song, cách đều)
-  //     → Đường đo sẽ nằm tại dimPoint và song song với đường nối xLine1→xLine2
-  //   - TextPosition: vị trí chữ số kích thước (offset 0.5 đơn vị tránh đè lên đường)
+  // Angle và dimPoint được tính tự động từ xLine1, xLine2 và level:
+  //   - Vector hướng dir = xLine2 - xLine1 → angle = Atan2(dir.Y, dir.X)
+  //   - Vector vuông góc perp = (-dir.Y, dir.X, 0) → dimPoint nằm trên đường
+  //     song song cách xLine1-xLine2 một khoảng offset = (DimBaseGap + (level-1)*DimensionGap) * TitleS
+  //   - TextPosition offset nhỏ 0.5 units theo hướng perp
   //
-  // XData: dữ liệu mở rộng gắn vào dimension để sau có thể truy vấn lại
-  //   - Key: "Length" → kích thước chiều dài móng (Lx, Ly)
-  //   - Key: "ColWidth" → bề rộng cột (Cx, Cy)
-  //   - Key: "AxisOffset" → khoảng lệch trục (OffsetX, OffsetY)
-  //   - Key: "StepHeight" → bậc móng (H1, H2)
-  //   - Key: "Elevation" → cao độ (Floor)
-  private void AddRotatedDimensionEntity(
-    double angle,
-    Point3d dimPoint,
-    Point3d xLine1,
-    Point3d xLine2,
-    string layer,
-    string? xdataKey,
-    string? xdataValue,
-    Transaction tr,
-    BlockTableRecord btr)
+  // TitleS = tỷ lệ khung tên (dùng cho text height và khoảng cách dim)
+  private void AddRotatedDimensionEntity(DimLevel level, Point3d xLine1, Point3d xLine2, string layer, Transaction tr, BlockTableRecord btr,
+    double dimScale = 1.0, double scaleFactor = 1.0, bool isReverse = false)
   {
-    var rd = new RotatedDimension(
-      angle,
-      xLine1,
-      xLine2,
-      dimPoint,
-      "",
-      ObjectId.Null)
-    {
-      TextRotation = angle,
-      Layer = layer
+    if (xLine1.IsEqualTo(xLine2)) return;
+
+    var dir = ( xLine2 - xLine1 ).GetNormal();
+    var angle = Math.Atan2(dir.Y, dir.X);
+    var norm = dir.CrossProduct(isReverse ? Vector3d.ZAxis.Negate() : Vector3d.ZAxis);
+
+    var p1 = xLine1.Add(norm.MultiplyBy(Numeric.DimBaseGap * TitleS));
+    var p2 = xLine2.Add(norm.MultiplyBy(Numeric.DimBaseGap * TitleS));
+
+    var dist = ( Numeric.DimBaseGap + (int) level * Numeric.DimensionGap ) * TitleS;
+    var mid = xLine1.Add(norm.MultiplyBy(dist));
+
+    var rd = new RotatedDimension(0, p1, p2, mid, "", _dimStyleId) {
+      Dimlfac = scaleFactor,
+      DimfxlenOn = false,
+      Rotation = angle,
+      Dimscale = dimScale,
+      DimLinePoint = mid,
+      Layer = layer,
+      Dimtmove = 0,
+      TextRotation = isReverse ? angle + Math.PI : angle
     };
-
-    rd.TextPosition = new Point3d(dimPoint.X + 0.5, dimPoint.Y + 0.5, 0);
-
-    if (!string.IsNullOrEmpty(xdataKey!) && xdataValue != null)
-      SetXDataString(rd, xdataKey!, xdataValue);
 
     btr.AppendEntity(rd);
     tr.AddNewlyCreatedDBObject(rd, true);
