@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using AutoCADTools.Core;
 using AutoCADTools.Core.Localization;
 using AutoCADTools.Presentation.Utils;
 using AutoCADTools.Storage;
@@ -51,6 +52,7 @@ namespace AutoCADTools.Presentation.ViewModels
       LocalizationManager.SetLanguage(SelectedLanguageItem.Code);
       _repository.SaveLanguage(SelectedLanguageItem.Code);
       CloseRequested?.Invoke();
+      AppProxy.NotifySettingsSaved();
     }
 
     private void OnCancel()

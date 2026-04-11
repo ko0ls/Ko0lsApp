@@ -2,7 +2,7 @@ using AutoCADTools.Presentation.Canvas.Utils;
 using FluentAssertions;
 using Xunit;
 
-namespace AutoCADTools.Test;
+namespace AutoCADTools.Test.Utils;
 
 public class UtilsPointTests : IDisposable
 {

@@ -79,10 +79,16 @@ public partial class SwallowFoundationDrawer
 
       DrawPlanAtPoint(basePoint, btr, tr);
       DrawPlanDimensionsAtPoint(basePoint, btr, tr);
-      /*DrawPlanRebarAtPoint(basePoint, btr, tr);
-      DrawSectionAtPoint(basePoint, btr, tr);
-      DrawSectionDimensionsAtPoint(basePoint, btr, tr);
-      DrawSectionRebarAtPoint(basePoint, btr, tr);*/
+
+      // bp for rebar = góc dưới bên trái + cover
+      var lx = Model.LengthX * S;
+      var ly = Model.LengthY * S;
+      var cover = Model.Cover * S;
+      var rebarBp = new Point3d(basePoint.X - lx / 2 + cover, basePoint.Y - ly / 2 + cover, 0);
+      DrawPlanRebarAtPoint(rebarBp, btr, tr);
+      //DrawSectionAtPoint(basePoint, btr, tr);
+      // DrawSectionDimensionsAtPoint(basePoint, btr, tr);
+      // DrawSectionRebarAtPoint(basePoint, btr, tr);
 
       tr.Commit();
     }

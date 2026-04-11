@@ -1,16 +1,19 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoCADTools.App.Utils;
+using AutoCADTools.Core;
 using AutoCADTools.Core.Localization;
 using AutoCADTools.Core.Utils;
 using AutoCADTools.Presentation.Utils;
 using AutoCADTools.Storage;
-using Autodesk.AutoCAD.ApplicationServices.Core;
+using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 [assembly: ExtensionApplication(typeof(AutoCADTools.App.AppEntry))]
 
@@ -38,7 +41,105 @@ namespace AutoCADTools.App
 
     public static Presentation.Canvas.CanvasViewModel? CanvasViewModel => _instanceVm;
 
-    public void Initialize()
+  // ── Template caches: pre-loaded from temp.dwt once at startup ───────────────
+
+  private static readonly HashSet<string> _loadedBlocks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+  private static readonly HashSet<string> _loadedDimStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+  private static readonly HashSet<string> _loadedLayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+  private static readonly HashSet<string> _loadedTextStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+  private static bool _settingsSaved;
+
+  public static IReadOnlyCollection<string> LoadedBlocks => _loadedBlocks;
+  public static IReadOnlyCollection<string> LoadedDimStyles => _loadedDimStyles;
+  public static IReadOnlyCollection<string> LoadedLayers => _loadedLayers;
+  public static IReadOnlyCollection<string> LoadedTextStyles => _loadedTextStyles;
+
+  /// <summary>Pre-load blocks, dim styles, layers, and text styles from temp.dwt.
+  /// Call ONCE from Initialize() when a valid MDI document exists.</summary>
+  private static void PreLoadFromTemplate()
+  {
+    var doc = Application.DocumentManager.MdiActiveDocument;
+    if (doc == null) return;
+
+    var templatePath = System.IO.Path.Combine(
+      System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+      ?? string.Empty, "Assets", "TemplateAutocad", "temp.dwt");
+    if (!System.IO.File.Exists(templatePath)) return;
+
+    using (doc.LockDocument())
+    using (var tr = doc.Database.TransactionManager.StartTransaction())
+    {
+      try
+      {
+        using var srcDb = new Database(false, true);
+        srcDb.ReadDwgFile(templatePath, FileOpenMode.OpenForReadAndReadShare, true, string.Empty);
+
+        using var trSrc = srcDb.TransactionManager.StartTransaction();
+
+        // ── 1. Blocks ────────────────────────────────────────────────────────────
+        var srcBt = (BlockTable)trSrc.GetObject(srcDb.BlockTableId, OpenMode.ForRead);
+        foreach (var entry in srcBt)
+        {
+          var btr = (BlockTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
+          if (btr.IsLayout || btr.IsAnonymous || btr.IsFromOverlayReference) continue;
+          if (_loadedBlocks.Contains(btr.Name)) continue;
+          var ids = new ObjectIdCollection { btr.ObjectId };
+          var mapping = new IdMapping();
+          // Use Replace so AttributeDefinitions and all sub-objects are cloned
+          doc.Database.WblockCloneObjects(ids, doc.Database.BlockTableId, mapping, DuplicateRecordCloning.Replace, false);
+          if (mapping[btr.ObjectId].Value != ObjectId.Null)
+            _loadedBlocks.Add(btr.Name);
+        }
+
+        // ── 2. Dim Styles ──────────────────────────────────────────────────────
+        var srcDst = (DimStyleTable)trSrc.GetObject(srcDb.DimStyleTableId, OpenMode.ForRead);
+        foreach (var entry in srcDst)
+        {
+          var dsr = (DimStyleTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
+          if (_loadedDimStyles.Contains(dsr.Name)) continue;
+          var ids = new ObjectIdCollection { dsr.ObjectId };
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(ids, doc.Database.DimStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          _loadedDimStyles.Add(dsr.Name);
+        }
+
+        // ── 3. Layers ───────────────────────────────────────────────────────────
+        var srcLt = (LayerTable)trSrc.GetObject(srcDb.LayerTableId, OpenMode.ForRead);
+        foreach (var entry in srcLt)
+        {
+          var ltr = (LayerTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
+          if (ltr.IsHidden) continue;
+          if (_loadedLayers.Contains(ltr.Name)) continue;
+          var ids = new ObjectIdCollection { ltr.ObjectId };
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(ids, doc.Database.LayerTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          _loadedLayers.Add(ltr.Name);
+        }
+
+        // ── 4. Text Styles ─────────────────────────────────────────────────────
+        var srcTst = (TextStyleTable)trSrc.GetObject(srcDb.TextStyleTableId, OpenMode.ForRead);
+        foreach (var entry in srcTst)
+        {
+          var tstr = (TextStyleTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
+          if (_loadedTextStyles.Contains(tstr.Name)) continue;
+          var ids = new ObjectIdCollection { tstr.ObjectId };
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(ids, doc.Database.TextStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          _loadedTextStyles.Add(tstr.Name);
+        }
+
+        trSrc.Commit();
+        tr.Commit();
+      }
+      catch (System.Exception)
+      {
+        tr.Abort();
+      }
+    }
+  }
+
+  public void Initialize()
     {
       try {
         var services = new ServiceCollection();
@@ -72,10 +173,21 @@ namespace AutoCADTools.App
         if (ComponentManager.Ribbon == null)
           ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
         else {
-          var editor = Application.DocumentManager.MdiActiveDocument.Editor;
+          var doc = Application.DocumentManager.MdiActiveDocument;
+          if (doc == null) return;
           CreatePanel();
           LocalizationManager.LanguageChanged += OnLanguageChanged;
-          editor.WriteMessage($"\n{"App.Loaded".GetString()}");
+
+          // Pre-load blocks / dim styles / layers / text styles from temp.dwt
+          AppProxy.SettingsSaved += () => {
+            _settingsSaved = true;
+            PreLoadFromTemplate();
+          };
+          // Also load at startup so first draw doesn't need settings
+          PreLoadFromTemplate();
+          _settingsSaved = true;
+
+          doc.Editor.WriteMessage($"\n{"App.Loaded".GetString()}");
         }
       }
       catch (System.Exception ex) {
@@ -96,6 +208,13 @@ namespace AutoCADTools.App
 
         CreatePanel();
         LocalizationManager.LanguageChanged += OnLanguageChanged;
+
+        AppProxy.SettingsSaved += () => {
+          _settingsSaved = true;
+          PreLoadFromTemplate();
+        };
+        PreLoadFromTemplate();
+        _settingsSaved = true;
 
         ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
       }
@@ -137,6 +256,14 @@ namespace AutoCADTools.App
 
     // ── Stub command methods ────────────────────────────────────────
 
+    private static void WriteMessageSafely(string msg)
+    {
+      var doc = Application.DocumentManager.MdiActiveDocument;
+      if (doc != null) {
+        doc.Editor.WriteMessage(msg);
+      }
+    }
+
     [CommandMethod("KOOLS_CMD_SETTINGS")]
     public void CmdSettings()
     {
@@ -157,8 +284,7 @@ namespace AutoCADTools.App
         Application.ShowModalWindow(window);
       }
       catch (System.Exception ex) {
-        Application.DocumentManager.MdiActiveDocument?.Editor
-          .WriteMessage($"\nMain View error: {ex.Message}");
+        WriteMessageSafely($"\nMain View error: {ex.Message}");
       }
     }
 
@@ -166,6 +292,10 @@ namespace AutoCADTools.App
     public void CmdSwallowFoundation()
     {
       if (Application.DocumentManager.MdiActiveDocument == null) return;
+      if (!_settingsSaved) {
+        WriteMessageSafely("\nPlease run Settings first before drawing.");
+        return;
+      }
       try {
         var window = new Presentation.Views.SwallowFoundationWindow();
         var result = window.ShowDialog();
@@ -179,8 +309,7 @@ namespace AutoCADTools.App
         }
       }
       catch (System.Exception ex) {
-        Application.DocumentManager.MdiActiveDocument?.Editor
-          .WriteMessage($"\nSwallow foundation error: {ex.Message}");
+        WriteMessageSafely($"\nSwallow foundation error: {ex.Message}");
       }
     }
   }

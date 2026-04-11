@@ -305,8 +305,9 @@ public partial class SwallowFoundationDrawer
     // rebarY = sec.Y + fBot + h2 + cover
     //   = cao độ đáy móng (fBot) + bậc H2 (h2) + lớp bảo vệ (cover)
     //   → Vị trí Y của các thanh thép chính đáy móng trên mặt cắt.
-    var (rxCount, rxDia, _) = ParseRebarSpec(Model.RebarX);
-    if (rxCount > 0 && rxDia > 0) {
+    var (rxDia, rxSpacing) = ParseRebarSpec(Model.RebarX);
+    if (rxDia > 0 && rxSpacing > 0) {
+      int rxCount = CalcRebarCount(Lx, rxSpacing);
       double usableX = Lx - 2 * cover;
       double spacing = usableX / ( rxCount + 1 );
       double rebarY = sec.Y + Model.FoundationBottomLevel * S + h2 + cover;
@@ -329,8 +330,8 @@ public partial class SwallowFoundationDrawer
     // Thanh thép Y chạy ngang trên mặt bằng (vuông góc với mặt cắt A-A),
     // nên trên mặt cắt sẽ thấy một ĐƯỜNG NẰM NGANG tại vị trí rebarY.
     // Đoạn nằm ngang từ (sec.X - Lx/2 + cover) đến (sec.X + Lx/2 - cover).
-    var (ryCount, ryDia, _) = ParseRebarSpec(Model.RebarY);
-    if (ryCount > 0 && ryDia > 0) {
+    var (ryDia, rySpacing) = ParseRebarSpec(Model.RebarY);
+    if (ryDia > 0 && rySpacing > 0) {
       double rebarY = sec.Y + Model.FoundationBottomLevel * S + h2 + cover;
       var lnY = AddLine(
         new Point3d(sec.X - Lx / 2 + cover, rebarY, sec.Z),
@@ -342,7 +343,7 @@ public partial class SwallowFoundationDrawer
     // ══ 3. Thép dọc cột (Column rebars) ═══════════════════════════════════
     // Chỉ vẽ khi Model.DrawColumnRebar = true.
     if (Model.DrawColumnRebar) {
-      var (stCount, stDia, stSpacing) = ParseRebarSpec(Model.StirrupRebar);
+      var (stDia, stSpacing) = ParseRebarSpec(Model.StirrupRebar);
       int crCount = Model.ColumnRebarCountX; // số thanh thép dọc cột
       double crDia = Model.ColumnRebar * S; // đường kính thép dọc cột
 
@@ -376,7 +377,7 @@ public partial class SwallowFoundationDrawer
       // sY1 = đỉnh dưới của đai = colBaseZ (tại đáy cột).
       // sY2 = đỉnh trên = colBaseZ + stSpacing×S (nhưng không vượt quá GroundLevel).
       // sX1 = mép trái cột, sX2 = mét phải cột.
-      if (stCount > 0 && stDia > 0 && stSpacing > 0) {
+      if (stDia > 0 && stSpacing > 0) {
         double sY1 = colBaseZ;
         double sY2 = Math.Min(colBaseZ + stSpacing * S, colBaseZ + Model.GroundLevel * S);
         double sX1 = sec.X - cwX / 2;

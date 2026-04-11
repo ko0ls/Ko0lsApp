@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.IO;
+using System.Linq;
 using AutoCADTools.App.Const;
 using AutoCADTools.App.Utils;
 using Autodesk.AutoCAD.Colors;
@@ -47,8 +48,21 @@ public partial class SwallowFoundationDrawer
     if (_db == null) return false;
     var dst = (DimStyleTable)tr.GetObject(_db.DimStyleTableId, OpenMode.ForRead);
     if (dst.Has(DimStyle.Dim100)) return true;
-    var location = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().Location ).DirectoryName ;
-    var path = Path.Combine(location!,@"Assets\TemplateAutocad","temp.dwt") ;
-    return CloneAutocadStyle.ImportDimensionStyleFromFile(path, DimStyle.Dim100, tr);
+
+    dst.UpgradeOpen();
+    using var dsr = new DimStyleTableRecord();
+    dsr.Name = DimStyle.Dim100;
+
+    // Copy settings from Standard style if available
+    if (dst.Has("H100")) {
+      var stdId = dst["H100"];
+      var stdRec = (DimStyleTableRecord)tr.GetObject(stdId, OpenMode.ForRead);
+      dsr.CopyFrom(stdRec);
+      dsr.Name = DimStyle.Dim100;
+    }
+
+    dst.Add(dsr);
+    tr.AddNewlyCreatedDBObject(dsr, true);
+    return true;
   }
 }

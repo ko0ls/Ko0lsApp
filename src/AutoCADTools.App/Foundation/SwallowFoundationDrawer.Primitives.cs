@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
@@ -353,95 +355,129 @@ public partial class SwallowFoundationDrawer
       tr.AddNewlyCreatedDBObject(attDef, true);
     }
 
-    var br = InsertBlock(blockName, pt, angle, tr, btr);
+    _ = InsertBlock(blockName, pt, angle, tr, btr);
   }
 
-  // AddDonut: Vẽ hình vành khăn (vòng tròn đặc có lỗ rỗng) tại center.
+  // ParseRebarSpec: Parse chuỗi qui cách thép → (đường kính mm, khoảng cách mm).
   //
-  // Kỹ thuật hatch vành khăn (island detection):
-  //   HatchLoopTypes.External yêu cầu winding direction:
-  //     - Outer boundary: duyệt COUNTER-CLOCKWISE (ngược chiều kim đồng hồ)
-  //       → vùng bên TRÁI đường đi là vùng đặc.
-  //     - Inner boundary (island): duyệt CLOCKWISE (cùng chiều kim đồng hồ)
-  //       → vùng bên TRÁI đường đi là vùng rỗng (lỗ).
+  // Input: string spec - ví dụ "D10A200" hoặc "D10"
   //
-  //   Polyline đỉnh 4 điểm vuông góc:
-  //     - Outer (CCW): phải→trên→trái→dưới→phải  (tọa độ X dương→Y dương→X âm→Y âm)
-  //     - Inner (CW):  phải→dưới→trái→trên→phải  (tọa độ X dương→Y âm→X âm→Y dương)
-  //   Chỉ truyền outerPL vào Hatch → hatch đặc toàn bộ hình vuông.
-  //   Chỉ truyền cả outerPL + innerPL → AutoCAD tự nhận inner là island (lỗ rỗng).
-  private void AddDonut(Point3d center, double outerDia, Transaction tr, BlockTableRecord btr)
+  // Format "D{phi}A{spacing}":
+  //   D10A200 → dia=10, spacing=200
+  //   D10     → dia=10, spacing=0 (thép đơn, count = 1)
+  //
+  // Count được tính riêng tại call site:
+  //   Thép phương X: count = ceil(Ly / spacing) + 1
+  //   Thép phương Y: count = ceil(Lx / spacing) + 1
+  private (double dia, double spacing) ParseRebarSpec(string spec)
   {
-    var innerDia = Math.Max(outerDia - 0.3 * S, outerDia * 0.5);
-    double outerR = outerDia / 2;
-    double innerR = innerDia / 2;
-
-    // Outer boundary: 4 đỉnh vuông góc, thứ tự CCW → vùng đặc.
-    using var outerPL = new Polyline();
-    outerPL.AddVertexAt(0, new Point2d(center.X + outerR, center.Y), 0, 0, 0);
-    outerPL.AddVertexAt(1, new Point2d(center.X, center.Y + outerR), 0, 0, 0);
-    outerPL.AddVertexAt(2, new Point2d(center.X - outerR, center.Y), 0, 0, 0);
-    outerPL.AddVertexAt(3, new Point2d(center.X, center.Y - outerR), 0, 0, 0);
-    outerPL.Closed = true;
-    btr.AppendEntity(outerPL);
-    tr.AddNewlyCreatedDBObject(outerPL, true);
-
-    // Inner boundary: 4 đỉnh vuông góc nhỏ hơn, thứ tự CW → tạo lỗ rỗng.
-    // Đỉnh inner: phải(dương)→dưới(âm)→trái(âm)→trên(dương)→phải(dương)
-    // → ngược chiều outer → AutoCAD nhận là island (lỗ).
-    using var innerPL = new Polyline();
-    innerPL.AddVertexAt(0, new Point2d(center.X + innerR, center.Y), 0, 0, 0);
-    innerPL.AddVertexAt(1, new Point2d(center.X, center.Y - innerR), 0, 0, 0);
-    innerPL.AddVertexAt(2, new Point2d(center.X - innerR, center.Y), 0, 0, 0);
-    innerPL.AddVertexAt(3, new Point2d(center.X, center.Y + innerR), 0, 0, 0);
-    innerPL.Closed = true;
-    btr.AppendEntity(innerPL);
-    tr.AddNewlyCreatedDBObject(innerPL, true);
-
-    // Hatch với cả outerPL + innerPL → AutoCAD tự nhận inner là island.
-    var ids = new ObjectIdCollection { outerPL.ObjectId, innerPL.ObjectId };
-    AddHatch(ids, Hatch.Solid, 1, Layer.Outline, tr, btr);
-  }
-
-  // ParseRebarSpec: Parse chuỗi qui cách thép → (số thanh, đường kính, khoảng cách).
-  //
-  // Input: string spec - chuỗi qui cách thép (từ Model.RebarX, Model.RebarY...)
-  //
-  // Các format được hỗ trợ:
-  //   "2a150" → 2 thanh, phi150mm, spacing=150mm  (thép đều cách)
-  //   "2d25"  → 2 thanh, phi25mm,  spacing=25mm   (thép đều cách, d=dia)
-  //   "10"    → 1 thanh,  phi10mm,  spacing=0       (thép đơn)
-  //   "d10"   → 1 thanh,  phi10mm,  spacing=0       (thép đơn, có prefix d)
-  //
-  // Regex pattern 1: @"^(\d+)([a-zA-Z])(\d+)$"
-  //   Group 1: số thanh (count)
-  //   Group 2: đơn vị/ký tự phân cách (a=spacing mm, d=dia mm)
-  //   Group 3: giá trị số
-  //
-  // Regex pattern 2: @"^(?:D)?(\d+)$"
-  //   Optional prefix "D", lấy số cuối là đường kính.
-  private (int count, double dia, double spacing) ParseRebarSpec(string spec)
-  {
-    if (string.IsNullOrWhiteSpace(spec)) return (0, 0, 0);
+    if (string.IsNullOrWhiteSpace(spec)) return (0, 0);
     spec = spec.Trim().ToUpperInvariant();
 
-    // "2a150" = 2 rebars @ 150mm, "2d25" = 2 rebars phi25mm
-    var m = Regex.Match(spec, @"^(\d+)([a-zA-Z])(\d+)$");
+    // "D10A200" → phi=10, spacing=200
+    var m = Regex.Match(spec, @"^D(\d+)A(\d+)$");
     if (m.Success)
     {
-      int count = int.Parse(m.Groups[1].Value);
-      string unit = m.Groups[2].Value;
-      int value = int.Parse(m.Groups[3].Value);
-      return (count, value, value);
+      var dia = double.Parse(m.Groups[1].Value);
+      var spacing = double.Parse(m.Groups[2].Value);
+      return (dia, spacing);
     }
 
-    // "10" or "d10" = phi10
-    var m2 = Regex.Match(spec, @"^(?:D)?(\d+)$");
-    if (m2.Success)
+    // "D10" → phi=10, spacing=0 (thép đơn)
+    var m2 = Regex.Match(spec, @"^D(\d+)$");
+    return m2.Success ? (double.Parse(m2.Groups[1].Value), 0) : (0, 0);
+  }
+
+  // CalcRebarCount: tính số thanh thép cho 1 phương.
+  //   Đối với phương X: số thanh = ceil(Ly / spacing) + 1
+  //   Đối với phương Y: số thanh = ceil(Lx / spacing) + 1
+  private static int CalcRebarCount(double length, double spacing)
+  {
+    if (spacing <= 0) return 1;
+    return (int)Math.Ceiling(length / spacing) + 1;
+  }
+
+  // IBR_Mong: Insert "R_Mong" block at position with dynamic properties L, L1.
+  // Checks LoadedBlocks (HashSet) then does a fresh BlockTable lookup.
+  private BlockReference? IBR_Mong(Point3d point, double l, double l1, string sh, string fiSpec, Transaction tr, BlockTableRecord btr)
+  {
+    if (_db == null) return null;
+
+    var name = "R_Mong";
+    if (!AppEntry.LoadedBlocks.Contains(name))
+      return null;
+
+    var bt = (BlockTable)tr.GetObject(_db.BlockTableId, OpenMode.ForRead);
+    if (!bt.Has(name))
+      return null;
+
+    var blockId = bt[name];
+    var bref = new BlockReference(point, blockId) {
+      BlockUnit = UnitsValue.Undefined,
+      ScaleFactors = new Scale3d(TitleS / 100, TitleS / 100, TitleS / 100)
+    };
+    bref.Layer = Layer.Rebar;
+    btr.AppendEntity(bref);
+    tr.AddNewlyCreatedDBObject(bref, true);
+
+    // Create AttributeReferences from the block definition's AttributeDefinitions.
+    var blockDef = (BlockTableRecord)tr.GetObject(blockId, OpenMode.ForRead);
+    if (blockDef.HasAttributeDefinitions)
     {
-      return (1, double.Parse(m2.Groups[1].Value), 0);
+      foreach (ObjectId subId in blockDef)
+      {
+        var ent = (Entity?)tr.GetObject(subId, OpenMode.ForRead);
+        if (ent is not AttributeDefinition attDef) continue;
+
+        var attRef = new AttributeReference();
+        attRef.SetDatabaseDefaults();
+        attRef.SetAttributeFromBlock(attDef, bref.BlockTransform);
+        attRef.Position = attDef.Position.TransformBy(bref.BlockTransform);
+
+        switch (attDef.Tag.ToUpperInvariant())
+        {
+          case "SH":
+            attRef.Tag = attDef.Tag;
+            attRef.TextString = sh;
+            break;
+          case "FI":
+            attRef.Tag = attDef.Tag;
+            attRef.TextString = fiSpec;
+            break;
+        }
+
+        attRef.AdjustAlignment(_db);
+        bref.AttributeCollection.AppendAttribute(attRef);
+        tr.AddNewlyCreatedDBObject(attRef, true);
+      }
     }
 
-    return (0, 0, 0);
+    // Apply dynamic block properties L, L1
+    foreach (DynamicBlockReferenceProperty prop in bref.DynamicBlockReferencePropertyCollection)
+    {
+      try {
+        switch (prop.PropertyName) {
+          case "L":
+            prop.Value = l;
+            break;
+          case "L1":
+            prop.Value = l1;
+            break;
+        }
+      }
+      catch {
+        // Skip if property cannot be set (e.g., read-only or incompatible value)
+      }
+    }
+
+    return bref;
+  }
+
+  // Matrix_Rotation: Xoay entity quanh trục Z tại điểm center.
+  private static void Matrix_Rotation(Entity? ent, double angleRad, Point3d center)
+  {
+    if (ent == null || ent.IsErased) return;
+    var matrix = Matrix3d.Rotation(angleRad, Vector3d.ZAxis, center);
+    ent.TransformBy(matrix);
   }
 }
