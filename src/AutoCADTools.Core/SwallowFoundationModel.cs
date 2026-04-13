@@ -13,6 +13,7 @@ public class SwallowFoundationModel
   private bool _drawColumnRebar;
   private bool _isStaggeredLayout;
   private double _scale = 3;
+  private double _titleBlockScale = 100;
 
   public bool IsRectangularColumn
   {
@@ -117,6 +118,12 @@ public class SwallowFoundationModel
     set => _scale = value;
   }
 
+  public double TitleBlockScale
+  {
+    get => _titleBlockScale;
+    set => _titleBlockScale = value;
+  }
+
   /// <summary>Number of column rebars along X side.</summary>
   public int ColumnRebarCountX { get; set; }
 
@@ -169,7 +176,8 @@ public class SwallowFoundationModel
       double cover,
       int columnRebarCountX,
       int columnRebarCountY,
-      double lapSpliceLength)
+      double lapSpliceLength,
+      double titleBlockScale)
   {
     FoundationName = foundationName;
     Quantity = quantity;
@@ -202,5 +210,6 @@ public class SwallowFoundationModel
     ColumnRebarCountX = columnRebarCountX;
     ColumnRebarCountY = columnRebarCountY;
     LapSpliceLength = lapSpliceLength;
+    TitleBlockScale = titleBlockScale;
   }
 }

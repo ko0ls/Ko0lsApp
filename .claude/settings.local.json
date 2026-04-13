@@ -160,7 +160,11 @@
       "Bash(del:*)",
       "Bash(powershell -Command \"Remove-Item 'D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\pr_review_body.md'\")",
       "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" pr view 13 --json reviews --jq '.reviews[] | \"\\\\\\(.author.login\\): \\\\\\(.state\\)\"' 2>&1)",
-      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" pr view 13 --json reviews --jq '.reviews[] | \"\\\\\\(.author.login\\): \\\\\\(.state\\) - \\\\\\(.body[:80]\\)\"' 2>&1)"
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" pr view 13 --json reviews --jq '.reviews[] | \"\\\\\\(.author.login\\): \\\\\\(.state\\) - \\\\\\(.body[:80]\\)\"' 2>&1)",
+      "Bash(xxd \"D:\\\\2. Ko0ls\\\\1. Project Code\\\\1. Tool AutoCAD 2026\\\\src\\\\AutoCADTools.App\\\\Foundation\\\\SwallowFoundationDrawer.Plan.cs\")",
+      "Bash(dotnet --list-sdks)",
+      "Bash(find 'C:/Program Files/dotnet' -name *.dll)",
+      "Bash(find 'C:/Program Files' -name LibreCAD* -o -name FreeCAD* -o -name QCAD*)"
     ]
   }
 }

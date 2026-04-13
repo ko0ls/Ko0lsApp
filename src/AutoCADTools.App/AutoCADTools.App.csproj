@@ -69,6 +69,10 @@
     <Resource Include="Resources\Icons\swallow_foundation.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <None Remove="Assets\TemplateAutocad\temp.dwt" />
+    <Resource Include="Assets\TemplateAutocad\temp.dwt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

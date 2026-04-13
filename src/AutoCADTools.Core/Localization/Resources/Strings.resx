@@ -27,4 +27,7 @@
   <data name="View.Settings.Button.Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="SwallowFoundation.Label.FloorLevel1" xml:space="preserve"><value /></data>
   <data name="SwallowFoundation.Button.Draw" xml:space="preserve"><value>Swallow Foundation</value></data>
+  <data name="SwallowFoundation.Label.TitleBlockScale" xml:space="preserve">
+    <value />
+  </data>
 </root>

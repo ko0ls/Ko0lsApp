@@ -8,11 +8,13 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:canvas="clr-namespace:AutoCADTools.Presentation.Canvas"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:AutoCADTools.Presentation.Behaviors"
         mc:Ignorable="d"
         Title="{utils:Loc SwallowFoundation.Window.Title}"
         WindowStartupLocation="CenterOwner"
         Width="900"
         Height="650"
+        behaviors:DialogCloseBehavior.DialogResult="{Binding DialogResult}"
         MinWidth="700"
         MinHeight="500"
         ShowInTaskbar="False"
@@ -82,6 +84,7 @@
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Foundation Name -->
@@ -110,9 +113,20 @@
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="{utils:Loc SwallowFoundation.Label.Scale}"
                        VerticalAlignment="Center"
-                       Margin="0 0 8 0"/>
+                       Margin="0 0 8 4"/>
             <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     Style="{StaticResource NumericInputTextBox}"
+                     HorizontalAlignment="Left"
+                     Margin="0 0 0 4"/>
+
+            <!-- Title Block Scale -->
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       Text="{utils:Loc SwallowFoundation.Label.TitleScale}"
+                       VerticalAlignment="Center"
+                       Margin="0 0 8 0"/>
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding TitleBlockScale, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Style="{StaticResource NumericInputTextBox}"
                      HorizontalAlignment="Left"/>
           </Grid>

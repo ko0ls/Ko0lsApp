@@ -26,6 +26,14 @@ if (Test-Path $srcRes) {
     Copy-Item "$srcRes\Icons" $resDest -Recurse -Force
 }
 
+# Assets (dwg, etc.)
+$resDest = Join-Path $bundle 'Assets'
+if (-not (Test-Path $resDest)) { New-Item -ItemType Directory -Path $resDest -Force | Out-Null }
+$srcRes = Join-Path $PSScriptRoot 'Assets'
+if (Test-Path $srcRes) {
+    Copy-Item "$srcRes\TemplateAutocad" $resDest -Recurse -Force
+}
+
 # Copy Presentation-layer NuGet dependencies that are PrivateAssets=All and therefore
 # not embedded in any DLL — they live in the user's NuGet cache and must be
 # explicitly pulled into the bundle so XAML can resolve them at runtime.

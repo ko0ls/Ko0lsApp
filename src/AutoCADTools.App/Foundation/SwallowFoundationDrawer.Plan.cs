@@ -1,282 +1,184 @@
 #nullable enable
 
 using System;
+using AutoCADTools.App.Const;
+using AutoCADTools.App.Enums;
+using AutoCADTools.Core.Utils;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Hatch = AutoCADTools.App.Const.Hatch;
 
 namespace AutoCADTools.App.Foundation;
 
 public partial class SwallowFoundationDrawer
 {
   // ╔══════════════════════════════════════════════════════════════╗
-  // ║                    A.  MẶT BẰNG (PLAN)                        ║
+  // ║                    A.  MẶT BẰNG (PLAN)                       ║
   // ╚══════════════════════════════════════════════════════════════╝
-
   private void DrawPlanAtPoint(Point3d bp, BlockTableRecord btr, Transaction tr)
   {
-    double Lx = Model.LengthX * S;
-    double Ly = Model.LengthY * S;
-    double cpX = Model.ColumnPositionX * S;
-    double cpY = Model.ColumnPositionY * S;
-    double padW = Model.ConcretePadExtension * S;
-    double cwX = Model.ColumnWidthX * S;
-    double cwY = Model.ColumnWidthY * S;
+    var lx = Model.LengthX * S;
+    var ly = Model.LengthY * S;
+    var cpX = Model.ColumnPositionX * S;
+    var cpY = Model.ColumnPositionY * S;
+    var padW = Model.ConcretePadExtension * S;
+    var cwX = Model.ColumnWidthX * S;
+    var cwY = Model.ColumnWidthY * S;
+    var axisX = Model.AxisPositionX * S;
+    var axisY = Model.AxisPositionY * S;
+    var topLeft = new Point3d(bp.X - lx / 2, bp.Y + ly / 2, bp.Z);
 
-    // Footing outline corners
-    var p1 = new Point3d(bp.X - Lx / 2, bp.Y - Ly / 2, bp.Z);
-    var p2 = new Point3d(bp.X + Lx / 2, bp.Y - Ly / 2, bp.Z);
-    var p3 = new Point3d(bp.X + Lx / 2, bp.Y + Ly / 2, bp.Z);
-    var p4 = new Point3d(bp.X - Lx / 2, bp.Y + Ly / 2, bp.Z);
+    var p1 = new Point3d(bp.X - lx / 2, bp.Y - ly / 2, bp.Z);
+    var p2 = new Point3d(bp.X + lx / 2, bp.Y - ly / 2, bp.Z);
+    var p3 = new Point3d(bp.X + lx / 2, bp.Y + ly / 2, bp.Z);
+    var p4 = new Point3d(bp.X - lx / 2, bp.Y + ly / 2, bp.Z);
+    CreatePolyline([p1, p2, p3, p4], Layer.Outline, tr, btr);
 
-    // ── Footing outline (THAY) ────────────────────────────────────
-    AddLine(p1, p2, LayerOutline, null, tr, btr);
-    AddLine(p2, p3, LayerOutline, null, tr, btr);
-    AddLine(p3, p4, LayerOutline, null, tr, btr);
-    AddLine(p4, p1, LayerOutline, null, tr, btr);
-
-    // ── Concrete pad (HATCH + AR-CONC) ─────────────────────────────
     var pp1 = new Point3d(p1.X - padW, p1.Y - padW, bp.Z);
     var pp2 = new Point3d(p2.X + padW, p2.Y - padW, bp.Z);
     var pp3 = new Point3d(p3.X + padW, p3.Y + padW, bp.Z);
     var pp4 = new Point3d(p4.X - padW, p4.Y + padW, bp.Z);
+    CreatePolyline([pp1, pp2, pp3, pp4], Layer.ConcreteHatch, tr, btr);
 
-    var padPL = CreateRectanglePolyline(pp1, pp2, pp3, pp4);
-    HatchPolyline(padPL, "AR-CONC", 20 * S, LayerConcreteHatch, tr, btr);
-
-    // ── Axis lines (TIM, dashed) ──────────────────────────────────
+    /* Axis */
     AddLine(
-      new Point3d(bp.X - Lx, bp.Y + cpY, bp.Z),
-      new Point3d(bp.X + Lx, bp.Y + cpY, bp.Z),
-      LayerAxis, "DASHED", tr, btr);
+      new Point3d(bp.X - lx / 2 - padW - Numeric.ExtendCenterLine * TitleS, bp.Y + ly / 2 - axisY, bp.Z),
+      new Point3d(bp.X + lx / 2 + padW + Numeric.ExtendCenterLine * TitleS, bp.Y + ly / 2 - axisY, bp.Z),
+      Layer.Axis, null, tr, btr);
 
     AddLine(
-      new Point3d(bp.X + cpX, bp.Y - Ly, bp.Z),
-      new Point3d(bp.X + cpX, bp.Y + Ly, bp.Z),
-      LayerAxis, "DASHED", tr, btr);
+      new Point3d(bp.X - lx / 2 + axisX, bp.Y + ly / 2 + padW + Numeric.ExtendCenterLine * TitleS, bp.Z),
+      new Point3d(bp.X - lx / 2 + axisX, bp.Y - ly / 2 - padW - Numeric.ExtendCenterLine * TitleS, bp.Z),
+      Layer.Axis, null, tr, btr);
 
-    // ── Column ─────────────────────────────────────────────────────
-    var cpBase = new Point3d(bp.X + cpX, bp.Y + cpY, bp.Z);
+    /* Column */
+    var cpBase = topLeft.Add(Vector3d.XAxis.MultiplyBy(cpX)).Add(Vector3d.YAxis.Negate().MultiplyBy(cpY));
 
-    if (Model.IsRectangularColumn)
-    {
+    if (Model.IsRectangularColumn) {
       var c1 = new Point3d(cpBase.X - cwX / 2, cpBase.Y - cwY / 2, cpBase.Z);
       var c2 = new Point3d(cpBase.X + cwX / 2, cpBase.Y - cwY / 2, cpBase.Z);
       var c3 = new Point3d(cpBase.X + cwX / 2, cpBase.Y + cwY / 2, cpBase.Z);
       var c4 = new Point3d(cpBase.X - cwX / 2, cpBase.Y + cwY / 2, cpBase.Z);
 
-      var colPL = CreateRectanglePolyline(c1, c2, c3, c4);
-      HatchPolyline(colPL, "DOTS", 5 * S, LayerColumn, tr, btr);
+      var colPl = CreatePolyline([c1, c2, c3, c4], Layer.Column, tr, btr);
+      AddHatch(new ObjectIdCollection() { colPl.ObjectId }, "DOTS", Numeric.HatchPatternScale * TitleS, Layer.Column,
+        tr, btr);
     }
     else // Circular column
     {
       var cRadius = Math.Min(cwX, cwY) / 2;
-      using var circ = new Circle(cpBase, Vector3d.ZAxis, cRadius) { Layer = LayerColumn };
+      using var circ = new Circle(cpBase, Vector3d.ZAxis, cRadius);
+      circ.Layer = Layer.Column;
       btr.AppendEntity(circ);
       tr.AddNewlyCreatedDBObject(circ, true);
 
-      using var circPL = new Polyline();
-      const int Segs = 32;
-      for (int i = 0; i < Segs; i++)
-      {
-        double a = 2 * Math.PI * i / Segs;
-        circPL.AddVertexAt(i, new Point2d(cpBase.X + cRadius * Math.Cos(a), cpBase.Y + cRadius * Math.Sin(a)), 0, 0, 0);
-      }
-      circPL.Closed = true;
-      var circIds = new ObjectIdCollection { circPL.ObjectId };
-      btr.AppendEntity(circPL);
-      tr.AddNewlyCreatedDBObject(circPL, true);
-      AddSolidHatch(circIds, LayerColumn, tr, btr);
+      var circIds = new ObjectIdCollection { circ.ObjectId };
+      AddHatch(circIds, Hatch.Dot, Numeric.HatchPatternScale * TitleS, Layer.Column, tr, btr);
     }
 
-    // ── Step boundary lines when H1 != H2 ──────────────────────────
-    if (Math.Abs(Model.StepHeightH1 - Model.StepHeightH2) > 0.001)
-    {
-      var margin = 0.05 * S;
-      var sp1 = new Point3d(bp.X - Lx / 2 + margin, bp.Y - Ly / 2 + margin, bp.Z);
-      var sp2 = new Point3d(bp.X + Lx / 2 - margin, bp.Y - Ly / 2 + margin, bp.Z);
-      var sp3 = new Point3d(bp.X + Lx / 2 - margin, bp.Y + Ly / 2 - margin, bp.Z);
-      var sp4 = new Point3d(bp.X - Lx / 2 + margin, bp.Y + Ly / 2 - margin, bp.Z);
+    /* Pedestal extend */
+    var pwx = cwX + Numeric.PedestalExtend * 2 * S;
+    var pwy = Model.IsRectangularColumn ? cwY + Numeric.PedestalExtend * 2 * S : pwx;
+    var cc1 = new Point3d(cpBase.X - pwx / 2, cpBase.Y - pwy / 2, cpBase.Z);
+    var cc2 = new Point3d(cpBase.X + pwx / 2, cpBase.Y - pwy / 2, cpBase.Z);
+    var cc3 = new Point3d(cpBase.X + pwx / 2, cpBase.Y + pwy / 2, cpBase.Z);
+    var cc4 = new Point3d(cpBase.X - pwx / 2, cpBase.Y + pwy / 2, cpBase.Z);
+    if (cc1.X.IsSmaller(p1.X)) cc1 = new Point3d(p1.X, cc1.Y, cc1.Z);
+    if (cc1.Y.IsSmaller(p1.Y)) cc1 = new Point3d(cc1.X, p1.Y, cc1.Z);
+    if (cc2.X.IsGreater(p2.X)) cc2 = new Point3d(p2.X, cc2.Y, cc2.Z);
+    if (cc2.Y.IsSmaller(p2.Y)) cc2 = new Point3d(cc2.X, p2.Y, cc2.Z);
+    if (cc3.X.IsGreater(p3.X)) cc3 = new Point3d(p3.X, cc3.Y, cc3.Z);
+    if (cc3.Y.IsGreater(p3.Y)) cc3 = new Point3d(cc3.X, p3.Y, cc3.Z);
+    if (cc4.X.IsSmaller(p4.X)) cc4 = new Point3d(p4.X, cc4.Y, cc4.Z);
+    if (cc4.Y.IsGreater(p4.Y)) cc4 = new Point3d(cc4.X, p4.Y, cc4.Z);
+    CreatePolyline([cc1, cc2, cc3, cc4], Layer.Column, tr, btr);
 
-      AddLine(sp1, sp2, LayerOutline, null, tr, btr);
-      AddLine(sp2, sp3, LayerOutline, null, tr, btr);
-      AddLine(sp3, sp4, LayerOutline, null, tr, btr);
-      AddLine(sp4, sp1, LayerOutline, null, tr, btr);
+    /* Chamfer */
+    if (Model.StepHeightH1.IsGreater(Model.StepHeightH2)) {
+      AddLine(p1, cc1, Layer.Outline, null, tr, btr);
+      AddLine(p2, cc2, Layer.Outline, null, tr, btr);
+      AddLine(p3, cc3, Layer.Outline, null, tr, btr);
+      AddLine(p4, cc4, Layer.Outline, null, tr, btr);
     }
 
-    // ── Foundation name label ──────────────────────────────────────
-    string label = $"{Model.FoundationName}(SL:{Model.Quantity:D2})";
-    AddMText(new Point3d(bp.X + Lx / 2 + 0.3, bp.Y + Ly / 2 + 0.3, bp.Z),
-      label, 0.35 * S, LayerLabel, tr, btr);
-
-    // ── Lx / Ly dimension labels (outside footing) ─────────────────
-    // Lx: below the bottom edge of footing
-    double dimLabelOff = padW + 1.0 * S;
-    double lblY = bp.Y - Ly / 2 - dimLabelOff;
+    // ── Bước 9: Ghi nhãn tên móng ────────────────────────────────────────────────
+    //   Nhãn đặt tại phía dưới trung tâm của mặt bằng móng
+    //   Format: "TênMóng(SL:dd)" ví dụ: "M1(SL:01)".
+    var label = $"{Model.FoundationName}(SL:{Model.Quantity:D2})";
     AddDbText(
-      new Point3d(bp.X, lblY, bp.Z),
-      "Lx = " + Model.LengthX.ToString("F0"),
-      0.35 * S, LayerLabel, tr, btr);
-
-    // Ly: right of the right edge of footing
-    double lblX = bp.X + Lx / 2 + dimLabelOff;
-    AddDbText(
-      new Point3d(lblX, bp.Y, bp.Z),
-      "Ly = " + Model.LengthY.ToString("F0"),
-      0.35 * S, LayerLabel, tr, btr);
+      new Point3d(bp.X,
+        bp.Y - ly / 2 - padW - Numeric.ExtendCenterLine * TitleS - Numeric.GapBetweenDimensions * TitleS -
+        Numeric.DimensionGap * 2 * TitleS - Numeric.GapBetweenDimensions * TitleS, bp.Z),
+      label, 5 * TitleS, Layer.LabelCyan, tr, btr, AttachmentPoint.TopCenter);
   }
 
   // ╔══════════════════════════════════════════════════════════════╗
   // ║               B.  DIM  MẶT BẰNG (PLAN DIMENSIONS)             ║
   // ╚══════════════════════════════════════════════════════════════╝
 
+  // ╔══════════════════════════════════════════════════════════════════════════════╗
+  // ║  DrawPlanDimensionsAtPoint: VẼ KÍCH THƯỚC MẶT BẰNG (PLAN DIMENSIONS)    ║
+  // ╠══════════════════════════════════════════════════════════════════════════════╣
+  // ║  Hệ tọa độ: bp = tâm móng, tất cả tọa độ tính tương đối so với bp.     ║
+  // ║                                                                              ║
+  // ║  Level1 — mép móng → đường trục:                                          ║
+  // ║    Phương X (hàng trên, nằm ngang):                                        ║
+  // ║      2 dim: (mép trái cột → trục dọc) + (trục dọc → mép phải cột)      ║
+  // ║    Phương Y (hàng bên phải, thẳng đứng):                                  ║
+  // ║      2 dim: (mép dưới cột → trục ngang) + (trục ngang → mép trên cột)  ║
+  // ║                                                                              ║
+  // ║  Level2 — Lx / Ly đầy đủ:                                                  ║
+  // ║    Phương X: đo mép trái → mép phải đài móng                             ║
+  // ║    Phương Y: đo mép dưới → mép trên đài móng                             ║
+  // ╚══════════════════════════════════════════════════════════════════════════════╝
   private void DrawPlanDimensionsAtPoint(Point3d bp, BlockTableRecord btr, Transaction tr)
   {
-    double Lx = Model.LengthX * S;
-    double Ly = Model.LengthY * S;
-    double cpX = Model.ColumnPositionX * S;
-    double cpY = Model.ColumnPositionY * S;
-    double dimOff = 1.5 * S;
-    double shortOff = 0.8 * S;
+    var lx = Model.LengthX * S;
+    var ly = Model.LengthY * S;
+    var padW = Model.ConcretePadExtension * S;
+    var axisX = Model.AxisPositionX * S;
+    var axisY = Model.AxisPositionY * S;
 
-    double xCol1 = bp.X + cpX - Model.ColumnWidthX * S / 2;
-    double xCol2 = bp.X + cpX + Model.ColumnWidthX * S / 2;
-    double yCol1 = bp.Y + cpY - Model.ColumnWidthY * S / 2;
-    double yCol2 = bp.Y + cpY + Model.ColumnWidthY * S / 2;
+    var pointFootingLeftX = bp.Add(Vector3d.XAxis.Negate().MultiplyBy(lx / 2))
+      .Add(Vector3d.YAxis.Negate().MultiplyBy(ly / 2 + padW));
+    var pointAxisX = pointFootingLeftX.Add(Vector3d.XAxis.MultiplyBy(axisX));
+    var pointFootingRightX = pointFootingLeftX.Add(Vector3d.XAxis.MultiplyBy(lx));
+    var pointPadLeftX = pointFootingLeftX.Add(Vector3d.XAxis.Negate().MultiplyBy(padW));
+    var pointPadRightX = pointFootingRightX.Add(Vector3d.XAxis.MultiplyBy(padW));
 
-    // ── X-dimension line (top, full Lx) ────────────────────────────
-    double yOut = bp.Y + Ly / 2 + dimOff;
-    AddRotatedDimensionEntity(0,
-      new Point3d(bp.X, yOut + 0.5, bp.Z),
-      new Point3d(bp.X - Lx / 2, yOut, bp.Z),
-      new Point3d(bp.X + Lx / 2, yOut, bp.Z),
-      LayerDimension, "Length", "Lx", tr, btr);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingLeftX, pointPadLeftX, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100, isReverse: true);
 
-    // ── X-dimension: left stub ─────────────────────────────────────
-    double yIn = bp.Y + Ly / 2 + shortOff;
-    AddRotatedDimensionEntity(0,
-      new Point3d(bp.X, yIn + 0.5, bp.Z),
-      new Point3d(bp.X - Lx / 2, yIn, bp.Z),
-      new Point3d(xCol1, yIn, bp.Z),
-      LayerDimension, null, null, tr, btr);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingLeftX, pointAxisX, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100);
 
-    // ── X-dimension: column width ───────────────────────────────────
-    AddRotatedDimensionEntity(0,
-      new Point3d(bp.X, yIn + 0.5, bp.Z),
-      new Point3d(xCol1, yIn, bp.Z),
-      new Point3d(xCol2, yIn, bp.Z),
-      LayerDimension, "ColWidth", "Cx", tr, btr);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointAxisX, pointFootingRightX, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100);
 
-    // ── X-dimension: right stub ────────────────────────────────────
-    AddRotatedDimensionEntity(0,
-      new Point3d(bp.X, yIn + 0.5, bp.Z),
-      new Point3d(xCol2, yIn, bp.Z),
-      new Point3d(bp.X + Lx / 2, yIn, bp.Z),
-      LayerDimension, null, null, tr, btr);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingRightX, pointPadRightX, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100);
 
-    // ── Y-dimension line (right, full Ly) ──────────────────────────
-    double xOut = bp.X + Lx / 2 + dimOff;
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(xOut + 0.5, bp.Y, bp.Z),
-      new Point3d(xOut, bp.Y - Ly / 2, bp.Z),
-      new Point3d(xOut, bp.Y + Ly / 2, bp.Z),
-      LayerDimension, "Length", "Ly", tr, btr);
+    AddRotatedDimensionEntity(DimLevel.Level2, pointFootingLeftX, pointFootingRightX, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100);
 
-    // ── Y-dimension: bottom stub ───────────────────────────────────
-    double xIn = bp.X + Lx / 2 + shortOff;
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(xIn + 0.5, bp.Y, bp.Z),
-      new Point3d(xIn, bp.Y - Ly / 2, bp.Z),
-      new Point3d(xIn, yCol1, bp.Z),
-      LayerDimension, null, null, tr, btr);
+    // ── Ly: hàng dimension bên phải mặt bằng (4× Level1 + 1× Level2) ───────────
+    var pointFootingTopY = bp.Add(Vector3d.XAxis.MultiplyBy(lx / 2))
+      .Add(Vector3d.XAxis.MultiplyBy(padW))
+      .Add(Vector3d.YAxis.MultiplyBy(ly / 2));
+    var pointAxisY = pointFootingTopY.Add(Vector3d.YAxis.Negate().MultiplyBy(axisY));
+    var pointFootingBottomY = pointFootingTopY.Add(Vector3d.YAxis.Negate().MultiplyBy(ly));
+    var pointPadBottomY = pointFootingBottomY.Add(Vector3d.YAxis.Negate().MultiplyBy(padW));
+    var pointPadTopY = pointFootingTopY.Add(Vector3d.YAxis.MultiplyBy(padW));
 
-    // ── Y-dimension: column width ──────────────────────────────────
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(xIn + 0.5, bp.Y, bp.Z),
-      new Point3d(xIn, yCol1, bp.Z),
-      new Point3d(xIn, yCol2, bp.Z),
-      LayerDimension, "ColWidth", "Cy", tr, btr);
-
-    // ── Y-dimension: top stub ──────────────────────────────────────
-    AddRotatedDimensionEntity(Math.PI / 2,
-      new Point3d(xIn + 0.5, bp.Y, bp.Z),
-      new Point3d(xIn, yCol2, bp.Z),
-      new Point3d(xIn, bp.Y + Ly / 2, bp.Z),
-      LayerDimension, null, null, tr, btr);
-
-    // ── Axis offset dims ────────────────────────────────────────────
-    if (Math.Abs(Model.AxisPositionX) > 0.1)
-    {
-      double yOff = bp.Y - Ly / 2 - dimOff;
-      AddRotatedDimensionEntity(0,
-        new Point3d(bp.X, yOff - 0.5, bp.Z),
-        new Point3d(bp.X, yOff, bp.Z),
-        new Point3d(bp.X + cpX, yOff, bp.Z),
-        LayerDimension, "AxisOffset", "OffsetX", tr, btr);
-    }
-
-    if (Math.Abs(Model.AxisPositionY) > 0.1)
-    {
-      double xOff = bp.X - Lx / 2 - dimOff;
-      AddRotatedDimensionEntity(Math.PI / 2,
-        new Point3d(xOff - 0.5, bp.Y, bp.Z),
-        new Point3d(xOff, bp.Y, bp.Z),
-        new Point3d(xOff, bp.Y + cpY, bp.Z),
-        LayerDimension, "AxisOffset", "OffsetY", tr, btr);
-    }
-  }
-
-  // ╔══════════════════════════════════════════════════════════════╗
-  // ║            C.  THÉP  MẶT BẰNG (PLAN REBAR)                    ║
-  // ╚══════════════════════════════════════════════════════════════╝
-
-  private void DrawPlanRebarAtPoint(Point3d bp, BlockTableRecord btr, Transaction tr)
-  {
-    double Lx = Model.LengthX * S;
-    double Ly = Model.LengthY * S;
-    double cover = Model.Cover * S;
-
-    var (rxCount, rxDia, _) = ParseRebarSpec(Model.RebarX);
-    var (ryCount, ryDia, _) = ParseRebarSpec(Model.RebarY);
-    if (rxCount <= 0 && ryCount <= 0) return;
-
-    // ── Rebar X (horizontal rebars, along X axis) ─────────────────
-    if (rxCount > 0 && rxDia > 0)
-    {
-      double usableY = Ly - 2 * cover;
-      double spacing = usableY / (rxCount + 1);
-
-      for (int i = 1; i <= rxCount; i++)
-      {
-        double y = bp.Y - Ly / 2 + cover + i * spacing;
-        var ln = AddLine(
-          new Point3d(bp.X - Lx / 2 + cover, y, bp.Z),
-          new Point3d(bp.X + Lx / 2 - cover, y, bp.Z),
-          LayerRebar, null, tr, btr);
-        ln.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
-
-        var tagPt = new Point3d(bp.X + 0.5 * S, y + 0.5 * S, bp.Z);
-        InsertMongRebarTag(tagPt, 0, $"phi{(int)rxDia}", tr, btr);
-      }
-    }
-
-    // ── Rebar Y (vertical rebars, along Y axis) ───────────────────
-    if (ryCount > 0 && ryDia > 0)
-    {
-      double usableX = Lx - 2 * cover;
-      double spacing = usableX / (ryCount + 1);
-
-      for (int i = 1; i <= ryCount; i++)
-      {
-        double x = bp.X - Lx / 2 + cover + i * spacing;
-        var ln = AddLine(
-          new Point3d(x, bp.Y - Ly / 2 + cover, bp.Z),
-          new Point3d(x, bp.Y + Ly / 2 - cover, bp.Z),
-          LayerRebar, null, tr, btr);
-        ln.Color = Autodesk.AutoCAD.Colors.Color.FromRgb(255, 0, 0);
-
-        var tagPt = new Point3d(x + 0.5 * S, bp.Y + 0.5 * S, bp.Z);
-        InsertMongRebarTag(tagPt, Math.PI / 2, $"phi{(int)ryDia}", tr, btr);
-      }
-    }
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingTopY, pointPadTopY, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingTopY, pointAxisY, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100, isReverse: true);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointAxisY, pointFootingBottomY, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100, isReverse: true);
+    AddRotatedDimensionEntity(DimLevel.Level1, pointFootingBottomY, pointPadBottomY, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100, isReverse: true);
+    AddRotatedDimensionEntity(DimLevel.Level2, pointFootingTopY, pointFootingBottomY, Layer.Dimension, tr, btr,
+      scaleFactor: 1 / S, dimScale: TitleS / 100,isReverse: true);
   }
 }
