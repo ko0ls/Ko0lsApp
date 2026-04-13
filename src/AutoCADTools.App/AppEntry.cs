@@ -225,12 +225,8 @@ namespace AutoCADTools.App
         CreatePanel();
         LocalizationManager.LanguageChanged += OnLanguageChanged;
 
-        AppProxy.SettingsSaved += () => {
-          _settingsSaved = true;
-          PreLoadFromTemplate();
-        };
+        AppProxy.SettingsSaved += PreLoadFromTemplate;
         PreLoadFromTemplate();
-        _settingsSaved = true;
 
         ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
       }
