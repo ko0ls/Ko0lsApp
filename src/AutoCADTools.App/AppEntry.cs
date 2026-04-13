@@ -48,7 +48,8 @@ namespace AutoCADTools.App
   private static readonly HashSet<string> _loadedLayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
   private static readonly HashSet<string> _loadedTextStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-  private static bool _settingsSaved;
+  private static bool _preloadRan;    // guards PreLoadFromTemplate against double-run
+  private static bool _settingsSaved; // true once PreLoadFromTemplate succeeds
 
   public static IReadOnlyCollection<string> LoadedBlocks => _loadedBlocks;
   public static IReadOnlyCollection<string> LoadedDimStyles => _loadedDimStyles;
@@ -56,16 +57,23 @@ namespace AutoCADTools.App
   public static IReadOnlyCollection<string> LoadedTextStyles => _loadedTextStyles;
 
   /// <summary>Pre-load blocks, dim styles, layers, and text styles from temp.dwt.
-  /// Call ONCE from Initialize() when a valid MDI document exists.</summary>
+  /// Idempotent — returns immediately on subsequent calls. Call once at startup.</summary>
   private static void PreLoadFromTemplate()
   {
+    // Guard against double-run: if the HashSets are already populated, skip.
+    if (_preloadRan) return;
+    _preloadRan = true;
+
     var doc = Application.DocumentManager.MdiActiveDocument;
     if (doc == null) return;
 
     var templatePath = System.IO.Path.Combine(
       System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
       ?? string.Empty, "Assets", "TemplateAutocad", "temp.dwt");
-    if (!System.IO.File.Exists(templatePath)) return;
+    if (!System.IO.File.Exists(templatePath)) {
+      doc.Editor.WriteMessage("\nWarning: temp.dwt template not found — some blocks/dimstyles may be missing.");
+      return;
+    }
 
     using (doc.LockDocument())
     using (var tr = doc.Database.TransactionManager.StartTransaction())
@@ -79,62 +87,75 @@ namespace AutoCADTools.App
 
         // ── 1. Blocks ────────────────────────────────────────────────────────────
         var srcBt = (BlockTable)trSrc.GetObject(srcDb.BlockTableId, OpenMode.ForRead);
+        var blockIds = new ObjectIdCollection();
         foreach (var entry in srcBt)
         {
           var btr = (BlockTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
           if (btr.IsLayout || btr.IsAnonymous || btr.IsFromOverlayReference) continue;
           if (_loadedBlocks.Contains(btr.Name)) continue;
-          var ids = new ObjectIdCollection { btr.ObjectId };
+          blockIds.Add(btr.ObjectId);
+          _loadedBlocks.Add(btr.Name); // track now; confirm after clone
+        }
+        if (blockIds.Count > 0) {
           var mapping = new IdMapping();
-          // Use Replace so AttributeDefinitions and all sub-objects are cloned
-          doc.Database.WblockCloneObjects(ids, doc.Database.BlockTableId, mapping, DuplicateRecordCloning.Replace, false);
-          if (mapping[btr.ObjectId].Value != ObjectId.Null)
-            _loadedBlocks.Add(btr.Name);
+          doc.Database.WblockCloneObjects(blockIds, doc.Database.BlockTableId, mapping, DuplicateRecordCloning.Replace, false);
         }
 
         // ── 2. Dim Styles ──────────────────────────────────────────────────────
         var srcDst = (DimStyleTable)trSrc.GetObject(srcDb.DimStyleTableId, OpenMode.ForRead);
+        var dstIds = new ObjectIdCollection();
         foreach (var entry in srcDst)
         {
           var dsr = (DimStyleTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
           if (_loadedDimStyles.Contains(dsr.Name)) continue;
-          var ids = new ObjectIdCollection { dsr.ObjectId };
-          var mapping = new IdMapping();
-          doc.Database.WblockCloneObjects(ids, doc.Database.DimStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          dstIds.Add(dsr.ObjectId);
           _loadedDimStyles.Add(dsr.Name);
+        }
+        if (dstIds.Count > 0) {
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(dstIds, doc.Database.DimStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
         }
 
         // ── 3. Layers ───────────────────────────────────────────────────────────
         var srcLt = (LayerTable)trSrc.GetObject(srcDb.LayerTableId, OpenMode.ForRead);
+        var ltIds = new ObjectIdCollection();
         foreach (var entry in srcLt)
         {
           var ltr = (LayerTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
           if (ltr.IsHidden) continue;
           if (_loadedLayers.Contains(ltr.Name)) continue;
-          var ids = new ObjectIdCollection { ltr.ObjectId };
-          var mapping = new IdMapping();
-          doc.Database.WblockCloneObjects(ids, doc.Database.LayerTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          ltIds.Add(ltr.ObjectId);
           _loadedLayers.Add(ltr.Name);
+        }
+        if (ltIds.Count > 0) {
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(ltIds, doc.Database.LayerTableId, mapping, DuplicateRecordCloning.Ignore, false);
         }
 
         // ── 4. Text Styles ─────────────────────────────────────────────────────
         var srcTst = (TextStyleTable)trSrc.GetObject(srcDb.TextStyleTableId, OpenMode.ForRead);
+        var tstIds = new ObjectIdCollection();
         foreach (var entry in srcTst)
         {
           var tstr = (TextStyleTableRecord)trSrc.GetObject(entry, OpenMode.ForRead);
           if (_loadedTextStyles.Contains(tstr.Name)) continue;
-          var ids = new ObjectIdCollection { tstr.ObjectId };
-          var mapping = new IdMapping();
-          doc.Database.WblockCloneObjects(ids, doc.Database.TextStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
+          tstIds.Add(tstr.ObjectId);
           _loadedTextStyles.Add(tstr.Name);
+        }
+        if (tstIds.Count > 0) {
+          var mapping = new IdMapping();
+          doc.Database.WblockCloneObjects(tstIds, doc.Database.TextStyleTableId, mapping, DuplicateRecordCloning.Ignore, false);
         }
 
         trSrc.Commit();
         tr.Commit();
+        _settingsSaved = true;
       }
-      catch (System.Exception)
-      {
+      catch (System.Exception ex) {
+        // Roll back transaction and log the error so the user knows what failed.
         tr.Abort();
+        Application.DocumentManager.MdiActiveDocument?.Editor.WriteMessage(
+          $"\nTemplate pre-load failed: {ex.Message}");
       }
     }
   }
@@ -179,13 +200,8 @@ namespace AutoCADTools.App
           LocalizationManager.LanguageChanged += OnLanguageChanged;
 
           // Pre-load blocks / dim styles / layers / text styles from temp.dwt
-          AppProxy.SettingsSaved += () => {
-            _settingsSaved = true;
-            PreLoadFromTemplate();
-          };
-          // Also load at startup so first draw doesn't need settings
-          PreLoadFromTemplate();
-          _settingsSaved = true;
+          AppProxy.SettingsSaved += PreLoadFromTemplate;
+          PreLoadFromTemplate(); // runs once; idempotent on subsequent calls
 
           doc.Editor.WriteMessage($"\n{"App.Loaded".GetString()}");
         }

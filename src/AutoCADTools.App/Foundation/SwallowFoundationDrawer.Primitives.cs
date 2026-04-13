@@ -358,6 +358,8 @@ public partial class SwallowFoundationDrawer
     _ = InsertBlock(blockName, pt, angle, tr, btr);
   }
 
+  // ── Rebar spec helpers ────────────────────────────────────────────────────────
+
   // ParseRebarSpec: Parse chuỗi qui cách thép → (đường kính mm, khoảng cách mm).
   //
   // Input: string spec - ví dụ "D10A200" hoặc "D10"
@@ -369,7 +371,7 @@ public partial class SwallowFoundationDrawer
   // Count được tính riêng tại call site:
   //   Thép phương X: count = ceil(Ly / spacing) + 1
   //   Thép phương Y: count = ceil(Lx / spacing) + 1
-  private (double dia, double spacing) ParseRebarSpec(string spec)
+  private static (double dia, double spacing) ParseRebarSpec(string spec)
   {
     if (string.IsNullOrWhiteSpace(spec)) return (0, 0);
     spec = spec.Trim().ToUpperInvariant();
@@ -388,6 +390,15 @@ public partial class SwallowFoundationDrawer
     return m2.Success ? (double.Parse(m2.Groups[1].Value), 0) : (0, 0);
   }
 
+  // FormatRebarSpec: tạo chuỗi hiển thị qui cách thép cho block R_Mong.
+  // Output: "/g{phi}" hoặc "/g{phi}a{spacing}" (VD: "/g10a200")
+  private static string FormatRebarSpec(double dia, double spacing)
+  {
+    return spacing > 0
+        ? $"/g{dia.ToString(CultureInfo.InvariantCulture)}a{spacing.ToString(CultureInfo.InvariantCulture)}"
+        : $"/g{dia.ToString(CultureInfo.InvariantCulture)}";
+  }
+
   // CalcRebarCount: tính số thanh thép cho 1 phương.
   //   Đối với phương X: số thanh = ceil(Ly / spacing) + 1
   //   Đối với phương Y: số thanh = ceil(Lx / spacing) + 1
@@ -399,7 +410,8 @@ public partial class SwallowFoundationDrawer
 
   // IBR_Mong: Insert "R_Mong" block at position with dynamic properties L, L1.
   // Checks LoadedBlocks (HashSet) then does a fresh BlockTable lookup.
-  private BlockReference? IBR_Mong(Point3d point, double l, double l1, string sh, string fiSpec, Transaction tr, BlockTableRecord btr)
+  // Optionally rotates the block around Z-axis at the insertion point.
+  private BlockReference? IBR_Mong(Point3d point, double l, double l1, string sh, string fiSpec, Transaction tr, BlockTableRecord btr, double angleRad = 0)
   {
     if (_db == null) return null;
 
@@ -437,11 +449,9 @@ public partial class SwallowFoundationDrawer
         switch (attDef.Tag.ToUpperInvariant())
         {
           case "SH":
-            attRef.Tag = attDef.Tag;
             attRef.TextString = sh;
             break;
           case "FI":
-            attRef.Tag = attDef.Tag;
             attRef.TextString = fiSpec;
             break;
         }
@@ -466,18 +476,14 @@ public partial class SwallowFoundationDrawer
         }
       }
       catch {
-        // Skip if property cannot be set (e.g., read-only or incompatible value)
+        // Skip if property is read-only or value is incompatible
       }
     }
 
-    return bref;
-  }
+    // Apply rotation around Z-axis at the insertion point
+    if (angleRad != 0)
+      bref.TransformBy(Matrix3d.Rotation(angleRad, Vector3d.ZAxis, point));
 
-  // Matrix_Rotation: Xoay entity quanh trục Z tại điểm center.
-  private static void Matrix_Rotation(Entity? ent, double angleRad, Point3d center)
-  {
-    if (ent == null || ent.IsErased) return;
-    var matrix = Matrix3d.Rotation(angleRad, Vector3d.ZAxis, center);
-    ent.TransformBy(matrix);
+    return bref;
   }
 }

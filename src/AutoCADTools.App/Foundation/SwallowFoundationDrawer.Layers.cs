@@ -49,20 +49,26 @@ public partial class SwallowFoundationDrawer
     var dst = (DimStyleTable)tr.GetObject(_db.DimStyleTableId, OpenMode.ForRead);
     if (dst.Has(DimStyle.Dim100)) return true;
 
+    // UpgradeOpen immediately before the write, downgrade after
     dst.UpgradeOpen();
-    using var dsr = new DimStyleTableRecord();
-    dsr.Name = DimStyle.Dim100;
-
-    // Copy settings from Standard style if available
-    if (dst.Has("H100")) {
-      var stdId = dst["H100"];
-      var stdRec = (DimStyleTableRecord)tr.GetObject(stdId, OpenMode.ForRead);
-      dsr.CopyFrom(stdRec);
+    try {
+      using var dsr = new DimStyleTableRecord();
       dsr.Name = DimStyle.Dim100;
-    }
 
-    dst.Add(dsr);
-    tr.AddNewlyCreatedDBObject(dsr, true);
-    return true;
+      // Copy settings from H100 style if available
+      if (dst.Has("H100")) {
+        var stdId = dst["H100"];
+        var stdRec = (DimStyleTableRecord)tr.GetObject(stdId, OpenMode.ForRead);
+        dsr.CopyFrom(stdRec);
+        dsr.Name = DimStyle.Dim100;
+      }
+
+      dst.Add(dsr);
+      tr.AddNewlyCreatedDBObject(dsr, true);
+      return true;
+    }
+    finally {
+      dst.DowngradeOpen();
+    }
   }
 }
