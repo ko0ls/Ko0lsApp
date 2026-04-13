@@ -31,16 +31,17 @@ public partial class SwallowFoundationDrawer
   {
     if (_db == null) return;
     var lt = (LayerTable)tr.GetObject(_db.LayerTableId, OpenMode.ForRead);
+    lt.UpgradeOpen();
 
     foreach (var entry in LayerEntries) {
       if (lt.Has(entry.name)) continue;
       using var ltr = new LayerTableRecord();
       ltr.Name = entry.name;
       ltr.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(ColorMethod.ByAci, entry.colorIndex);
-      lt.UpgradeOpen();
       lt.Add(ltr);
       tr.AddNewlyCreatedDBObject(ltr, true);
     }
+    lt.DowngradeOpen();
   }
 
   private bool EnsureDimensionStyle(Transaction tr)
