@@ -1,7 +1,5 @@
 #nullable enable
 
-using System.IO;
-using System.Linq;
 using AutoCADTools.App.Const;
 using AutoCADTools.App.Utils;
 using Autodesk.AutoCAD.Colors;
